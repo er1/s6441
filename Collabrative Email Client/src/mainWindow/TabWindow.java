@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.text.*;
 import java.awt.*;
 
-public class Tab_window {
+public class TabWindow {
 
     JTabbedPane sentmail = new javax.swing.JTabbedPane();
     JTabbedPane tab_menu = new javax.swing.JTabbedPane();

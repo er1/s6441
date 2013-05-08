@@ -6,7 +6,7 @@ import java.awt.TextArea;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
-public class Compose_Mail extends JFrame implements ActionListener {
+public class ComposeMail extends JFrame implements ActionListener {
 
     public JFrame writeMail() {
         JFrame cmwindow = new JFrame("New Mail");

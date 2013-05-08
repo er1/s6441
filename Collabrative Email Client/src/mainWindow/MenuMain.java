@@ -8,7 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
-public class Menu_Main extends JFrame implements ActionListener {
+public class MenuMain extends JFrame implements ActionListener {
 
     JMenuItem new_ID = new JMenuItem("New Mail ID");
     JMenuItem get_Mail = new JMenuItem("Get Mail");
@@ -19,7 +19,7 @@ public class Menu_Main extends JFrame implements ActionListener {
     JMenuItem sent_menu = new JMenuItem("Sent Mail");
     JMenuItem reply_menu = new JMenuItem("Reply Mail");
     mainWindow.NewMail obj_1 = new mainWindow.NewMail();
-    mainWindow.Tab_window obj_4 = new mainWindow.Tab_window();
+    mainWindow.TabWindow obj_4 = new mainWindow.TabWindow();
 
     public JMenuBar menumail() {
         JMenuBar mainmenu = new JMenuBar();
