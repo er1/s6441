@@ -8,12 +8,7 @@ package mainWindow;
  *
  * @author anasalkhatib
  */
-public class UserInterface {
-
-    public enum UserInterfaceEnum {
-
-        SWING
-    }
+public abstract class UserInterface {
 
     /**
      * * Factory method to get special UI
@@ -26,7 +21,5 @@ public class UserInterface {
     /**
      * Function to draw the user interface
      */
-    public void display() {
-        new MainWindow();
-    }
+    abstract public void display();
 }
