@@ -38,10 +38,6 @@ public class MainWindow extends JFrame implements ActionListener {
         window.setVisible(true);
     }
 
-    public static void main(String args[]) {
-        new MainWindow();
-    }
-
     public void actionPerformed(ActionEvent e) {
     }
 }

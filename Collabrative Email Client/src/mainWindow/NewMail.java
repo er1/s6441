@@ -37,11 +37,6 @@ public class NewMail extends JFrame implements ActionListener {
         return nmwindow;
     }
 
-    public static void main(String args[]) {
-        NewMail obj_new = new NewMail();
-        obj_new.newmail();
-    }
-
     public void actionPerformed(ActionEvent e) {
     }
 }
