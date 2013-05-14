@@ -16,37 +16,56 @@ class Persistence{
     public  Mail  openMail( Path mailPath) {
         
         String text;
-        BufferedReader bufferreader = null;
+        BufferedReader bufferReader = null;
         ArrayList fileContent = new ArrayList();
         
         Mail mail  = new Mail();
         
         try{
-            bufferreader = new BufferedReader(new FileReader(mailPath.toString()));	
+            bufferReader = new BufferedReader(new FileReader(mailPath.toString()));	
             
-            while ((text = bufferreader.readLine()) != null) {
+            while ((text = bufferReader.readLine()) != null) {
                     fileContent.add(text);
-            }                          
-            mail.setReivers("");
-            mail.setSubject("");
-            mail.setMessage("");
-            mail.setpath(mailPath);
+            } 
             
-            // fill to text field
+            mail.setPath(mailPath); //I have to check if we need to use the parameter, or keep the one in Mail class
+            
+            // fill Sender
+            text ="";
+            for(int i= fileContent.indexOf("<From>")+1;i < fileContent.indexOf("</From>");i++) {
+                text = text + fileContent.get(i).toString();
+            }
+            mail.setSender(text);
+                        
+            // fill Receivers
             text ="";
             for(int i= fileContent.indexOf("<TO>")+1;i < fileContent.indexOf("</TO>");i++) {
                 text = text + fileContent.get(i).toString();
             }
-            mail.setReivers(text);
+            mail.setReceivers(text);
             
-            // fill to Subject field
+            // fill CcReceivers
+            text ="";
+            for(int i= fileContent.indexOf("<CC>")+1;i < fileContent.indexOf("</CC>");i++) {
+                text = text + fileContent.get(i).toString();
+            }
+            mail.setCcReceivers(text);
+            
+            // fill CciReceivers
+            text ="";
+            for(int i= fileContent.indexOf("<CCi>")+1;i < fileContent.indexOf("</CCi>");i++) {
+                text = text + fileContent.get(i).toString();
+            }
+            mail.setCciReceivers(text);
+            
+            // fill to Subject 
             text ="";
             for(int i= fileContent.indexOf("<Subject>")+1;i < fileContent.indexOf("</Subject>");i++) {
                 text = text + fileContent.get(i).toString();
             }
             mail.setSubject(text);
             
-            // fill to message field
+            // fill to message 
             text ="";
             for(int i= fileContent.indexOf("<Message>")+1;i < fileContent.indexOf("</Message>");i++) {
 
@@ -60,7 +79,7 @@ class Persistence{
                 return mail;
         } finally {
                 try {
-                        if (br != null)br.close();
+                        if (bufferReader != null)bufferReader.close();
                 } catch (IOException ex) {
                         ex.printStackTrace();
                         return mail;
@@ -84,7 +103,10 @@ class Persistence{
                 
                 // format file content
                  mailContent    =   "<Path>\n"      + mail.getPath().toString() +   "\n</Path>\n"
-                                +   "<TO>\n"        + mail.getReivers()         +   "\n</TO>\n"
+                                +   "<From>\n"      + mail.getSender()          +   "\n</From>\n"
+                                +   "<TO>\n"        + mail.getReceivers()         +   "\n</TO>\n"
+                                +   "<Cc>\n"        + mail.getCcReceivers()       +   "\n</Cc>\n"
+                                +   "<Cci>\n"       + mail.getCciReceivers()      +   "\n</Cci>\n"
                                 +   "<Subject>\n"   + mail.getSubject()         +   "\n</Subject>\n"
                                 +   "<Message>\n"   + mail.getMessage()         +   "\n</Message>\n";
                 
@@ -154,6 +176,7 @@ class Persistence{
         
         try {
                 Files.copy(oldPath, newPath, REPLACE_EXISTING);
+                deleteFile(oldPath);
                 return true;
         } catch (IOException except) {
                 except.printStackTrace();
@@ -177,17 +200,36 @@ class Persistence{
 }
 
 //this class is only for  my tests purpose, should use the class defined with the group
-
-    
+   
 class Mail {
+    String sender;
     String receivers;
+    String ccReceivers;
+     String cciReceivers;
     String subject;
     String message;
     Path  path;  
-    public boolean setReivers (String to){
+    
+    public boolean setSender (String sender){
+        this.sender = sender;
+        return true;
+    }
+    
+    public boolean setReceivers (String to){
         this.receivers = to;
         return true;
-    } 
+    }
+    
+    public boolean setCcReceivers (String ccReceivers){
+        this.ccReceivers = ccReceivers;
+        return true;
+    }
+    
+    public boolean setCciReceivers (String cciReceivers){
+        this.cciReceivers = cciReceivers;
+        return true;
+    }
+    
     public boolean setSubject (String subject){
         this.subject = subject;
         return true;
@@ -196,7 +238,7 @@ class Mail {
         this.message = message;
         return true;
     }
-        public boolean setpath (Path path){
+        public boolean setPath (Path path){
         this.path = path;
         return true;
     }
@@ -204,7 +246,14 @@ class Mail {
         this.message = this.message + message;
         return true;
     }
-    public String getReivers(){ return this.receivers; } 
+    
+    public String getSender(){ return this.sender; }
+    
+    public String getReceivers(){ return this.receivers; } 
+    
+    public String getCcReceivers(){ return this.ccReceivers; } 
+    
+    public String getCciReceivers(){ return this.cciReceivers; } 
 
     public String getSubject(){ return this.subject;}
 
