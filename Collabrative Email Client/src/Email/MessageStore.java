@@ -1,25 +1,25 @@
 package Email;
 
 /**
- * Root container of all messages allowing direct lookup of
- * special purpose containers
+ * Root folder of all messages allowing direct lookup of
+ * special purpose folder
  * 
  * @author chanman
  */
-public interface MessageStore extends Container {
+public interface MessageStore extends Folder {
     /**
-     * Get the Inbox container
+     * Get the Inbox folder
      * @return Inbox
      */
-    Container getInbox();
+    Folder getInbox();
     /**
-     * get the Outbox container
+     * get the Outbox folder
      * @return Outbox
      */
-    Container getOutbox();
+    Folder getOutbox();
     /**
-     * get the Sent Messages container
+     * get the Sent Messages folder
      * @return SentMessages
      */
-    Container getSentMessages();    
+    Folder getSentMessages();    
 }
