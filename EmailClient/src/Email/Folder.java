@@ -8,6 +8,18 @@ package Email;
 public interface Folder {
 
     /**
+     *
+     * @return
+     */
+    public String getName();
+
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name);
+
+    /**
      * Get the set of messages in this folder
      *
      * @return list of Messages

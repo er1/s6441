@@ -6,8 +6,14 @@ package Email;
  * @author chanman
  */
 public class TemporaryFolder implements Folder {
+
     MessageSet messages = new MessageSet();
     FolderSet folders = new FolderSet();
+    String name = "Folder";
+
+    TemporaryFolder(String n) {
+        name = n;
+    }
 
     @Override
     public MessageSet getMessages() {
@@ -49,5 +55,15 @@ public class TemporaryFolder implements Folder {
         for (Folder f : folders) {
             f.sync();
         }
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String n) {
+        name = n;
     }
 }

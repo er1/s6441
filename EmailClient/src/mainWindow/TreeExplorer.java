@@ -4,7 +4,10 @@
  */
 package mainWindow;
 
-import java.awt.BorderLayout;
+import Email.DummyStore;
+import Email.Folder;
+import Email.Message;
+import Email.MessageStore;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -16,13 +19,8 @@ import net.miginfocom.swing.MigLayout;
  *
  * @author anasalkhatib
  */
-public class TreeExplorer extends JPanel{
+public class TreeExplorer extends JPanel {
     //TODO: See http://www.java2s.com/Code/Java/Swing-JFC/FileTreewithPopupMenu.htm
-
-    JTree inboxTree;
-    JTree outboxTree;
-    DefaultTreeModel inboxTreeModel;
-    DefaultTreeModel outboxTreeModel;
 
     public TreeExplorer() {
         super();
@@ -31,29 +29,43 @@ public class TreeExplorer extends JPanel{
 
     private void init() {
         this.setLayout(new MigLayout("wrap"));
-        //Demo Inbox
-        DefaultMutableTreeNode inbox = new DefaultMutableTreeNode("Inbox");
-        DefaultMutableTreeNode subFolder1 = new DefaultMutableTreeNode("SubFolder1");
-        DefaultMutableTreeNode subFolder2 = new DefaultMutableTreeNode("SubFolder2");
-        DefaultMutableTreeNode subFolder3 = new DefaultMutableTreeNode("SubFolder3");
-         
-        inboxTreeModel = new DefaultTreeModel(inbox);
-        inboxTree = new JTree(inboxTreeModel);
-        inbox.add(subFolder1);
-        subFolder1.add(subFolder2);
-        inbox.add(subFolder3);
-        this.add(inboxTree);
 
-        //Demo Outbox
-        DefaultMutableTreeNode outbox = new DefaultMutableTreeNode("Outbox");
-        outboxTreeModel =  new DefaultTreeModel(outbox);
-        outboxTree = new JTree(outboxTreeModel);
-        this.add(outboxTree);
+        refresh(new DummyStore()); // FIXME
 
         setSize(20, 20);
         setBorder(BorderFactory.createTitledBorder("Folders"));
 
     }
-    
-    
+
+    /**
+     *
+     * @param ms
+     */
+    public void refresh(MessageStore ms) {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Mailbox");
+        populatefolder(root, ms);
+        DefaultTreeModel messageTreeModel = new DefaultTreeModel(root);
+        JTree messageTree = new JTree(messageTreeModel);
+        this.removeAll();
+        this.add(messageTree);
+    }
+
+    /**
+     *
+     * @param node
+     * @param folder
+     */
+    private void populatefolder(DefaultMutableTreeNode node, Folder folder) {
+        for (Folder f : folder.getSubfolders()) {
+            DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(f.getName());
+            node.add(subnode);
+            populatefolder(subnode, f);
+        }
+        
+        // Remove this maybe
+        for (Message m : folder.getMessages()) {
+            DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(m.getHeader("From"));
+            node.add(subnode);
+        }
+    }
 }

@@ -10,23 +10,45 @@ package Email;
  */
 public class DummyStore extends TemporaryFolder implements MessageStore {
 
-    private Folder inbox = new TemporaryFolder();
-    private Folder outbox = new TemporaryFolder();
-    private Folder sent = new TemporaryFolder();
+    // Some temporary boxes
+    private Folder inbox = new TemporaryFolder("Inbox");
+    private Folder outbox = new TemporaryFolder("Outbox");
+    private Folder sent = new TemporaryFolder("Sent Messages");
 
-    DummyStore() {
+    /**
+     *
+     */
+    public DummyStore() {
+        super("Mailbox");
+
+        // add them to the store on creation
         this.addFolder(inbox);
         this.addFolder(outbox);
         this.addFolder(sent);
 
+        // add two test messages
         PlainTextMessage msg = new PlainTextMessage();
-        msg.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        msg.parse("Date: 01 Jan 70 00:00 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
                 + "\r\n"
                 + "Hello, World\r\n");
+        inbox.addMessage(msg);
 
+        msg = new PlainTextMessage();
+        msg.parse("Date: 05 Nov 09 1900 EDT\r\n"
+                + "From: Alice Anderson <alice@example.com>\r\n"
+                + "To: Bob Brown <bob@example.com>, Charlie Chapman <charlie@example.com>\r\n"
+                + "BCC: eve@example.org\r\n"
+                + "Subject: Payroll forms\r\n"
+                + "\r\n"
+                + "Hi everyone,\r\n"
+                + "\r\n"
+                + "I just want to make sure everyone has submitted their forms for payroll\r\n"
+                + "\r\n"
+                + "Alice\r\n"
+                + "\r\n");
         inbox.addMessage(msg);
     }
 

@@ -63,7 +63,7 @@ public class PlainTextMessage implements Message {
     /**
      * Parse a raw message from storage into this object
      *
-     * @param rawmessage
+     * @param msg
      */
     public void parse(String msg) {
         // Zero or more lines of header followed by an empty line
