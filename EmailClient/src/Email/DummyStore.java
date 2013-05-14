@@ -8,54 +8,40 @@ package Email;
  *
  * @author chanman
  */
-public class DummyStore implements MessageStore {
+public class DummyStore extends TemporaryFolder implements MessageStore {
+
+    private Folder inbox = new TemporaryFolder();
+    private Folder outbox = new TemporaryFolder();
+    private Folder sent = new TemporaryFolder();
+
+    DummyStore() {
+        this.addFolder(inbox);
+        this.addFolder(outbox);
+        this.addFolder(sent);
+
+        PlainTextMessage msg = new PlainTextMessage();
+        msg.parse("Date: 01 Jan 01 1970 GMT\r\n"
+                + "From: toor@example.com\r\n"
+                + "To: alice@example.com\r\n"
+                + "Subject: Hello\r\n"
+                + "\r\n"
+                + "Hello, World\r\n");
+
+        inbox.addMessage(msg);
+    }
 
     @Override
     public Folder getInbox() {
-        return new EmptyFolder();
+        return inbox;
     }
 
     @Override
     public Folder getOutbox() {
-        return new EmptyFolder();
+        return outbox;
     }
 
     @Override
     public Folder getSentMessages() {
-        return new EmptyFolder();
-    }
-
-    @Override
-    public MessageSet getMessages() {
-        return new MessageSet();
-    }
-
-    @Override
-    public FolderSet getSubfolders() {
-        return new FolderSet();
-    }
-
-    @Override
-    public void addMessage(Message msg) {
-    }
-
-    @Override
-    public void addMessageCopy(Message msg) {
-    }
-
-    @Override
-    public void deleteMessage(Message msg) {
-    }
-
-    @Override
-    public void addFolder(Folder folder) {
-    }
-
-    @Override
-    public void deleteFolder(Folder folder) {
-    }
-
-    @Override
-    public void sync() {
+        return sent;
     }
 }

@@ -39,8 +39,9 @@ public class PlainTextMessage implements Message {
     }
 
     /**
+     * Turn this Message into a String for storage
      *
-     * @return
+     * @return rawmessage
      */
     public String serialize() {
         String msg = new String();
@@ -60,8 +61,9 @@ public class PlainTextMessage implements Message {
     }
 
     /**
+     * Parse a raw message from storage into this object
      *
-     * @param msg
+     * @param rawmessage
      */
     public void parse(String msg) {
         // Zero or more lines of header followed by an empty line
