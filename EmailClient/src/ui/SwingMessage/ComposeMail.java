@@ -14,21 +14,21 @@ public class ComposeMail extends JFrame implements ActionListener {
     JTextField toField;
     TextArea messageContentTextArea;
 
+	JButton cancelMailButton;
+    JPanel composeMailPanel;
+
     public ComposeMail(Message msg) {
         super("Email");
 
         message = msg;
-
-
-
     }
 
     public void writeMail() {
-        JPanel composeMailPanel = new JPanel(new MigLayout());
-        
+
+        composeMailPanel = new JPanel(new MigLayout());
         JLabel toLabel = new JLabel("To", JLabel.LEFT);
         JLabel subjectLabel = new JLabel("Subject");
-        
+
         toField = new JTextField();
         subjectField = new JTextField();
         messageContentTextArea = new TextArea("Enter the email");
@@ -39,8 +39,10 @@ public class ComposeMail extends JFrame implements ActionListener {
         JButton saveDraftButton = new JButton("Draft");
         saveDraftButton.setToolTipText("Save mail in Draft folder, Does not send mail");
 
-        JButton cancelMailButton = new JButton("Cancel");
+        cancelMailButton = new JButton("Cancel");
         cancelMailButton.setToolTipText("Delete the mail and move it to recycle bin draft");
+        cancelMailButton.addActionListener(this);
+
 
         composeMailPanel.add(toLabel);
         composeMailPanel.add(toField, "span,grow,wrap");
@@ -52,18 +54,22 @@ public class ComposeMail extends JFrame implements ActionListener {
         composeMailPanel.add(cancelMailButton);
         this.add(composeMailPanel);
         this.setSize(650, 380);
-        
+
         refresh();
-        
+
         this.setVisible(true);
     }
-    
+
     public void refresh() {
         toField.setText(message.getHeader("To"));
         subjectField.setText(message.getHeader("Subject"));
         messageContentTextArea.setText(message.getContent());
     }
-    
+
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == cancelMailButton) {
+            this.setVisible(false);
+            this.dispose();
+        }
     }
 }
