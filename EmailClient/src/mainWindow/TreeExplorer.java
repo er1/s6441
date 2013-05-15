@@ -48,6 +48,7 @@ public class TreeExplorer extends JPanel {
         JTree messageTree = new JTree(messageTreeModel);
         this.removeAll();
         this.add(messageTree);
+        messageTree.addMouseListener(new MouseRightClickListener(messageTree));
     }
 
     /**
