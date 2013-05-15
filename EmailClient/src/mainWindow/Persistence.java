@@ -1,4 +1,4 @@
-package e.mail;
+package mainWindow;
 
 import java.io.*;
 import java.nio.file.Files;
