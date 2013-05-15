@@ -25,7 +25,11 @@ public class PlainTextMessage implements Message {
 
     @Override
     public String getHeader(String key) {
-        return header.get(key);
+        String value = header.get(key);
+        if (value == null) {
+            value = "";
+        }
+        return value;
     }
 
     @Override
