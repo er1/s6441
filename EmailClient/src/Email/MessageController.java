@@ -1,7 +1,7 @@
 package Email;
 
 public interface MessageController {
-
+    
     FolderID[] getFolderList(FolderID folder);
 
     MessageID[] getEmailList(FolderID folder);

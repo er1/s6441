@@ -1,6 +1,6 @@
 package ui;
 
-import Email.PersistentStorage;
+import Persist.PersistentStorage;
 
 /**
  *
