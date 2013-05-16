@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui;
+package Email;
 
 /**
  *
  * @author anasalkhatib
  */
-abstract class PersistentStorage {
+public abstract class PersistentStorage {
 
-    static PersistentStorage getFileSystemStorage() {
+    public static PersistentStorage getFileSystemStorage() {
         FileSystemStorage fileSystemStorage = new FileSystemStorage();
         return fileSystemStorage;
     }
