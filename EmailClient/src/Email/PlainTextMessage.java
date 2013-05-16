@@ -1,7 +1,9 @@
 package Email;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import util.Util;
 
 /**
  * Implementation of Message as something that can be stored as a String;
@@ -11,7 +13,11 @@ import java.util.regex.Matcher;
 public class PlainTextMessage implements Message {
 
     private String content = new String();
-    private Header header = new Header();
+    private HashMap<String, String> header;
+
+    public PlainTextMessage() {
+        this.header = Util.newHashMap();
+    }
 
     @Override
     public void setContent(String newcontent) {

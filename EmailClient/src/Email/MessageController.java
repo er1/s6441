@@ -1,28 +1,32 @@
 package Email;
 
+import java.util.ArrayList;
+/**
+ * Message controller class
+ */
 public class MessageController {
 
-    private Message getMessageFromID(MessageID message) {
+    private Message getMessageFromID(String messageId) {
         return new PlainTextMessage() {
-        }; // FIXME 
+        }; // FIXME
     }
 
-    private Folder getFolderFromID(FolderID folder) {
+    private Folder getFolderFromID(String folderId) {
         return new TemporaryFolder(""); // FIXME
     }
 
-    private MessageID getIDfromMessage(Message message) {
-        return new MessageID(); // FIXME
+    private String getIDfromMessage(Message message) {
+        return new String(); // FIXME
     }
 
-    private FolderID getIDfromFolder(Folder folder) {
-        return new FolderID(); // FIXME
+    private String getIDfromFolder(Folder folder) {
+        return new String(); // FIXME
     }
 
-    public FolderID[] getFolderList(FolderID folder) {
-        Folder fldr = getFolderFromID(folder);
-        FolderSet set = fldr.getSubfolders();
-        FolderID[] ids = new FolderID[set.size()];
+    public String[] getFolderList(String folderId) {
+        Folder fldr = getFolderFromID(folderId);
+        ArrayList<Folder> set = fldr.getSubfolders();
+        String[] ids = new String[set.size()];
 
         int index = 0;
         for (Folder subfolder : set) {
@@ -32,10 +36,10 @@ public class MessageController {
         return ids;
     }
 
-    public MessageID[] getEmailList(FolderID folder) {
-        Folder fldr = getFolderFromID(folder);
-        MessageSet set = fldr.getMessages();
-        MessageID[] ids = new MessageID[set.size()];
+    public String[] getEmailList(String folderId) {
+        Folder fldr = getFolderFromID(folderId);
+        ArrayList<Message> set = fldr.getMessages();
+        String[] ids = new String[set.size()];
 
         int index = 0;
         for (Message message : set) {
@@ -45,17 +49,17 @@ public class MessageController {
         return ids;
     }
 
-    public String getEmailContent(MessageID id) {
+    public String getEmailContent(String id) {
         Message message = getMessageFromID(id);
         return message.getContent();
     }
 
-    public void setEmailContent(MessageID id, String content) {
+    public void setEmailContent(String id, String content) {
         Message message = getMessageFromID(id);
         message.setContent(content);
     }
 
-    public Summary getEmailSummary(MessageID id) {
+    public Summary getEmailSummary(String id) {
         Message message = getMessageFromID(id);
         Summary summary = new Summary();
 
@@ -70,42 +74,42 @@ public class MessageController {
         return summary;
     }
 
-    public void setEmailHeader(MessageID message, String key, String value) {
-        Message msg = getMessageFromID(message);
+    public void setEmailHeader(String messageId, String key, String value) {
+        Message msg = getMessageFromID(messageId);
         msg.setHeader(key, value);
     }
 
-    public String getEmailHeader(MessageID message, String key) {
-        Message msg = getMessageFromID(message);
+    public String getEmailHeader(String messageId, String key) {
+        Message msg = getMessageFromID(messageId);
         return msg.getHeader(key);
     }
 
-    public void markRead(MessageID message) {
-        setEmailHeader(message, "X-Read", "FIXME: Set to NOW()");
+    public void markRead(String messageId) {
+        setEmailHeader(messageId, "X-Read", "FIXME: Set to NOW()");
     }
 
-    public void markUnread(MessageID message) {
-        setEmailHeader(message, "X-Read", null);
+    public void markUnread(String messageId) {
+        setEmailHeader(messageId, "X-Read", null);
     }
 
-    public void delete(MessageID message) {
+    public void delete(String messageId) {
         // FIXME;
     }
 
-    public void moveTo(MessageID message, FolderID folder) {
-        Message msg = getMessageFromID(message);
+    public void moveTo(String messageId, String folder) {
+        Message msg = getMessageFromID(messageId);
         Folder fldr = getFolderFromID(folder);
         fldr.addMessage(msg);
     }
 
-    public MessageID compose() {
-        return new MessageID();
+    public String compose() {
+        return new String();
     }
 
-    MessageID reply(MessageID originalMessage) {
+    String reply(String originalMessage) {
         Message original = getMessageFromID(originalMessage);
 
-        MessageID replyid = compose();
+        String replyid = compose();
         Message replymsg = getMessageFromID(replyid);
 
         String replyContent = original.getContent();

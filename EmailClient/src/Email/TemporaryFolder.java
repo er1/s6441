@@ -1,5 +1,7 @@
 package Email;
 
+import java.util.ArrayList;
+
 /**
  * An empty folder with no backing store for testing
  *
@@ -7,8 +9,8 @@ package Email;
  */
 public class TemporaryFolder implements Folder {
 
-    MessageSet messages = new MessageSet();
-    FolderSet folders = new FolderSet();
+    ArrayList<Message> messages;
+    ArrayList<Folder> folders;
     String name = "Folder";
 
     TemporaryFolder(String n) {
@@ -16,12 +18,12 @@ public class TemporaryFolder implements Folder {
     }
 
     @Override
-    public MessageSet getMessages() {
+    public ArrayList<Message> getMessages() {
         return messages;
     }
 
     @Override
-    public FolderSet getSubfolders() {
+    public ArrayList<Folder> getSubfolders() {
         return folders;
     }
 
