@@ -1,8 +1,6 @@
 package ui.SwingMain;
 
 import javax.swing.*;
-import java.text.*;
-import java.awt.*;
 
 public class TabWindow {
 

@@ -2,7 +2,6 @@ package ui.SwingMessage;
 
 import Email.Message;
 import javax.swing.*;
-
 import java.awt.TextArea;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;

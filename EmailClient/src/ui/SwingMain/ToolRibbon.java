@@ -1,6 +1,5 @@
 package ui.SwingMain;
 
-import Email.Message;
 import Email.PlainTextMessage;
 import java.awt.Graphics;
 import java.awt.Image;

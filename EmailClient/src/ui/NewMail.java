@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
-;
-
 public class NewMail extends JFrame implements ActionListener {
 
     public JFrame newmail() {
