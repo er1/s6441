@@ -1,0 +1,15 @@
+#![Forward]
+#!>>
+#!Sub-Usecase of selected email
+#!Forwarding an email
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Forward
+view:OK=controller.forwardEmail(EmailID)
+controller:Email=model.getEmail(EmailID)
+controller:controller.composeMail(Email)

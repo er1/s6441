@@ -1,0 +1,15 @@
+#![Reply]
+#!>>
+#!Sub-Usecase of selected email
+#!Replying to an email
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Reply
+view:OK=controller.replyToEmail(EmailID)
+controller:Email=model.getEmail(EmailID)
+controller:controller.composeMail(Email)

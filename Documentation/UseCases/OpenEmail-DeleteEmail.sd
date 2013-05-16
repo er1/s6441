@@ -1,0 +1,18 @@
+#![Delete]
+#!>>
+#!Sub-Usecase of selected email
+#!Deleting a selected email
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Delete Email
+view:OK=controller.DeleteEmail()
+controller:OK=model.MoveEmail(Email,TrashFolder)
+controller:view.updateEmailListDisplay()
+view:model.getEmailList(Folder)
+controller:view.clearEmailContentPane()
+controller:view.openPreviousEmail()
