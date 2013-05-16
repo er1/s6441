@@ -1,28 +1,28 @@
 package Email;
 
-public interface MessageController {    
+public interface MessageController {
 
-    FID[] getFolderList(FID);
+    FolderID[] getFolderList(FolderID folder);
 
-    MID[] getEmailList(FID);
+    MessageID[] getEmailList(FolderID folder);
 
-    String getEmailContent(MID);
+    String getEmailContent(MessageID message);
 
-    void setEmailContent(MID, String);
+    void setEmailContent(MessageID message, String content);
 
-    Summary getEmailSummary(MID);
+    Header getEmailSummary(MessageID message); // FIXME: 
 
-    setEmailHeader (MID, String key, String value);
+    void setEmailHeader(MessageID message, String key, String value);
 
-    void markRead(MID);
+    void markRead(MessageID message);
 
-    void markUnread(MID);
+    void markUnread(MessageID message);
 
-    void delete(MID);
+    void delete(MessageID message);
 
-    void moveTo(MID, FID);
+    void moveTo(MessageID message, FolderID folder);
 
-    MID compose();
+    MessageID compose();
 
-    MID reply(MID);
+    MessageID reply(MessageID originalMessage);
 }
