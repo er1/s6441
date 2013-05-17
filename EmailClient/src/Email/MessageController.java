@@ -1,5 +1,9 @@
 package Email;
 
+/**
+ *
+ * @author chanman
+ */
 public class MessageController {
 
     private Message getMessageFromID(MessageID message) {
@@ -19,6 +23,11 @@ public class MessageController {
         return new FolderID(); // FIXME
     }
 
+    /**
+     *
+     * @param folder
+     * @return
+     */
     public FolderID[] getFolderList(FolderID folder) {
         Folder fldr = getFolderFromID(folder);
         FolderSet set = fldr.getSubfolders();
@@ -32,6 +41,11 @@ public class MessageController {
         return ids;
     }
 
+    /**
+     *
+     * @param folder
+     * @return
+     */
     public MessageID[] getEmailList(FolderID folder) {
         Folder fldr = getFolderFromID(folder);
         MessageSet set = fldr.getMessages();
@@ -45,16 +59,31 @@ public class MessageController {
         return ids;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public String getEmailContent(MessageID id) {
         Message message = getMessageFromID(id);
         return message.getContent();
     }
 
+    /**
+     *
+     * @param id
+     * @param content
+     */
     public void setEmailContent(MessageID id, String content) {
         Message message = getMessageFromID(id);
         message.setContent(content);
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public Summary getEmailSummary(MessageID id) {
         Message message = getMessageFromID(id);
         Summary summary = new Summary();
@@ -70,34 +99,67 @@ public class MessageController {
         return summary;
     }
 
+    /**
+     *
+     * @param message
+     * @param key
+     * @param value
+     */
     public void setEmailHeader(MessageID message, String key, String value) {
         Message msg = getMessageFromID(message);
         msg.setHeader(key, value);
     }
 
+    /**
+     *
+     * @param message
+     * @param key
+     * @return
+     */
     public String getEmailHeader(MessageID message, String key) {
         Message msg = getMessageFromID(message);
         return msg.getHeader(key);
     }
 
+    /**
+     *
+     * @param message
+     */
     public void markRead(MessageID message) {
         setEmailHeader(message, "X-Read", "FIXME: Set to NOW()");
     }
 
+    /**
+     *
+     * @param message
+     */
     public void markUnread(MessageID message) {
         setEmailHeader(message, "X-Read", null);
     }
 
+    /**
+     *
+     * @param message
+     */
     public void delete(MessageID message) {
         // FIXME;
     }
 
+    /**
+     *
+     * @param message
+     * @param folder
+     */
     public void moveTo(MessageID message, FolderID folder) {
         Message msg = getMessageFromID(message);
         Folder fldr = getFolderFromID(folder);
         fldr.addMessage(msg);
     }
 
+    /**
+     *
+     * @return
+     */
     public MessageID compose() {
         return new MessageID();
     }

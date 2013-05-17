@@ -8,12 +8,14 @@ package Email;
 public interface Folder {
 
     /**
+     * Get the name of a Folder
      *
      * @return
      */
     public String getName();
 
     /**
+     * Set this name of a Folder
      *
      * @param name
      */

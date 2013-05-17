@@ -7,5 +7,8 @@ package Email;
  */
 public class FolderID {
 
+    /**
+     * Yeah...
+     */
     public String id;
 }

@@ -7,5 +7,8 @@ package Email;
  */
 public class MessageID {
 
+    /**
+     *
+     */
     public String id;
 }

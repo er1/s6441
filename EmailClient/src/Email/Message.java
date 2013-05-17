@@ -36,12 +36,11 @@ public interface Message {
      * @param value
      */
     void setHeader(String key, String value);
-    
     // FIXME: Would these style on Message make sense?
     /*
-    String[] getFrom();
-    String[] getTo();
-    String[] getCC();
-    String[] getBCC();
-    */
+     String[] getFrom();
+     String[] getTo();
+     String[] getCC();
+     String[] getBCC();
+     */
 }

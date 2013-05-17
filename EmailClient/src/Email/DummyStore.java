@@ -16,6 +16,7 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
     private Folder sent = new TemporaryFolder("Sent Messages");
 
     /**
+     * Create a testing <esaageStore
      *
      */
     public DummyStore() {

@@ -43,7 +43,7 @@ class Summary {
         this.subject = subject;
         return this;
     }
-    
+
     public Summary Read(boolean isRead) {
         this.read = isRead;
         return this;
@@ -72,7 +72,7 @@ class Summary {
     public String getSubject() {
         return subject;
     }
-    
+
     public boolean isRead() {
         return read;
     }
