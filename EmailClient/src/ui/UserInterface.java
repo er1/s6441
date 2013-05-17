@@ -7,7 +7,9 @@ package ui;
 public abstract class UserInterface {
 
     /**
-     * * Factory method to get special UI
+     * Static Factory Method to get special UI using Swing
+     *
+     * @return UserInterface implemented in Swing
      */
     public static UserInterface getSwingUserInterface() {
         SwingUserInterface swingInterface = new SwingUserInterface();

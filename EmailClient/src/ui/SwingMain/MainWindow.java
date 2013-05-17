@@ -5,15 +5,21 @@ import java.awt.Container;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * Main Email Client window
+ */
 public class MainWindow extends JFrame implements ActionListener {
 
     ToolRibbon toolRibbon = new ToolRibbon();
     MenuMain menuBar = new MenuMain();
 
+    /**
+     * Constructor
+     */
     public MainWindow() {
         super("Email Client");
         Container contentPane = this.getContentPane();
-        
+
         contentPane.setLayout(new MigLayout("fill"));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -34,6 +40,10 @@ public class MainWindow extends JFrame implements ActionListener {
         this.setSize(1000, 600);
     }
 
+    /**
+     *
+     * @param e Action Performed by user
+     */
     public void actionPerformed(ActionEvent e) {
     }
 }

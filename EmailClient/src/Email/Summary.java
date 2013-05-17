@@ -4,7 +4,7 @@ package Email;
  *
  * @author chanman
  */
-class Summary {
+public class Summary {
 
     String date;
     String to;
@@ -13,6 +13,17 @@ class Summary {
     String bcc;
     String subject;
     boolean read;
+
+    Summary(Message message) {
+
+        this.Date(message.getHeaderValue("Date")).
+                From(message.getHeaderValue("From")).
+                To(message.getHeaderValue("To")).
+                CC(message.getHeaderValue("Cc")).
+                BCC(message.getHeaderValue("Bcc")).
+                Subject(message.getHeaderValue("Subject")).
+                Read(message.getHeaderValue("X-Read").length() > 0);
+    }
 
     public Summary Date(String date) {
         this.date = date;

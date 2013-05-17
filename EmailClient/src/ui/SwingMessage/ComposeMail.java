@@ -6,8 +6,10 @@ import java.awt.TextArea;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * Compose Mail Window
+ */
 public class ComposeMail extends JFrame implements ActionListener {
-    // This message
 
     Message message;
     JTextField subjectField;
@@ -17,12 +19,19 @@ public class ComposeMail extends JFrame implements ActionListener {
 	JButton cancelMailButton;
     JPanel composeMailPanel;
 
+    /**
+     *
+     * @param msg The message object used to populate fields
+     */
     public ComposeMail(Message msg) {
         super("Email");
 
         message = msg;
     }
 
+    /**
+     * Populate Fields //TODO Rename function
+     */
     public void writeMail() {
 
         composeMailPanel = new JPanel(new MigLayout());
@@ -60,12 +69,19 @@ public class ComposeMail extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    /**
+     * Refresh display of window
+     */
     public void refresh() {
-        toField.setText(message.getHeader("To"));
-        subjectField.setText(message.getHeader("Subject"));
+        toField.setText(message.getHeaderValue("To"));
+        subjectField.setText(message.getHeaderValue("Subject"));
         messageContentTextArea.setText(message.getContent());
     }
 
+    /**
+     *
+     * @param e Action performed
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == cancelMailButton) {
             this.setVisible(false);

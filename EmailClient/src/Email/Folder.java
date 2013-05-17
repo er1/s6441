@@ -1,5 +1,7 @@
 package Email;
 
+import java.util.ArrayList;
+
 /**
  * Means of holding Messages
  *
@@ -26,14 +28,14 @@ public interface Folder {
      *
      * @return list of Messages
      */
-    MessageSet getMessages();
+    ArrayList<Message> getMessages();
 
     /**
      * Get the set of folders directly inside this folder
      *
      * @return list of Folders
      */
-    FolderSet getSubfolders();
+    ArrayList<Folder> getSubfolders();
 
     /**
      * Add msg to this folder

@@ -24,6 +24,9 @@ public class CreateNewFolder extends JFrame implements ActionListener {
     JButton okButton;
     JButton cancelButton;
 
+    /**
+     * Create new sub-folder, prompt user for name
+     */
     public void newFolder() {
 
         newFdWindow = new JFrame("Create New Folder");
@@ -54,6 +57,10 @@ public class CreateNewFolder extends JFrame implements ActionListener {
 
     }
 
+    /**
+     *
+     * @param e Action performed by user
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals("Ok")) {
@@ -66,6 +73,10 @@ public class CreateNewFolder extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     *
+     * @return Folder Name as String
+     */
     public String getFolderName() {
         return folderName;
     }

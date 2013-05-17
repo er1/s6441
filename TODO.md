@@ -3,6 +3,8 @@ SOEN 6441/1 Collaborative Email Client
 
 Project I Email Basics
 ----------------------
+* GUI
+
 * Compose New Email
 * Save Draft Email
 * Display Your inbox folder hiearchy
@@ -12,6 +14,8 @@ Project I Email Basics
 * All functionalites should have menu, right mouse click and hot keys
 * delete an email from folders
 * delete folders except top level inbox
+
+* Persistent Storage
 
 Project II Email Management
 ---------------------------
