@@ -6,6 +6,7 @@ import Email.Message;
 import Email.MessageStore;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -48,6 +49,8 @@ public class TreeExplorer extends JPanel {
         this.removeAll();
         this.add(messageTree);
         messageTree.addMouseListener(new MouseRightClickListener(messageTree));
+        JScrollPane scrollPane = new JScrollPane(messageTree);
+        this.add(scrollPane);
     }
 
     /**
@@ -61,11 +64,11 @@ public class TreeExplorer extends JPanel {
             node.add(subnode);
             populatefolder(subnode, f);
         }
-
+        /*
         // Remove this maybe
         for (Message m : folder.getMessages()) {
             DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(m.getHeaderValue("From"));
             node.add(subnode);
-        }
+        }*/
     }
 }
