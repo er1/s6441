@@ -4,8 +4,16 @@ import javax.swing.*;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
-public class NewMail extends JFrame implements ActionListener {
+/**
+ * New Message Window
+ */
+public class NewMail implements ActionListener {
 
+    /**
+     *
+     * @return the new message window to display
+     */
+    //FIXME this should just be a constructor of this class.
     public JFrame newmail() {
         JFrame nmwindow = new JFrame("New Mail");
         JPanel multiple = new JPanel(new MigLayout());
@@ -35,6 +43,10 @@ public class NewMail extends JFrame implements ActionListener {
         return nmwindow;
     }
 
+    /**
+     *
+     * @param e Action Performed
+     */
     public void actionPerformed(ActionEvent e) {
     }
 }

@@ -7,12 +7,13 @@ import javax.swing.border.LineBorder;
 
 /**
  *
- * @author anasalkhatib
  */
 public class EmailContentPane extends JPanel {
 
+    /**
+     * Constructor
+     */
     public EmailContentPane() {
-        //setSize(20, 20);
         JTextArea emailContent = new JTextArea("Content of email");
         add(emailContent, "west,grow, span, fill");
         setBorder(new LineBorder(Color.BLACK));

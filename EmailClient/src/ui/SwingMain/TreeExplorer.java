@@ -18,6 +18,9 @@ import net.miginfocom.swing.MigLayout;
 public class TreeExplorer extends JPanel {
     //TODO: See http://www.java2s.com/Code/Java/Swing-JFC/FileTreewithPopupMenu.htm
 
+    /**
+     *
+     */
     public TreeExplorer() {
         super();
         init();

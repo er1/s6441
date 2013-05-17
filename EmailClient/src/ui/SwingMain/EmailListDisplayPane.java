@@ -6,11 +6,13 @@ import javax.swing.JTable;
 import net.miginfocom.swing.MigLayout;
 
 /**
- *
- * @author anasalkhatib
+ * Email list Display
  */
 public class EmailListDisplayPane extends JPanel {
 
+    /**
+     * Constructor
+     */
     public EmailListDisplayPane() {
         this.setLayout(new MigLayout());
         String[][] data;

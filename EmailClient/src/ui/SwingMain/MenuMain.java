@@ -8,6 +8,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
+/**
+ * Main menu
+ */
 public class MenuMain extends JFrame implements ActionListener {
 
     JMenuItem new_ID = new JMenuItem("New Mail ID");
@@ -19,8 +22,11 @@ public class MenuMain extends JFrame implements ActionListener {
     JMenuItem sent_menu = new JMenuItem("Sent Mail");
     JMenuItem reply_menu = new JMenuItem("Reply Mail");
     ui.NewMail obj_1 = new ui.NewMail();
-    ui.SwingMain.TabWindow obj_4 = new ui.SwingMain.TabWindow();
 
+    /**
+     *
+     * @return A Swing MenuBar
+     */
     public JMenuBar menumail() {
         JMenuBar mainmenu = new JMenuBar();
         JMenu file = new JMenu("File", true);
@@ -43,6 +49,10 @@ public class MenuMain extends JFrame implements ActionListener {
         return mainmenu;
     }
 
+    /**
+     *
+     * @param e Action performed and detected
+     */
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == new_ID) {
@@ -51,11 +61,6 @@ public class MenuMain extends JFrame implements ActionListener {
         }
         if (e.getSource() == exit) {
             System.exit(0);
-        }
-        if (e.getSource() == inbox_menu) {
-            JTabbedPane inbox_new = obj_4.inbox;
-            inbox_new.setSelectedComponent(inbox_new);
-            //.setSelectedComponent(inbox_new);
         }
     }
 }

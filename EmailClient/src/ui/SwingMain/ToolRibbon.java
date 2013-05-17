@@ -13,6 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import ui.SwingMessage.ComposeMail;
 
+/**
+ *
+ * @author anasalkhatib
+ */
 public class ToolRibbon extends JFrame implements ActionListener {
 
     JButton deleteButton = new JButton();
@@ -23,6 +27,11 @@ public class ToolRibbon extends JFrame implements ActionListener {
     JButton composeButton = new JButton();
     JButton replyButton = new JButton();
 
+    /**
+     *
+     * @param original
+     * @return
+     */
     public ImageIcon resizeImageIcon(ImageIcon original) {
         Image img = original.getImage();
         BufferedImage bi = new BufferedImage(img.getWidth(null),
@@ -33,6 +42,10 @@ public class ToolRibbon extends JFrame implements ActionListener {
         return resizedImage;
     }
 
+    /**
+     *
+     * @return
+     */
     public JToolBar toolbar() {
 
         //TODO: resize icons
@@ -99,6 +112,10 @@ public class ToolRibbon extends JFrame implements ActionListener {
         return tool_bar;
     }
 
+    /**
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == composeButton) {

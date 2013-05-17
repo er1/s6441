@@ -8,6 +8,10 @@ import Persist.PersistentStorage;
  */
 public class Main {
 
+    /**
+     *
+     * @param args Array of any command line arguments passed in
+     */
     public static void main(String args[]) {
         UserInterface gui = UserInterface.getSwingUserInterface();
         gui.display();

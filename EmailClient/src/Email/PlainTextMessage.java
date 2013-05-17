@@ -15,6 +15,9 @@ public class PlainTextMessage implements Message {
     private String content = new String();
     private HashMap<String, String> header;
 
+    /**
+     * Constructor
+     */
     public PlainTextMessage() {
         this.header = Util.newHashMap();
     }

@@ -23,6 +23,11 @@ public class MessageController {
         return new String(); // FIXME
     }
 
+    /**
+     *
+     * @param folderId Identifier for the folder
+     * @return Array of string id's of all the Sub-folders inside our folder
+     */
     public String[] getFolderList(String folderId) {
         Folder fldr = getFolderFromID(folderId);
         ArrayList<Folder> set = fldr.getSubfolders();
@@ -36,6 +41,11 @@ public class MessageController {
         return ids;
     }
 
+    /**
+     *
+     * @param folderId ID of folder
+     * @return Array of string id's of all the messages inside our folder
+     */
     public String[] getEmailList(String folderId) {
         Folder fldr = getFolderFromID(folderId);
         ArrayList<Message> set = fldr.getMessages();
@@ -49,11 +59,21 @@ public class MessageController {
         return ids;
     }
 
+    /**
+     *
+     * @param id
+     * @return
+     */
     public String getEmailContent(String id) {
         Message message = getMessageFromID(id);
         return message.getContent();
     }
 
+    /**
+     *
+     * @param id
+     * @param content
+     */
     public void setEmailContent(String id, String content) {
         Message message = getMessageFromID(id);
         message.setContent(content);
@@ -71,34 +91,64 @@ public class MessageController {
         return summary;
     }
 
+    /**
+     *
+     * @param messageId Message ID
+     * @param key Key
+     * @param value Value
+     */
     public void setEmailHeader(String messageId, String key, String value) {
         Message msg = getMessageFromID(messageId);
         msg.setHeader(key, value);
     }
 
+    /**
+     *
+     * @param messageId Message ID
+     * @param key Key for which we want a value
+     * @return Value of particular key within message header
+     */
     public String getEmailHeader(String messageId, String key) {
         Message msg = getMessageFromID(messageId);
         return msg.getHeaderValue(key);
     }
 
+    /**
+     *
+     * @param messageId Message ID
+     */
     public void markRead(String messageId) {
         setEmailHeader(messageId, "X-Read", "FIXME: Set to NOW()");
     }
 
+    /**
+     *
+     * @param messageId Message ID
+     */
     public void markUnread(String messageId) {
         setEmailHeader(messageId, "X-Read", null);
     }
 
+    /**
+     *
+     * @param messageId Message ID
+     */
     public void delete(String messageId) {
         // FIXME;
     }
 
-    public void moveTo(String messageId, String folder) {
+    /**
+     *
+     * @param messageId Message ID
+     * @param destinationFolderId Destination Folder ID
+     */
+    public void moveMessageToFolder(String messageId, String destinationFolderId) {
         Message msg = getMessageFromID(messageId);
-        Folder fldr = getFolderFromID(folder);
-        fldr.addMessage(msg);
+        Folder destination = getFolderFromID(destinationFolderId);
+        destination.addMessage(msg);
     }
 
+    //FIXME Not sure what this does
     public String compose() {
         return new String();
     }
