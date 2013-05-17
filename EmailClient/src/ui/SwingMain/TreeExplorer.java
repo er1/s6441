@@ -58,10 +58,10 @@ public class TreeExplorer extends JPanel {
             node.add(subnode);
             populatefolder(subnode, f);
         }
-        
+
         // Remove this maybe
         for (Message m : folder.getMessages()) {
-            DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(m.getHeader("From"));
+            DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(m.getHeaderValue("From"));
             node.add(subnode);
         }
     }

@@ -27,7 +27,7 @@ public interface Message {
      * @param key
      * @return value
      */
-    String getHeader(String key);
+    String getHeaderValue(String key);
 
     /**
      * set one header value in the message

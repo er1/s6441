@@ -61,8 +61,8 @@ public class ComposeMail extends JFrame implements ActionListener {
     }
 
     public void refresh() {
-        toField.setText(message.getHeader("To"));
-        subjectField.setText(message.getHeader("Subject"));
+        toField.setText(message.getHeaderValue("To"));
+        subjectField.setText(message.getHeaderValue("Subject"));
         messageContentTextArea.setText(message.getContent());
     }
 

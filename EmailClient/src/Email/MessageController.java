@@ -59,17 +59,14 @@ public class MessageController {
         message.setContent(content);
     }
 
-    public Summary getEmailSummary(String id) {
-        Message message = getMessageFromID(id);
-        Summary summary = new Summary();
-
-        summary.Date(message.getHeader("Date")).
-                From(message.getHeader("From")).
-                To(message.getHeader("To")).
-                CC(message.getHeader("Cc")).
-                BCC(message.getHeader("Bcc")).
-                Subject(message.getHeader("Subject")).
-                Read(message.getHeader("X-Read").length() > 0);
+    /**
+     *
+     * @param messageID ID of Message
+     * @return Summary of the Message
+     */
+    public Summary getEmailSummary(String messageID) {
+        Message message = getMessageFromID(messageID);
+        Summary summary = new Summary(message);
 
         return summary;
     }
@@ -81,7 +78,7 @@ public class MessageController {
 
     public String getEmailHeader(String messageId, String key) {
         Message msg = getMessageFromID(messageId);
-        return msg.getHeader(key);
+        return msg.getHeaderValue(key);
     }
 
     public void markRead(String messageId) {
@@ -116,8 +113,8 @@ public class MessageController {
         replyContent = "\r\n\r\n" + replyContent;
         replyContent = replyContent.replaceAll("\n", "\n> ");
 
-        String to = original.getHeader("From");
-        String subject = original.getHeader("subject");
+        String to = original.getHeaderValue("From");
+        String subject = original.getHeaderValue("subject");
 
         if (!"RE:".equals(subject.substring(0, 3).toUpperCase())) {
             subject = "RE: " + subject;

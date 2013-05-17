@@ -30,7 +30,7 @@ public class PlainTextMessage implements Message {
     }
 
     @Override
-    public String getHeader(String key) {
+    public String getHeaderValue(String key) {
         String value = header.get(key);
         if (value == null) {
             value = "";
@@ -58,7 +58,7 @@ public class PlainTextMessage implements Message {
 
         // add headers
         for (String key : header.keySet()) {
-            msg += key + ": " + this.getHeader(key) + "\r\n";
+            msg += key + ": " + this.getHeaderValue(key) + "\r\n";
         }
 
         // blank line to separate headers from content
