@@ -1,6 +1,7 @@
 package Email;
 
 import java.util.ArrayList;
+import util.Util;
 
 /**
  * An empty folder with no backing store for testing
@@ -14,6 +15,8 @@ public class TemporaryFolder implements Folder {
     String name = "Folder";
 
     TemporaryFolder(String n) {
+        this.folders = Util.newArrayList();
+        this.messages = Util.newArrayList();
         name = n;
     }
 
