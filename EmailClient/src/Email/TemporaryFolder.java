@@ -14,7 +14,7 @@ public class TemporaryFolder implements Folder {
     ArrayList<Folder> folders;
     String name = "Folder";
 
-    TemporaryFolder(String n) {
+    public TemporaryFolder(String n) {
         this.folders = Util.newArrayList();
         this.messages = Util.newArrayList();
         name = n;

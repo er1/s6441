@@ -7,10 +7,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
+
+import Email.TemporaryFolder;
 
 /**
  *
@@ -23,8 +28,9 @@ public class MouseRightClickListener extends MouseAdapter implements ActionListe
 	JMenuItem deleteFolder = new JMenuItem ( "Delete" );
 	JMenuItem newFolder = new JMenuItem ( "New Folder" );
 	JMenuItem moveFolder = new JMenuItem ( "Move" );
-
-	ui.CreateNewFolder newFolderObj = new ui.CreateNewFolder();
+	
+	String folderName; 
+	TreePath path;
 
     /**
      *
@@ -41,7 +47,7 @@ public class MouseRightClickListener extends MouseAdapter implements ActionListe
     public void mousePressed(MouseEvent e) {
         if ( SwingUtilities.isRightMouseButton ( e ) )
         {
-            TreePath path = this.tree.getPathForLocation ( e.getX (), e.getY () );
+            path = this.tree.getPathForLocation ( e.getX (), e.getY () );
             System.out.println("Selected TreePath : " + path.toString());
             Rectangle pathBounds = this.tree.getUI ().getPathBounds ( this.tree, path );
             if ( pathBounds != null && pathBounds.contains ( e.getX (), e.getY () ) )
@@ -65,15 +71,47 @@ public class MouseRightClickListener extends MouseAdapter implements ActionListe
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+    	
 		if (e.getSource() == newFolder)
 		{
-
-			newFolderObj.newFolder();
-
-			System.out.println("Folder name " + newFolderObj.getFolderName());
-
+			folderName = (String)JOptionPane.showInputDialog(
+                    null,
+                    "Name:",
+                    "Create New Folder",
+                    JOptionPane.PLAIN_MESSAGE
+                    );
+			
+			if ((folderName != null) && (folderName.length() > 0)) {
+				System.out.println("FOLDER NAME :"+ folderName);
+				
+				//Insert new node into JTree given the folder and path where to insert the folder
+				addFolder(new TemporaryFolder(folderName), path);
+				return;
+            }
+			
 		}
+		
 
+	}
+    
+    /**
+    *
+    * @param folder -> new folder to be added to Tree
+    * @param path -> where exactly folder gonna be
+    */
+
+	private void addFolder(TemporaryFolder folder, TreePath path) {
+		DefaultMutableTreeNode parentFolder = null;
+		System.out.println("Current path selected : "+path.toString());
+		if(path != null)
+		{
+			parentFolder = (DefaultMutableTreeNode)
+							(path.getLastPathComponent());
+		}
+		DefaultMutableTreeNode childFolder = new DefaultMutableTreeNode(folder.getName());
+		DefaultTreeModel treeModel = (DefaultTreeModel) this.tree.getModel();
+		treeModel.insertNodeInto(childFolder, parentFolder, parentFolder.getChildCount());
+		this.tree.scrollPathToVisible(new TreePath(childFolder.getPath()));
 	}
 
 }
