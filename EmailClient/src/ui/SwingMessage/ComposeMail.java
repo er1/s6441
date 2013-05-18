@@ -1,70 +1,73 @@
 package ui.SwingMessage;
 
-import Email.Message;
 import javax.swing.*;
-import java.awt.TextArea;
 import java.awt.event.*;
-import net.miginfocom.swing.MigLayout;
+import java.awt.BorderLayout;
+import ui.LabeledTextField;
 
 /**
  * Compose Mail Window
  */
 public class ComposeMail extends JFrame implements ActionListener {
 
-    Message message;
-    JTextField subjectField;
-    JTextField toField;
-    TextArea messageContentTextArea;
-
-	JButton cancelMailButton;
-    JPanel composeMailPanel;
+    LabeledTextField subjectField;
+    LabeledTextField toField;
+    JTextArea messageContentTextArea;
+    JButton cancelMailButton;
+    JButton sendMailButton;
+    JButton saveDraftButton;
 
     /**
      *
      * @param msg The message object used to populate fields
      */
-    public ComposeMail(Message msg) {
+    public ComposeMail() {
         super("Email");
 
-        message = msg;
     }
 
     /**
      * Populate Fields //TODO Rename function
      */
     public void writeMail() {
+        // Contruct fields
+        subjectField = new LabeledTextField("Subject");
+        toField = new LabeledTextField("To");
+        messageContentTextArea = new JTextArea();
 
-        composeMailPanel = new JPanel(new MigLayout());
-        JLabel toLabel = new JLabel("To", JLabel.LEFT);
-        JLabel subjectLabel = new JLabel("Subject");
-
-        toField = new JTextField();
-        subjectField = new JTextField();
-        messageContentTextArea = new TextArea("Enter the email");
-
-        JButton sendMailButton = new JButton("Send");
+        sendMailButton = new JButton("Send");
         sendMailButton.setToolTipText("Sends mail to the corresponding To information");
 
-        JButton saveDraftButton = new JButton("Draft");
+        saveDraftButton = new JButton("Draft");
         saveDraftButton.setToolTipText("Save mail in Draft folder, Does not send mail");
 
         cancelMailButton = new JButton("Cancel");
         cancelMailButton.setToolTipText("Delete the mail and move it to recycle bin draft");
         cancelMailButton.addActionListener(this);
 
+        // Make header
+        JPanel headerPanel = new JPanel();
+        BoxLayout headerLayout = new BoxLayout(headerPanel, BoxLayout.Y_AXIS);
+        headerPanel.setLayout(headerLayout);
 
-        composeMailPanel.add(toLabel);
-        composeMailPanel.add(toField, "span,grow,wrap");
-        composeMailPanel.add(subjectLabel);
-        composeMailPanel.add(subjectField, "span,grow,wrap");
-        composeMailPanel.add(messageContentTextArea, "span,grow,wrap");
-        composeMailPanel.add(sendMailButton);
-        composeMailPanel.add(saveDraftButton);
-        composeMailPanel.add(cancelMailButton);
-        this.add(composeMailPanel);
+        headerPanel.add(toField);
+        headerPanel.add(subjectField);
+
+        // Make footer
+        JPanel footerPanel = new JPanel();
+        BoxLayout footerLayout = new BoxLayout(footerPanel, BoxLayout.X_AXIS);
+        footerPanel.setLayout(footerLayout);
+
+        footerPanel.add(sendMailButton);
+        footerPanel.add(saveDraftButton);
+        footerPanel.add(cancelMailButton);
+
+        this.setLayout(new BorderLayout());
+
+        this.add(headerPanel, BorderLayout.NORTH);
+        this.add(messageContentTextArea);
+        this.add(footerPanel, BorderLayout.SOUTH);
         this.setSize(650, 380);
-
-        refresh();
 
         this.setVisible(true);
     }
@@ -73,9 +76,6 @@ public class ComposeMail extends JFrame implements ActionListener {
      * Refresh display of window
      */
     public void refresh() {
-        toField.setText(message.getHeaderValue("To"));
-        subjectField.setText(message.getHeaderValue("Subject"));
-        messageContentTextArea.setText(message.getContent());
     }
 
     /**

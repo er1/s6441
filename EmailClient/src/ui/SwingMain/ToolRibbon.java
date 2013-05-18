@@ -129,7 +129,7 @@ public class ToolRibbon extends JFrame implements ActionListener {
                     + "\r\n"
                     + "Hello, World\r\n");
 
-            ComposeMail cmwindow = new ComposeMail(msg);
+            ComposeMail cmwindow = new ComposeMail();
             cmwindow.writeMail();
         }
     }
