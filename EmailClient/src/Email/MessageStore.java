@@ -8,6 +8,13 @@ package Email;
 public interface MessageStore extends Folder {
 
     /**
+     * Get the Drafts folder
+     *
+     * @return Drafts
+     */
+    Folder getDrafts();
+
+    /**
      * Get the Inbox folder
      *
      * @return Inbox
@@ -27,4 +34,11 @@ public interface MessageStore extends Folder {
      * @return SentMessages
      */
     Folder getSentMessages();
+
+    /**
+     * get the Trash folder
+     *
+     * @return Trash
+     */
+    Folder getTrash();
 }

@@ -11,12 +11,14 @@ package Email;
 public class DummyStore extends TemporaryFolder implements MessageStore {
 
     // Some temporary boxes
+    private Folder drafts = new TemporaryFolder("Drafts");
     private Folder inbox = new TemporaryFolder("Inbox");
     private Folder outbox = new TemporaryFolder("Outbox");
     private Folder sent = new TemporaryFolder("Sent Messages");
+    private Folder trash = new TemporaryFolder("Trash");
 
     /**
-     * Create a testing <esaageStore
+     * Create a testing MesaageStore
      *
      */
     public DummyStore() {
@@ -26,6 +28,8 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
         this.addFolder(inbox);
         this.addFolder(outbox);
         this.addFolder(sent);
+        this.addFolder(drafts);
+        this.addFolder(trash);
 
         // add two test messages
         PlainTextMessage msg = new PlainTextMessage();
@@ -54,6 +58,11 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
     }
 
     @Override
+    public Folder getDrafts() {
+        return drafts;
+    }
+
+    @Override
     public Folder getInbox() {
         return inbox;
     }
@@ -66,5 +75,10 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
     @Override
     public Folder getSentMessages() {
         return sent;
+    }
+
+    @Override
+    public Folder getTrash() {
+        return trash;
     }
 }
