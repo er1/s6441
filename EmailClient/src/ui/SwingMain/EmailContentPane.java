@@ -1,13 +1,11 @@
 package ui.SwingMain;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.border.LineBorder;
 
 /**
- *What does this do?
+ * What does this do?
  */
 public class EmailContentPane extends JPanel {
 
