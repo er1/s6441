@@ -1,12 +1,13 @@
 package ui.SwingMain;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
 /**
- *
+ *What does this do?
  */
 public class EmailContentPane extends JPanel {
 
@@ -15,8 +16,10 @@ public class EmailContentPane extends JPanel {
      */
     public EmailContentPane() {
         JTextArea emailContent = new JTextArea("Content of email");
-        add(emailContent, "west,grow, span, fill");
-        setBorder(new LineBorder(Color.BLACK));
+        this.setLayout(new BorderLayout());
+        emailContent.setEditable(false);
+        add(emailContent);
+        //setBorder(new LineBorder(Color.BLACK));
 
     }
 }

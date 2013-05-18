@@ -1,9 +1,9 @@
 package ui.SwingMain;
 
+import java.awt.BorderLayout;
 import javax.swing.*;
-import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.*;
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Main Email Client window
@@ -18,25 +18,36 @@ public class MainWindow extends JFrame implements ActionListener {
      */
     public MainWindow() {
         super("Email Client");
-        Container contentPane = this.getContentPane();
 
-        contentPane.setLayout(new MigLayout("fill"));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Create the main layout
+        this.setLayout(new BorderLayout());
 
+        // Contruct widgets
         JToolBar tool_bar = toolRibbon.toolbar();
         JMenuBar mainmenu = menuBar.menumail();
         TreeExplorer inboxTree = new TreeExplorer();
+        inboxTree.refresh();
         EmailListDisplayPane emailListDisplayPane = new EmailListDisplayPane();
         EmailContentPane emailContentPane = new EmailContentPane();
 
+        // Create a layout for the center
+        JPanel center = new JPanel();
+        GridLayout centerLayout = new GridLayout();
+        centerLayout.setColumns(1);
+        centerLayout.setRows(2);
+        center.setLayout(centerLayout);
+
+        // Add elements
+        center.add(emailListDisplayPane);
+        center.add(emailContentPane);
+
+        this.add(center);
+        this.add(tool_bar, BorderLayout.NORTH);
+        this.add(inboxTree, BorderLayout.WEST);
+
+        // Window details
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(mainmenu);
-
-        contentPane.add(tool_bar, "north");
-        contentPane.add(inboxTree, "west");
-        //TODO Figure out why this isn't filling the full screen width
-        contentPane.add(emailListDisplayPane, "grow,wrap");
-        contentPane.add(emailContentPane, "grow");
-
         this.setSize(1000, 600);
     }
 

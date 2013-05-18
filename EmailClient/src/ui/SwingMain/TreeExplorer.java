@@ -2,20 +2,15 @@ package ui.SwingMain;
 
 import Email.DummyStore;
 import Email.Folder;
-import Email.Message;
-import Email.MessageStore;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import net.miginfocom.swing.MigLayout;
 
-/**
- *
- * @author anasalkhatib
- */
 public class TreeExplorer extends JPanel {
     //TODO: See http://www.java2s.com/Code/Java/Swing-JFC/FileTreewithPopupMenu.htm
 
@@ -28,29 +23,27 @@ public class TreeExplorer extends JPanel {
     }
 
     private void init() {
-        this.setLayout(new MigLayout("wrap"));
+        this.setLayout(new BorderLayout());
 
-        refresh(new DummyStore()); // FIXME
-
-        setSize(20, 20);
+        setSize(200, 200);
+        setMinimumSize(new Dimension(200, 200));
         setBorder(BorderFactory.createTitledBorder("Folders"));
-
     }
 
     /**
      *
      * @param ms
      */
-    public void refresh(MessageStore ms) {
+    public void refresh() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Mailbox");
-        populatefolder(root, ms);
+        populatefolder(root, new DummyStore());
         DefaultTreeModel messageTreeModel = new DefaultTreeModel(root);
         JTree messageTree = new JTree(messageTreeModel);
         this.removeAll();
         this.add(messageTree);
         messageTree.addMouseListener(new MouseRightClickListener(messageTree));
-        JScrollPane scrollPane = new JScrollPane(messageTree);
-        this.add(scrollPane);
+        //JScrollPane scrollPane = new JScrollPane(messageTree);
+        //this.add(scrollPane);
     }
 
     /**
@@ -64,11 +57,6 @@ public class TreeExplorer extends JPanel {
             node.add(subnode);
             populatefolder(subnode, f);
         }
-        /*
-        // Remove this maybe
-        for (Message m : folder.getMessages()) {
-            DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(m.getHeaderValue("From"));
-            node.add(subnode);
-        }*/
+
     }
 }

@@ -1,9 +1,9 @@
 package ui.SwingMain;
 
+import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Email list Display
@@ -14,7 +14,7 @@ public class EmailListDisplayPane extends JPanel {
      * Constructor
      */
     public EmailListDisplayPane() {
-        this.setLayout(new MigLayout());
+        this.setLayout(new BorderLayout());
         String[][] data;
         data = new String[5][2];
         data[0][0] = "email1@test.com";
@@ -30,6 +30,6 @@ public class EmailListDisplayPane extends JPanel {
 
         JTable emailList = new JTable(data, new String[]{"From", "Subject"});
         setSize(200, 400);
-        add(new JScrollPane(emailList), "grow");
+        add(new JScrollPane(emailList));
     }
 }
