@@ -4,7 +4,6 @@
  */
 package util;
 
-import Email.Folder;
 import java.util.ArrayList;
 import java.util.HashMap;
 

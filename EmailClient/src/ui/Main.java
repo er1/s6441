@@ -16,6 +16,6 @@ public class Main {
         UserInterface gui = UserInterface.getSwingUserInterface();
         gui.display();
         PersistentStorage persistentStorage = PersistentStorage.getFileSystemStorage();
-        persistentStorage.load();
+        //persistentStorage.load(); ???
     }
 }
