@@ -17,6 +17,43 @@ Project I Email Basics
 
 * Persistent Storage
 
+###Initial Startup Of Client:
+
+* Prompt user for mailbox id
+    * If Mailbox exists continue
+    * If Mailbox doesn't exist create it with empty top level dirctories:
+
+        - Inbox
+        - Trash
+        - Outbox
+        - Sent
+        - Drafts
+-Load Top level Directories from Persistent Storage
+    - Read subfolders in Mailbox
+- Display GUI
+    - Tree explorer of top level folder displayed
+    - Inbox Selected
+    - Email list updated
+        - Load emails from FileSystem
+        - Iterate through Email headers and populate Email List
+        - Select First Email in List
+        - Update EmailContent Pane
+            - Load Email Content for Selected Email
+            - Display it
+        
+####Compose New mail
+####Reply to email
+####Create New Folder
+####Delete Folder
+####Move Folder
+####Delete Email
+####Reply to Email
+####Move Email
+####Handle Keyboard Quick keys
+####Empty Trash
+
+
+
 Project II Email Management
 ---------------------------
 * Email Templates
