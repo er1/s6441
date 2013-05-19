@@ -22,7 +22,7 @@ public class ToolRibbon extends JToolBar implements ActionListener {
 
     JButton deleteButton;
     JButton forwardButton;
-    JButton readButton;
+    JButton markUnreadButton;
     JButton inboxButton;
     JButton refreshButton;
     JButton composeButton;
@@ -51,7 +51,7 @@ public class ToolRibbon extends JToolBar implements ActionListener {
         button.setMinimumSize(size);
         return button;
     }
-    
+
     /**
      *
      * @return
@@ -64,13 +64,57 @@ public class ToolRibbon extends JToolBar implements ActionListener {
         forwardButton = makeButton("resources/forward.png", "Forward the selected message", size);
         deleteButton = makeButton("resources/delete.png", "Send the selected message to the trash", size);
 
-        readButton = makeButton("resources/unread.png", "Mark this message as not read", size);
+        markUnreadButton = makeButton("resources/unread.png", "Mark this message as not read", size);
+
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doRefresh();
+            }
+        });
+
+        composeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doCompose();
+            }
+        });
+
+        markUnreadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doMarkUnread();
+            }
+        });
+
+
+        replyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doReply();
+            }
+        });
+
+        forwardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doForward();
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doDelete();
+            }
+        });
+
 
         this.setRollover(true);
         this.add(refreshButton);
         this.add(composeButton);
         this.add(replyButton);
-        this.add(readButton);
+        this.add(markUnreadButton);
         this.add(forwardButton);
         this.add(deleteButton);
     }
@@ -85,5 +129,25 @@ public class ToolRibbon extends JToolBar implements ActionListener {
             ComposeMail cmwindow = new ComposeMail();
             cmwindow.setVisible(true);
         }
+    }
+
+    private void doRefresh() {
+    }
+
+    private void doCompose() {
+        ComposeMail compose = new ComposeMail();
+        compose.show();
+    }
+
+    private void doReply() {
+    }
+
+    private void doMarkUnread() {
+    }
+
+    private void doForward() {
+    }
+
+    private void doDelete() {
     }
 }
