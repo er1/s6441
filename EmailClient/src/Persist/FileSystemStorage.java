@@ -6,6 +6,7 @@ package Persist;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
@@ -57,10 +58,11 @@ class FileSystemStorage extends PersistentStorage {
         if (!parentFolder.isDirectory() || !parentFolder.exists()) {
             return messageSet;
         };
+        messageSet = new HashSet<String>();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
             if (file.isFile()) {
-                messageSet.add(folder + file.getName() + File.separator);
+                messageSet.add(folder + File.separator + file.getName() + File.separator);
                 logger.log(Level.INFO, messageSet.toString());
             }
         }
@@ -74,10 +76,12 @@ class FileSystemStorage extends PersistentStorage {
         if (!parentFolder.isDirectory() || !parentFolder.exists()) {
             return folderSet;
         };
+        folderSet = new HashSet<String>();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
             if (file.isDirectory()) {
-                folderSet.add(folder + file.getName() + File.separator);
+                logger.log(Level.INFO, file.toString());
+                folderSet.add(folder + File.separator + file.getName() + File.separator);
                 logger.log(Level.INFO, folderSet.toString());
             }
         }
@@ -86,6 +90,7 @@ class FileSystemStorage extends PersistentStorage {
 
     @Override
     public boolean deleteFolderAndAllContents(String folder) {
+        logger.log(Level.INFO, "Deleting file: {0}", folder);
         File folderToDelete = new File(mailBoxPath + folder);
         if (!folderToDelete.isDirectory() || !folderToDelete.exists()) {
             return false;
@@ -96,9 +101,8 @@ class FileSystemStorage extends PersistentStorage {
                 logger.log(Level.INFO, "Deleting folder and contents of: {0}", file.getName());
                 deleteFolderAndAllContents(folder + File.separator + file.getName());
             }
-            if (!file.delete()) {
-                return false;
-            }
+            file.delete();
+            logger.log(Level.INFO, "Deleting file: {0}", file.getName());
         }
         return folderToDelete.delete();
     }
@@ -106,8 +110,15 @@ class FileSystemStorage extends PersistentStorage {
     @Override
     public boolean moveMessageToFolder(String messagePath, String folderPath) {
         File messageToMove = new File(mailBoxPath + File.separator + messagePath);
-        //File destinationFolder = new File
-        return false;
+        File destinationFolder = new File(mailBoxPath + File.separator + folderPath);
+        if (!destinationFolder.exists()) {
+            return false;
+        }
+        File newFile = new File(destinationFolder + File.separator + messageToMove.getName());
+        logger.log(Level.INFO, "Moving message {0}", messageToMove.toString());
+        logger.log(Level.INFO, "To {0}", newFile.toString());
+
+        return messageToMove.renameTo(newFile);
     }
 
     @Override
