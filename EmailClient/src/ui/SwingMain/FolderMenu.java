@@ -18,8 +18,8 @@ public class FolderMenu extends JPopupMenu {
 
     String selected;
 
-    FolderMenu(String last) {
-        selected = last;
+    FolderMenu(String selectedFolder) {
+        selected = selectedFolder;
 
         JMenuItem deleteFolder = new JMenuItem("Delete");
         JMenuItem newFolder = new JMenuItem("New Folder");

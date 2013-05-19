@@ -1,6 +1,5 @@
 package ui.SwingMain;
 
-import Email.PlainTextMessage;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -10,7 +9,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JToolBar;
 import ui.SwingMessage.ComposeMail;
 

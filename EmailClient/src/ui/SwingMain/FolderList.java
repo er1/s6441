@@ -23,11 +23,30 @@ public class FolderList extends JPanel {
     MessageList list;
     JTree messageTree;
 
-    private class MessageStoreModel implements TreeModel {
+    private class FolderNode {
+
+        String id;
+        String name;
+
+        public FolderNode(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
+    private class FolderTreeModel implements TreeModel {
 
         MessageController controller;
 
-        public MessageStoreModel(MessageController store) {
+        public FolderTreeModel(MessageController store) {
             controller = store;
         }
 
@@ -107,7 +126,7 @@ public class FolderList extends JPanel {
     }
 
     public void refresh() {
-        messageTree = new JTree(new MessageStoreModel(store));
+        messageTree = new JTree(new FolderTreeModel(store));
         this.add(messageTree);
 
         messageTree.addMouseListener(new MouseAdapter() {
@@ -128,9 +147,8 @@ public class FolderList extends JPanel {
     }
 
     private void changefolder() {
-        // get selected folder
-        // list.change to selected folder
-        String id = "inbox";
+        TreePath path = messageTree.getSelectionPath();
+        String id = (String) path.getLastPathComponent();
         list.displayFolder(id);
     }
 }
