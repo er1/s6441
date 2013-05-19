@@ -15,12 +15,14 @@ public abstract class PersistentStorage {
      *
      * @return A Persistent Storage that uses the File System as the back end
      */
-    public static PersistentStorage getFileSystemStorage() {
-        FileSystemStorage fileSystemStorage = new FileSystemStorage();
+    public static PersistentStorage getFileSystemStorage(String mailBoxID) {
+        FileSystemStorage fileSystemStorage = new FileSystemStorage(mailBoxID);
         return fileSystemStorage;
     }
 
-    abstract public void newFolder(String newFolderName, String parentFolder);
+    abstract public boolean newFolder(String fullPath);
+
+    abstract public boolean newFolderInMailbox(String newFolderPath);
     abstract public String[] loadMessageListFromFolder(String folder);
     abstract public String[] loadSubfolders(String folder);
     abstract public void deleteFolder(String folder);
@@ -31,4 +33,5 @@ public abstract class PersistentStorage {
     abstract public String loadMessage(String message);
     abstract public void deleteMessage(String message);
     abstract public void moveFolder(String folderToMove, String destinationFolder);
+    
 }

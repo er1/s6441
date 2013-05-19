@@ -14,4 +14,11 @@ class SwingUserInterface extends UserInterface {
         JFrame window = new MainWindow();
         window.setVisible(true);
     }
+
+    @Override
+    public String getUserID() {
+        return "testUser";
+    }
+    
+    
 }

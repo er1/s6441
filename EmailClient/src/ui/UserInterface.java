@@ -20,4 +20,5 @@ public abstract class UserInterface {
      * Function to draw the user interface
      */
     abstract public void display();
+    abstract public String getUserID();
 }
