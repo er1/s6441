@@ -27,11 +27,10 @@ public abstract class PersistentStorage {
     abstract public String[] loadSubfolders(String folder);
     abstract public void deleteFolder(String folder);
     abstract public void moveMessageToFolder(String message, String folder);
-    
+
     abstract public void newMessage(String folder);
     abstract public void saveMessage(String message, String content);
     abstract public String loadMessage(String message);
     abstract public void deleteMessage(String message);
     abstract public void moveFolder(String folderToMove, String destinationFolder);
-    
 }

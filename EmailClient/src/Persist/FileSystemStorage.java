@@ -16,13 +16,13 @@ import util.Util;
  * @author anasalkhatib
  */
 class FileSystemStorage extends PersistentStorage {
-    static final Logger logger = Logger.getLogger(FileSystemStorage.class.getName()); 
+    static final Logger logger = Logger.getLogger(FileSystemStorage.class.getName());
     static {
         logger.setParent(Logger.getLogger(FileSystemStorage.class.getPackage().getName()));
     }
-    
+
     String mailBoxPath;
-    
+
     FileSystemStorage(String mailBoxID){
         String path =  getHomeFolderPathWithSeparator() + mailBoxID + File.separator;
         mailBoxPath = path;
@@ -30,11 +30,11 @@ class FileSystemStorage extends PersistentStorage {
         newFolder(mailBoxPath);
         initialiseMailboxFolder();
     }
-    
+
     private final String getHomeFolderPathWithSeparator(){
         return System.getProperty("user.home") + File.separator;
     }
-    
+
     @Override
     public boolean newFolder(String fullPath)
     {
@@ -95,7 +95,7 @@ class FileSystemStorage extends PersistentStorage {
         initialFolders.add("Outbox");
         initialFolders.add("Sent");
         initialFolders.add("Trash");
- 
+
         for (String folder : initialFolders)
         {
             newFolderInMailbox(folder);
