@@ -136,7 +136,7 @@ public class ToolRibbon extends JToolBar implements ActionListener {
 
     private void doCompose() {
         ComposeMail compose = new ComposeMail();
-        compose.show();
+        compose.setVisible(true);
     }
 
     private void doReply() {

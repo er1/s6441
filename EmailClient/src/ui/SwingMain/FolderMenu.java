@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.tree.TreeNode;
 
 /**
  *
@@ -17,9 +16,9 @@ import javax.swing.tree.TreeNode;
  */
 public class FolderMenu extends JPopupMenu {
 
-    TreeNode selected;
+    String selected;
 
-    FolderMenu(TreeNode last) {
+    FolderMenu(String last) {
         selected = last;
 
         JMenuItem deleteFolder = new JMenuItem("Delete");

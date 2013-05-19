@@ -6,17 +6,15 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import javax.swing.JMenuItem;
+import java.util.Arrays;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 public class FolderList extends JPanel {
@@ -24,6 +22,64 @@ public class FolderList extends JPanel {
     MessageController store;
     MessageList list;
     JTree messageTree;
+
+    private class MessageStoreModel implements TreeModel {
+
+        MessageController controller;
+
+        public MessageStoreModel(MessageController store) {
+            controller = store;
+        }
+
+        @Override
+        public String getRoot() {
+            return controller.getRootFolderId();
+        }
+
+        @Override
+        public Object getChild(Object folderid, int index) {
+            String id = (String) folderid;
+            String[] folders = controller.getFolderList(id);
+            return folders[index];
+        }
+
+        @Override
+        public int getChildCount(Object folderid) {
+            String id = (String) folderid;
+            String[] folders = controller.getFolderList(id);
+            return folders.length;
+        }
+
+        @Override
+        public boolean isLeaf(Object o) {
+            return false;
+        }
+
+        @Override
+        public void valueForPathChanged(TreePath tp, Object o) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public int getIndexOfChild(Object parent, Object child) {
+            String parentid = (String) parent;
+            String childid = (String) child;
+            String[] folders = controller.getFolderList(parentid);
+            return Arrays.asList(folders).indexOf(childid);
+        }
+
+        @Override
+        public void addTreeModelListener(TreeModelListener tl) {
+            // FIXME
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void removeTreeModelListener(TreeModelListener tl) {
+            // FIXME
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
 
     public FolderList(MessageController controller, MessageList messagelist) {
         super();
@@ -43,22 +99,19 @@ public class FolderList extends JPanel {
 
     void makeMenu(Point mouseposition) {
         TreePath path = messageTree.getPathForLocation(mouseposition.x, mouseposition.y);
-        TreeNode last = (TreeNode) path.getLastPathComponent();
-        
+        String last = (String) path.getLastPathComponent();
+
         JPopupMenu menu = new FolderMenu(last);
 
         menu.show(this, mouseposition.x, mouseposition.y);
     }
 
     public void refresh() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Mailbox");
-        populatefolder(root, store.getRootFolderId());
-        DefaultTreeModel messageTreeModel = new DefaultTreeModel(root);
-        messageTree = new JTree(messageTreeModel);
-        this.removeAll();
+        messageTree = new JTree(new MessageStoreModel(store));
         this.add(messageTree);
 
         messageTree.addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
                     makeMenu(e.getPoint());
@@ -72,24 +125,6 @@ public class FolderList extends JPanel {
                 changefolder();
             }
         });
-    }
-
-    /**
-     *
-     * @param node
-     * @param folder
-     */
-    private void populatefolder(DefaultMutableTreeNode node, String folderid) {
-
-
-
-        for (String subfolder : store.getFolderList(folderid)) {
-            String name = store.getFolderName(subfolder);
-            DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(name); // get name from subfolder id
-            node.add(subnode);
-            populatefolder(subnode, subfolder);
-        }
-
     }
 
     private void changefolder() {
