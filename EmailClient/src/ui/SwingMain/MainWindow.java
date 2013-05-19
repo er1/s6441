@@ -12,8 +12,8 @@ import java.awt.event.*;
  */
 public class MainWindow extends JFrame implements ActionListener {
 
-    JMenuBar mainmenu;
-    JToolBar tool_bar;
+    JMenuBar windowMenu;
+    JToolBar toolbar;
     FolderList folders;
     MessageList messages;
     Content content;
@@ -26,8 +26,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
         MessageController controller = new MessageController(new DummyStore());
 
-        this.mainmenu = new Menu();
-        this.tool_bar = new ToolRibbon();
+        this.windowMenu = new Menu();
+        this.toolbar = new ToolRibbon();
         this.content = new Content(controller);
         this.messages = new MessageList(controller, this.content);
         this.messages.displayFolder(controller.getInboxFolderId());
@@ -60,12 +60,12 @@ public class MainWindow extends JFrame implements ActionListener {
         center.add(content);
 
         this.add(center);
-        this.add(tool_bar, BorderLayout.NORTH);
+        this.add(toolbar, BorderLayout.NORTH);
         this.add(folders, BorderLayout.WEST);
 
         // Window details
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setJMenuBar(mainmenu);
+        this.setJMenuBar(windowMenu);
         this.setSize(1000, 600);
     }
 
