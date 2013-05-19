@@ -4,6 +4,7 @@
  */
 package Persist;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -25,8 +26,8 @@ public abstract class PersistentStorage {
     abstract public boolean newFolder(String fullPath);
 
     abstract public boolean newFolderInMailbox(String newFolderPath);
-    abstract public Set<String> loadMessageListFromFolder(String folder);
-    abstract public Set<String> loadSubfolders(String folder);
+    abstract public ArrayList<String> loadMessageListFromFolder(String folder);
+    abstract public ArrayList<String> loadSubfolders(String folder);
     abstract public boolean deleteFolderAndAllContents(String folder);
 
     abstract public boolean moveMessageToFolder(String message, String folder);

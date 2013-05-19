@@ -4,10 +4,14 @@
  */
 package Persist;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,13 +28,17 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     String mailBoxPath;
+    static private FileSystemStorage instance = null;
 
-    FileSystemStorage(String mailBoxID){
-        String path =  getHomeFolderPathWithSeparator() + mailBoxID + File.separator;
-        mailBoxPath = path;
-        logger.log(Level.INFO, "mailBoxPath set to {0}", mailBoxPath);
-        newFolder(mailBoxPath);
-        initialiseMailboxFolder();
+    FileSystemStorage(String mailBoxID) {
+        if (null == instance) {
+            String path = getHomeFolderPathWithSeparator() + mailBoxID + File.separator;
+            mailBoxPath = path;
+            logger.log(Level.INFO, "mailBoxPath set to {0}", mailBoxPath);
+            newFolder(mailBoxPath);
+            initialiseMailboxFolder();
+            this.instance = this;
+        }
     }
 
     private final String getHomeFolderPathWithSeparator(){
@@ -52,40 +60,40 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public Set<String> loadMessageListFromFolder(String folder) {
+    public ArrayList<String> loadMessageListFromFolder(String folder) {
         File parentFolder = new File(mailBoxPath + folder);
-        Set<String> messageSet = null;
+        ArrayList<String> mesageList = null;
         if (!parentFolder.isDirectory() || !parentFolder.exists()) {
-            return messageSet;
+            return mesageList;
         };
-        messageSet = new HashSet<String>();
+        mesageList = Util.newArrayList();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
             if (file.isFile()) {
-                messageSet.add(folder + File.separator + file.getName() + File.separator);
-                logger.log(Level.INFO, messageSet.toString());
+                mesageList.add(folder + File.separator + file.getName() + File.separator);
+                logger.log(Level.INFO, mesageList.toString());
             }
         }
-        return messageSet;
+        return mesageList;
     }
 
     @Override
-    public Set<String> loadSubfolders(String folder) {
+    public ArrayList<String> loadSubfolders(String folder) {
         File parentFolder = new File(mailBoxPath + folder);
-        Set<String> folderSet = null;
+        ArrayList<String> folderList = null;
         if (!parentFolder.isDirectory() || !parentFolder.exists()) {
-            return folderSet;
+            return folderList;
         };
-        folderSet = new HashSet<String>();
+        folderList = Util.newArrayList();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
             if (file.isDirectory()) {
                 logger.log(Level.INFO, file.toString());
-                folderSet.add(folder + File.separator + file.getName() + File.separator);
-                logger.log(Level.INFO, folderSet.toString());
+                folderList.add(folder + File.separator + file.getName() + File.separator);
+                logger.log(Level.INFO, folderList.toString());
             }
         }
-        return folderSet;
+        return folderList;
     }
 
     @Override
@@ -122,28 +130,73 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public boolean newMessage(String folder) {
-        return false;
+    public boolean newMessage(String messagePath) {
+        File newMessage = new File(mailBoxPath + messagePath);
+        boolean result = false;
+        try {
+            result = newMessage.createNewFile();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
 
     @Override
-    public boolean saveMessage(String message, String content) {
-        return false;
+    public boolean saveMessage(String messagePath, String content) {
+        File newMessage = new File(mailBoxPath + messagePath);
+        FileOutputStream outputStream;
+        if (!newMessage.exists()) {
+            //TODO create it instaead?
+            return false;
+        } else {
+            try {
+                outputStream = new FileOutputStream(newMessage);
+                outputStream.write(content.getBytes());
+
+            } catch (FileNotFoundException ex) {
+                logger.log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, null, ex);
+            }
+        }
+        return true;
     }
 
     @Override
-    public String loadMessage(String message) {
-        return null;
+    public String loadMessage(String messagePath) {
+        //http://www.javapractices.com/topic/TopicAction.do?Id=42
+        StringBuilder text = new StringBuilder();
+        String NL = System.getProperty("line.separator");
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new FileInputStream(mailBoxPath + messagePath));
+            while (scanner.hasNextLine()) {
+                text.append(scanner.nextLine() + NL);
+            }
+
+        } catch (FileNotFoundException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        } finally {
+            scanner.close();
+        }
+        return text.toString();
     }
 
     @Override
     public boolean deleteMessage(String message) {
-        return false;
+        File pathToDelete = new File(mailBoxPath + message);
+        return pathToDelete.delete();
     }
 
     @Override
     public boolean moveFolder(String folderToMove, String destinationFolder) {
-        return false;
+        File source = new File(mailBoxPath + folderToMove);
+        File destination = new File(
+                mailBoxPath
+                + destinationFolder
+                + File.separator
+                + source.getName());
+        return source.renameTo(destination);
     }
 
     private void initialiseMailboxFolder() {

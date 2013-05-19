@@ -11,7 +11,7 @@ import util.Util;
  * @author chanman
  */
 public class PlainTextMessage implements Message {
-    
+
     private String content = new String();
     private HashMap<String, String> header;
 
@@ -24,7 +24,7 @@ public class PlainTextMessage implements Message {
     public PlainTextMessage() {
         this.header = Util.newHashMap();
     }
-    
+
     public String getId() {
         return this.id;
     }
