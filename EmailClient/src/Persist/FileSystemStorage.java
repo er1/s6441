@@ -51,8 +51,20 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public String[] loadMessageListFromFolder(String folder) {
-        return null;
+    public Set<String> loadMessageListFromFolder(String folder) {
+        File parentFolder = new File(mailBoxPath + folder);
+        Set<String> messageSet = null;
+        if (!parentFolder.isDirectory() || !parentFolder.exists()) {
+            return messageSet;
+        };
+        File[] allFiles = parentFolder.listFiles();
+        for (File file : allFiles) {
+            if (file.isFile()) {
+                messageSet.add(folder + file.getName() + File.separator);
+                logger.log(Level.INFO, messageSet.toString());
+            }
+        }
+        return messageSet;
     }
 
     @Override
@@ -73,19 +85,23 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public void deleteFolder(String folder) {
+    public boolean deleteFolder(String folder) {
+        return false;
     }
 
     @Override
-    public void moveMessageToFolder(String message, String folder) {
+    public boolean moveMessageToFolder(String message, String folder) {
+        return false;
     }
 
     @Override
-    public void newMessage(String folder) {
+    public boolean newMessage(String folder) {
+        return false;
     }
 
     @Override
-    public void saveMessage(String message, String content) {
+    public boolean saveMessage(String message, String content) {
+        return false;
     }
 
     @Override
@@ -94,11 +110,13 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public void deleteMessage(String message) {
+    public boolean deleteMessage(String message) {
+        return false;
     }
 
     @Override
-    public void moveFolder(String folderToMove, String destinationFolder) {
+    public boolean moveFolder(String folderToMove, String destinationFolder) {
+        return false;
     }
 
     private void initialiseMailboxFolder() {
