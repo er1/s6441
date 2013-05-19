@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Util;
@@ -16,13 +17,13 @@ import util.Util;
  * @author anasalkhatib
  */
 class FileSystemStorage extends PersistentStorage {
-    static final Logger logger = Logger.getLogger(FileSystemStorage.class.getName()); 
+    static final Logger logger = Logger.getLogger(FileSystemStorage.class.getName());
     static {
         logger.setParent(Logger.getLogger(FileSystemStorage.class.getPackage().getName()));
     }
-    
+
     String mailBoxPath;
-    
+
     FileSystemStorage(String mailBoxID){
         String path =  getHomeFolderPathWithSeparator() + mailBoxID + File.separator;
         mailBoxPath = path;
@@ -30,16 +31,16 @@ class FileSystemStorage extends PersistentStorage {
         newFolder(mailBoxPath);
         initialiseMailboxFolder();
     }
-    
+
     private final String getHomeFolderPathWithSeparator(){
         return System.getProperty("user.home") + File.separator;
     }
-    
+
     @Override
     public boolean newFolder(String fullPath)
     {
         File folder = new File(fullPath);
-        //TODO Handle return?
+        //TODO Handle return, or leave it up to caller?
         return folder.mkdir();
     }
     @Override
@@ -50,29 +51,57 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public String[] loadMessageListFromFolder(String folder) {
-        return null;
+    public Set<String> loadMessageListFromFolder(String folder) {
+        File parentFolder = new File(mailBoxPath + folder);
+        Set<String> messageSet = null;
+        if (!parentFolder.isDirectory() || !parentFolder.exists()) {
+            return messageSet;
+        };
+        File[] allFiles = parentFolder.listFiles();
+        for (File file : allFiles) {
+            if (file.isFile()) {
+                messageSet.add(folder + file.getName() + File.separator);
+                logger.log(Level.INFO, messageSet.toString());
+            }
+        }
+        return messageSet;
     }
 
     @Override
-    public String[] loadSubfolders(String folder) {
-        return null;
+    public Set<String> loadSubfolders(String folder) {
+        File parentFolder = new File(mailBoxPath + folder);
+        Set<String> folderSet = null;
+        if (!parentFolder.isDirectory() || !parentFolder.exists()) {
+            return folderSet;
+        };
+        File[] allFiles = parentFolder.listFiles();
+        for (File file : allFiles) {
+            if (file.isDirectory()) {
+                folderSet.add(folder + file.getName() + File.separator);
+                logger.log(Level.INFO, folderSet.toString());
+            }
+        }
+        return folderSet;
     }
 
     @Override
-    public void deleteFolder(String folder) {
+    public boolean deleteFolder(String folder) {
+        return false;
     }
 
     @Override
-    public void moveMessageToFolder(String message, String folder) {
+    public boolean moveMessageToFolder(String message, String folder) {
+        return false;
     }
 
     @Override
-    public void newMessage(String folder) {
+    public boolean newMessage(String folder) {
+        return false;
     }
 
     @Override
-    public void saveMessage(String message, String content) {
+    public boolean saveMessage(String message, String content) {
+        return false;
     }
 
     @Override
@@ -81,11 +110,13 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public void deleteMessage(String message) {
+    public boolean deleteMessage(String message) {
+        return false;
     }
 
     @Override
-    public void moveFolder(String folderToMove, String destinationFolder) {
+    public boolean moveFolder(String folderToMove, String destinationFolder) {
+        return false;
     }
 
     private void initialiseMailboxFolder() {
@@ -95,7 +126,7 @@ class FileSystemStorage extends PersistentStorage {
         initialFolders.add("Outbox");
         initialFolders.add("Sent");
         initialFolders.add("Trash");
- 
+
         for (String folder : initialFolders)
         {
             newFolderInMailbox(folder);
