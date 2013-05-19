@@ -85,12 +85,28 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public boolean deleteFolder(String folder) {
-        return false;
+    public boolean deleteFolderAndAllContents(String folder) {
+        File folderToDelete = new File(mailBoxPath + folder);
+        if (!folderToDelete.isDirectory() || !folderToDelete.exists()) {
+            return false;
+        };
+        File[] allFiles = folderToDelete.listFiles();
+        for (File file : allFiles) {
+            if (file.isDirectory()) {
+                logger.log(Level.INFO, "Deleting folder and contents of: {0}", file.getName());
+                deleteFolderAndAllContents(folder + File.separator + file.getName());
+            }
+            if (!file.delete()) {
+                return false;
+            }
+        }
+        return folderToDelete.delete();
     }
 
     @Override
-    public boolean moveMessageToFolder(String message, String folder) {
+    public boolean moveMessageToFolder(String messagePath, String folderPath) {
+        File messageToMove = new File(mailBoxPath + File.separator + messagePath);
+        //File destinationFolder = new File
         return false;
     }
 

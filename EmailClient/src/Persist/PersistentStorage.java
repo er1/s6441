@@ -27,7 +27,7 @@ public abstract class PersistentStorage {
     abstract public boolean newFolderInMailbox(String newFolderPath);
     abstract public Set<String> loadMessageListFromFolder(String folder);
     abstract public Set<String> loadSubfolders(String folder);
-    abstract public boolean deleteFolder(String folder);
+    abstract public boolean deleteFolderAndAllContents(String folder);
 
     abstract public boolean moveMessageToFolder(String message, String folder);
 
