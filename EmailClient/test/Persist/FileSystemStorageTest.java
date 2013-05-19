@@ -7,6 +7,7 @@ package Persist;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -73,7 +74,7 @@ public class FileSystemStorageTest {
      */
     @Test
     public void testNewFolder() {
-        boolean result = instance.newFolder(mailboxID);
+        boolean result = instance.newFolder(testDirectory + File.separator + "newFolder");
         assertEquals(true, result);
     }
 
@@ -107,13 +108,10 @@ public class FileSystemStorageTest {
     @Test
     public void testLoadSubfolders() {
         System.out.println("loadSubfolders");
-        String folder = "";
-        FileSystemStorage instance = null;
-        String[] expResult = null;
-        String[] result = instance.loadSubfolders(folder);
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        String folder = "Inbox";
+        Set<String> emptySet = null;
+        Set<String> result = instance.loadSubfolders(folder);
+        assertSame(emptySet, result);
     }
 
     /**

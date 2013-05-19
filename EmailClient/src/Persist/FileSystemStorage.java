@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Util;
@@ -39,7 +40,7 @@ class FileSystemStorage extends PersistentStorage {
     public boolean newFolder(String fullPath)
     {
         File folder = new File(fullPath);
-        //TODO Handle return?
+        //TODO Handle return, or leave it up to caller?
         return folder.mkdir();
     }
     @Override
@@ -55,8 +56,20 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     @Override
-    public String[] loadSubfolders(String folder) {
-        return null;
+    public Set<String> loadSubfolders(String folder) {
+        File parentFolder = new File(mailBoxPath + folder);
+        Set<String> folderSet = null;
+        if (!parentFolder.isDirectory() || !parentFolder.exists()) {
+            return folderSet;
+        };
+        File[] allFiles = parentFolder.listFiles();
+        for (File file : allFiles) {
+            if (file.isDirectory()) {
+                folderSet.add(folder + file.getName() + File.separator);
+                logger.log(Level.INFO, folderSet.toString());
+            }
+        }
+        return folderSet;
     }
 
     @Override
