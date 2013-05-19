@@ -35,7 +35,8 @@ public class MainWindow extends JFrame implements ActionListener {
 
 
         // Create the main layout
-        this.setLayout(new BorderLayout());
+        BorderLayout layout = new BorderLayout();
+        this.setLayout(layout);
 
         // Contruct widgets
         folders.refresh();
@@ -47,6 +48,13 @@ public class MainWindow extends JFrame implements ActionListener {
         centerLayout.setRows(2);
         center.setLayout(centerLayout);
 
+        layout.setHgap(2);
+        centerLayout.setVgap(2);
+        
+        folders.setBorder(BorderFactory.createLoweredBevelBorder());
+        messages.setBorder(BorderFactory.createLoweredBevelBorder());
+        content.setBorder(BorderFactory.createLoweredBevelBorder());
+        
         // Add elements
         center.add(messages);
         center.add(content);

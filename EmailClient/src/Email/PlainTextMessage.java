@@ -98,6 +98,7 @@ public class PlainTextMessage implements Message {
 
         String allLines = msg.substring(matcher.start(), matcher.end());
         String[] lines = allLines.split("\n");
+        header.clear();
 
         for (String line : lines) {
             int colon = line.indexOf(":");
