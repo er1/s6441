@@ -22,7 +22,7 @@ public class FileSystemFolder implements Folder {
     String name = new String();
     //Need the mailboxID to get persistenceStore, unless we get the persistStore
     //from the controller?
-    PersistentStorage persistStore = PersistentStorage.getFileSystemStorage(mailboxID);
+    PersistentStorage persistStore = null;//PersistentStorage.getFileSystemStorage(mailboxID);
 
     public FileSystemFolder(String id) {
         this.folders = Util.newArrayList();
