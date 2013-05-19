@@ -6,11 +6,12 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import ui.NewMail;
 
 /**
  * Main menu
  */
-public class MenuMain extends JFrame implements ActionListener {
+public class Menu extends JMenuBar implements ActionListener {
 
     JMenuItem new_ID = new JMenuItem("New Mail ID");
     JMenuItem get_Mail = new JMenuItem("Get Mail");
@@ -20,14 +21,12 @@ public class MenuMain extends JFrame implements ActionListener {
     JMenuItem refresh_menu = new JMenuItem("Refresh");
     JMenuItem sent_menu = new JMenuItem("Sent Mail");
     JMenuItem reply_menu = new JMenuItem("Reply Mail");
-    ui.NewMail obj_1 = new ui.NewMail();
 
     /**
      *
      * @return A Swing MenuBar
      */
-    public JMenuBar menumail() {
-        JMenuBar mainmenu = new JMenuBar();
+    public Menu() {
         JMenu file = new JMenu("File", true);
         JMenu edit = new JMenu("Edit", true);
         new_ID.addActionListener(this);
@@ -42,10 +41,8 @@ public class MenuMain extends JFrame implements ActionListener {
         edit.add(sent_menu);
         edit.add(reply_menu);
         edit.add(delete_menu);
-        mainmenu.add(file);
-        mainmenu.add(edit);
-        //menu_Panel.add(mainmenu);
-        return mainmenu;
+        this.add(file);
+        this.add(edit);
     }
 
     /**
@@ -56,11 +53,11 @@ public class MenuMain extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == new_ID) {
-            JFrame nmwindow = new JFrame();
-            nmwindow = obj_1.newmail();
+            JFrame nmwindow = new NewMail();
+            nmwindow.setVisible(true);
         }
         if (e.getSource() == exit) {
-            System.exit(0);
+            System.exit(0); // does this make sense?
         }
     }
 }

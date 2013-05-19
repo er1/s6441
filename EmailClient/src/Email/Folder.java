@@ -9,6 +9,10 @@ import java.util.ArrayList;
  */
 public interface Folder {
 
+    public String getId();
+
+    public void setId(String id);
+
     /**
      * Get the name of a Folder
      *

@@ -7,6 +7,10 @@ package Email;
  */
 public interface Message {
 
+    public String getId();
+
+    public void setId(String id);
+
     /**
      * Set the content of the message body
      *

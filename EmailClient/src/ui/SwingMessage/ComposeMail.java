@@ -24,12 +24,6 @@ public class ComposeMail extends JFrame implements ActionListener {
     public ComposeMail() {
         super("Email");
 
-    }
-
-    /**
-     * Populate Fields //TODO Rename function
-     */
-    public void writeMail() {
         // Contruct fields
         subjectField = new LabeledTextField("Subject");
         toField = new LabeledTextField("To");

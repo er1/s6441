@@ -7,15 +7,14 @@ import net.miginfocom.swing.MigLayout;
 /**
  * New Message Window
  */
-public class NewMail implements ActionListener {
+public class NewMail extends JFrame implements ActionListener {
 
     /**
      *
      * @return the new message window to display
      */
-    //FIXME this should just be a constructor of this class.
-    public JFrame newmail() {
-        JFrame nmwindow = new JFrame("New Mail");
+    public NewMail() {
+        super("New Mail");
         JPanel multiple = new JPanel(new MigLayout());
         JLabel accountNameLabel = new JLabel("Account Name");
         JTextField firstNameField = new JTextField("First", 15);
@@ -37,10 +36,8 @@ public class NewMail implements ActionListener {
         multiple.add(reenterPasswordLabel);
         multiple.add(reenterPasswordField, "span,grow,wrap");
         multiple.add(saveButton, "tag ok");
-        nmwindow.add(multiple);
-        nmwindow.setSize(400, 250);
-        nmwindow.setVisible(true);
-        return nmwindow;
+        this.add(multiple);
+        this.setSize(400, 250);
     }
 
     /**

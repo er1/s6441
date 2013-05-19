@@ -1,27 +1,41 @@
 package Email;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import util.Util;
 
 /**
  * Message controller class
  */
 public class MessageController {
 
-    private Message getMessageFromID(String messageId) {
-        return new PlainTextMessage() {
-        }; // FIXME
+    MessageStore store;
+    // What should I be doing here? this is dumb
+    HashMap<String, Message> messageLookup = Util.newHashMap();
+    HashMap<String, Folder> folderLookup = Util.newHashMap();
+
+    public MessageController(MessageStore messagestore) {
+        store = messagestore;
     }
 
-    private Folder getFolderFromID(String folderId) {
-        return new TemporaryFolder(""); // FIXME
+    private Message getMessageFromId(String messageId) {
+        return messageLookup.get(messageId);
     }
 
-    private String getIDfromMessage(Message message) {
-        return new String(); // FIXME
+    private Folder getFolderFromId(String folderId) {
+        return folderLookup.get(folderId);
     }
 
-    private String getIDfromFolder(Folder folder) {
-        return new String(); // FIXME
+    private String getIdfromMessage(Message message) {
+        String id = message.getId();
+        messageLookup.put(id, message);
+        return id;
+    }
+
+    private String getIdfromFolder(Folder folder) {
+        String id = folder.getId();
+        folderLookup.put(id, folder);
+        return id;
     }
 
     /**
@@ -30,13 +44,13 @@ public class MessageController {
      * @return
      */
     public String[] getFolderList(String folderId) {
-        Folder fldr = getFolderFromID(folderId);
+        Folder fldr = getFolderFromId(folderId);
         ArrayList<Folder> set = fldr.getSubfolders();
         String[] ids = new String[set.size()];
 
         int index = 0;
         for (Folder subfolder : set) {
-            ids[index++] = getIDfromFolder(subfolder);
+            ids[index++] = getIdfromFolder(subfolder);
         }
 
         return ids;
@@ -44,19 +58,26 @@ public class MessageController {
 
     /**
      *
-     * @param folderId ID of folder
+     * @param folderId Id of folder
      * @return Array of string id's of all the messages inside our folder
      */
     public String[] getEmailList(String folderId) {
-        Folder fldr = getFolderFromID(folderId);
-        ArrayList<Message> set = fldr.getMessages();
-        String[] ids = new String[set.size()];
+        String[] ids;
 
-        int index = 0;
-        for (Message message : set) {
-            ids[index++] = getIDfromMessage(message);
+        try {
+            Folder fldr = getFolderFromId(folderId);
+            ArrayList<Message> set;
+            set = fldr.getMessages();
+
+            ids = new String[set.size()];
+
+            int index = 0;
+            for (Message message : set) {
+                ids[index++] = getIdfromMessage(message);
+            }
+        } catch (Exception ex) {
+            ids = new String[0];
         }
-
         return ids;
     }
 
@@ -66,8 +87,12 @@ public class MessageController {
      * @return
      */
     public String getEmailContent(String id) {
-        Message message = getMessageFromID(id);
-        return message.getContent();
+        try {
+            Message message = getMessageFromId(id);
+            return message.getContent();
+        } catch (NullPointerException e) {
+            return new String();
+        }
     }
 
     /**
@@ -76,17 +101,17 @@ public class MessageController {
      * @param content
      */
     public void setEmailContent(String id, String content) {
-        Message message = getMessageFromID(id);
+        Message message = getMessageFromId(id);
         message.setContent(content);
     }
 
     /**
      *
-     * @param messageID ID of Message
+     * @param messageId Id of Message
      * @return Summary of the Message
      */
-    public Summary getEmailSummary(String messageID) {
-        Message message = getMessageFromID(messageID);
+    public Summary getEmailSummary(String messageId) {
+        Message message = getMessageFromId(messageId);
         Summary summary = new Summary(message);
 
         return summary;
@@ -94,29 +119,29 @@ public class MessageController {
 
     /**
      *
-     * @param messageId Message ID
+     * @param messageId Message Id
      * @param key Key
      * @param value Value
      */
     public void setEmailHeader(String messageId, String key, String value) {
-        Message msg = getMessageFromID(messageId);
+        Message msg = getMessageFromId(messageId);
         msg.setHeader(key, value);
     }
 
     /**
      *
-     * @param messageId Message ID
+     * @param messageId Message Id
      * @param key Key for which we want a value
      * @return Value of particular key within message header
      */
     public String getEmailHeader(String messageId, String key) {
-        Message msg = getMessageFromID(messageId);
+        Message msg = getMessageFromId(messageId);
         return msg.getHeaderValue(key);
     }
 
     /**
      *
-     * @param messageId Message ID
+     * @param messageId Message Id
      */
     public void markRead(String messageId) {
         setEmailHeader(messageId, "X-Read", "FIXME: Set to NOW()");
@@ -124,7 +149,7 @@ public class MessageController {
 
     /**
      *
-     * @param messageId Message ID
+     * @param messageId Message Id
      */
     public void markUnread(String messageId) {
         setEmailHeader(messageId, "X-Read", null);
@@ -132,7 +157,7 @@ public class MessageController {
 
     /**
      *
-     * @param messageId Message ID
+     * @param messageId Message Id
      */
     public void delete(String messageId) {
         // FIXME;
@@ -140,12 +165,12 @@ public class MessageController {
 
     /**
      *
-     * @param messageId Message ID
-     * @param destinationFolderId Destination Folder ID
+     * @param messageId Message Id
+     * @param destinationFolderId Destination Folder Id
      */
     public void moveMessageToFolder(String messageId, String destinationFolderId) {
-        Message msg = getMessageFromID(messageId);
-        Folder destination = getFolderFromID(destinationFolderId);
+        Message msg = getMessageFromId(messageId);
+        Folder destination = getFolderFromId(destinationFolderId);
         destination.addMessage(msg);
     }
 
@@ -155,26 +180,60 @@ public class MessageController {
     }
 
     String reply(String originalMessage) {
-        Message original = getMessageFromID(originalMessage);
-
+        // create a new message
         String replyid = compose();
-        Message replymsg = getMessageFromID(replyid);
+        Message replymsg = getMessageFromId(replyid);
+
+        // get the original message and use it to create the reply content
+        Message original = getMessageFromId(originalMessage);
 
         String replyContent = original.getContent();
         replyContent = "\r\n\r\n" + replyContent;
         replyContent = replyContent.replaceAll("\n", "\n> ");
 
+        // get the headers based on the original message
         String to = original.getHeaderValue("From");
         String subject = original.getHeaderValue("subject");
 
+        // add RE to the subject if it is not already there
         if (!"RE:".equals(subject.substring(0, 3).toUpperCase())) {
             subject = "RE: " + subject;
         }
 
+        // set the headers and content of the reply
         replymsg.setContent(replyContent);
         replymsg.setHeader("To", to);
         replymsg.setHeader("Subject", subject);
 
         return replyid;
+    }
+
+    // get particular folder ids
+    public String getRootFolderId() {
+        return getIdfromFolder(store);
+    }
+
+    public String getDraftsFolderId() {
+        return getIdfromFolder(store.getDrafts());
+    }
+
+    public String getInboxFolderId() {
+        return getIdfromFolder(store.getInbox());
+    }
+
+    public String getOutboxFolderId() {
+        return getIdfromFolder(store.getOutbox());
+    }
+
+    public String getSentMessagesFolderId() {
+        return getIdfromFolder(store.getSentMessages());
+    }
+
+    public String getTrashFolderId() {
+        return getIdfromFolder(store.getTrash());
+    }
+
+    public String getFolderName(String folder) {
+        return getFolderFromId(folder).getName();
     }
 }

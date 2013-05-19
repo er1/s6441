@@ -13,11 +13,23 @@ public class TemporaryFolder implements Folder {
     ArrayList<Message> messages;
     ArrayList<Folder> folders;
     String name = "Folder";
+    // ID used the the messagecontroller for bookeeping
+    String id = new String();
 
     public TemporaryFolder(String n) {
         this.folders = Util.newArrayList();
         this.messages = Util.newArrayList();
         name = n;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

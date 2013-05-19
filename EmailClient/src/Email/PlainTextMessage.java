@@ -11,15 +11,26 @@ import util.Util;
  * @author chanman
  */
 public class PlainTextMessage implements Message {
-
+    
     private String content = new String();
     private HashMap<String, String> header;
+
+    // ID used the the messagecontroller for bookeeping
+    private String id = new String();
 
     /**
      * Constructor
      */
     public PlainTextMessage() {
         this.header = Util.newHashMap();
+    }
+    
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

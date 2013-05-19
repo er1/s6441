@@ -24,6 +24,12 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
     public DummyStore() {
         super("Mailbox");
 
+        inbox.setId("in");
+        outbox.setId("out");
+        sent.setId("sent");
+        drafts.setId("draft");
+        trash.setId("trash");
+        
         // add them to the store on creation
         this.addFolder(inbox);
         this.addFolder(outbox);
@@ -33,6 +39,7 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
 
         // add two test messages
         PlainTextMessage msg = new PlainTextMessage();
+        msg.setId("m1");
         msg.parse("Date: 01 Jan 70 00:00 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
@@ -42,6 +49,7 @@ public class DummyStore extends TemporaryFolder implements MessageStore {
         inbox.addMessage(msg);
 
         msg = new PlainTextMessage();
+        msg.setId("m2");
         msg.parse("Date: 05 Nov 09 1900 EDT\r\n"
                 + "From: Alice Anderson <alice@example.com>\r\n"
                 + "To: Bob Brown <bob@example.com>, Charlie Chapman <charlie@example.com>\r\n"
