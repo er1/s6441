@@ -113,14 +113,14 @@ public class FileSystemStorageTest {
     }
 
     /**
-     * Test of deleteFolder method, of class FileSystemStorage.
+     * Test of deleteFolderAndAllContents method, of class FileSystemStorage.
      */
     @Test
     public void testDeleteFolder() {
         System.out.println("deleteFolder");
         String folder = "";
         FileSystemStorage instance = null;
-        instance.deleteFolder(folder);
+        instance.deleteFolderAndAllContents(folder);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
