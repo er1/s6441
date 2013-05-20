@@ -84,8 +84,7 @@ public class PlainTextMessageTest {
         
         String expResult;
         String result;
-        
-        expResult = "Hello, World\r\n";
+       
         instance.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
@@ -120,9 +119,10 @@ public class PlainTextMessageTest {
         instance.setContent("Hello\r\n");
                 
         String expResult = "From: postmaster\r\n"
-                + ""
+                + "\r\n"
                 + "Hello\r\n";
         String result = instance.serialize();
+        assertEquals(expResult, result);
     }
 
     /**
@@ -135,9 +135,10 @@ public class PlainTextMessageTest {
         instance.setContent("Hello\r\n");
                 
         String expResult = "From: postmaster\r\n"
-                + ""
+                + "\r\n"
                 + "Hello\r\n";
         String result = instance.serialize();
+        assertEquals(expResult, result);
     }
 
     /**
@@ -150,7 +151,6 @@ public class PlainTextMessageTest {
         String expResult;
         String result;
         
-        expResult = "Hello, World\r\n";
         instance.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
