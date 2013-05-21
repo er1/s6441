@@ -14,6 +14,10 @@ public class MessageController {
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
 
+    /**
+     * MessageController Constructor
+     * @param messagestore
+     */
     public MessageController(MessageStore messagestore) {
         store = messagestore;
     }
@@ -39,9 +43,9 @@ public class MessageController {
     }
 
     /**
-     *
-     * @param folder
-     * @return
+     * Get sub folders from a folder
+     * @param folderId 
+     * @return Array of string id's of all the sub folders inside our folder
      */
     public String[] getFolderList(String folderId) {
         Folder fldr = getFolderFromId(folderId);
@@ -57,7 +61,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Get email list from a folder
      * @param folderId Id of folder
      * @return Array of string id's of all the messages inside our folder
      */
@@ -82,9 +86,9 @@ public class MessageController {
     }
 
     /**
-     *
+     * Get email content
      * @param id
-     * @return
+     * @return content
      */
     public String getEmailContent(String id) {
         try {
@@ -96,7 +100,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Set email content
      * @param id
      * @param content
      */
@@ -106,7 +110,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Get email summary
      * @param messageId Id of Message
      * @return Summary of the Message
      */
@@ -118,7 +122,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Set email header
      * @param messageId Message Id
      * @param key Key
      * @param value Value
@@ -129,7 +133,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Get email header
      * @param messageId Message Id
      * @param key Key for which we want a value
      * @return Value of particular key within message header
@@ -140,7 +144,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Mark message as read
      * @param messageId Message Id
      */
     public void markRead(String messageId) {
@@ -148,7 +152,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Mark message as unread
      * @param messageId Message Id
      */
     public void markUnread(String messageId) {
@@ -164,7 +168,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Move message to specified destination folder
      * @param messageId Message Id
      * @param destinationFolderId Destination Folder Id
      */
@@ -175,10 +179,20 @@ public class MessageController {
     }
 
     //FIXME Not sure what this does
+    /**
+     * 
+     * @return
+     */
     public String compose() {
         return new String();
     }
 
+    /**
+     * Create Reply content from the original message
+     * @param  originalMessage
+     * @return replyid
+     */
+    
     String reply(String originalMessage) {
         // create a new message
         String replyid = compose();
@@ -209,30 +223,59 @@ public class MessageController {
     }
 
     // get particular folder ids
+    /**
+     * Get root folder id
+     * @return id
+     */
     public String getRootFolderId() {
         return getIdfromFolder(store);
     }
 
+    /**
+     * Get drafts folder id
+     * @return id
+     */
     public String getDraftsFolderId() {
         return getIdfromFolder(store.getDrafts());
     }
 
+    /**
+     * Get inbox folder id
+     * @return id
+     */
     public String getInboxFolderId() {
         return getIdfromFolder(store.getInbox());
     }
 
+    /**
+     * Get outbox folder id
+     * @return id
+     */
     public String getOutboxFolderId() {
         return getIdfromFolder(store.getOutbox());
     }
 
+    /**
+     * Get sent messages folder id
+     * @return id
+     */
     public String getSentMessagesFolderId() {
         return getIdfromFolder(store.getSentMessages());
     }
 
+    /**
+     * Get trash folder id
+     * @return id
+     */
     public String getTrashFolderId() {
         return getIdfromFolder(store.getTrash());
     }
 
+    /**
+     * Get the name of a folder
+     * @param folder
+     * @return folderName
+     */
     public String getFolderName(String folder) {
         return getFolderFromId(folder).getName();
     }
