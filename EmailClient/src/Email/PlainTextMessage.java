@@ -25,10 +25,18 @@ public class PlainTextMessage implements Message {
         this.header = Util.newHashMap();
     }
 
+    /**
+     * Get id
+     * @return id
+     */
     public String getId() {
         return this.id;
     }
 
+    /**
+     * Set id
+     * @param id
+     */
     public void setId(String id) {
         this.id = id;
     }

@@ -16,17 +16,29 @@ public class TemporaryFolder implements Folder {
     // ID used the the messagecontroller for bookeeping
     String id = new String();
 
+    /**
+     * Constructor to initialize folders,messages and name
+     * @param n
+     */
     public TemporaryFolder(String n) {
         this.folders = Util.newArrayList();
         this.messages = Util.newArrayList();
         name = n;
     }
 
+    /**
+     * Get id
+     * @return
+     */
     @Override
     public String getId() {
         return this.id;
     }
 
+    /**
+     * Set id
+     * @param id
+     */
     @Override
     public void setId(String id) {
         this.id = id;
