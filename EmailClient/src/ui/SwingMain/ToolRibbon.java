@@ -5,11 +5,15 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import ui.SwingMessage.ComposeMail;
 
 /**
@@ -56,11 +60,11 @@ public class ToolRibbon extends JToolBar implements ActionListener {
      */
     public ToolRibbon() {
         Dimension size = new Dimension(64, 64);
-        refreshButton = makeButton("resources/refresh.png", "Send/Receive messages", size);
-        composeButton = makeButton("resources/compose.png", "Compose new Message", size);
-        replyButton = makeButton("resources/reply.png", "Reply to the selected message", size);
-        forwardButton = makeButton("resources/forward.png", "Forward the selected message", size);
-        deleteButton = makeButton("resources/delete.png", "Send the selected message to the trash", size);
+        refreshButton = makeButton("resources/refresh.png", "Send/Receive messages (F5)", size);
+        composeButton = makeButton("resources/compose.png", "Compose New Message (Alt + N)", size);
+        replyButton = makeButton("resources/reply.png", "Reply to the selected message (Alt + R)", size);
+        forwardButton = makeButton("resources/forward.png", "Forward the selected message (Alt + F)", size);
+        deleteButton = makeButton("resources/delete.png", "Send the selected message to the trash (Alt + D)", size);
 
         markUnreadButton = makeButton("resources/unread.png", "Mark this message as not read", size);
 
@@ -70,14 +74,25 @@ public class ToolRibbon extends JToolBar implements ActionListener {
                 doRefresh();
             }
         });
-
+        
+        Action refresh = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+                System.out.println("refresh");
+                doRefresh();
+            }
+        };
+        refreshButton.getInputMap().put(KeyStroke.getKeyStroke("F5"),"Refresh");
+        refreshButton.getActionMap().put("Refresh",refresh);
+        
         composeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 doCompose();
             }
         });
-
+        composeButton.setMnemonic(KeyEvent.VK_N);
+        
         markUnreadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -92,13 +107,15 @@ public class ToolRibbon extends JToolBar implements ActionListener {
                 doReply();
             }
         });
-
+        replyButton.setMnemonic(KeyEvent.VK_R);
+        
         forwardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 doForward();
             }
         });
+        forwardButton.setMnemonic(KeyEvent.VK_F);
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
@@ -106,7 +123,7 @@ public class ToolRibbon extends JToolBar implements ActionListener {
                 doDelete();
             }
         });
-
+        deleteButton.setMnemonic(KeyEvent.VK_D);
 
         this.setRollover(true);
         this.add(refreshButton);
