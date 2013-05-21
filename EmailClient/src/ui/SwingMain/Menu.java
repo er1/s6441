@@ -13,7 +13,6 @@ import ui.NewMail;
  */
 public class Menu extends JMenuBar implements ActionListener {
 
-    JMenuItem new_ID = new JMenuItem("New Mail ID");
     JMenuItem get_Mail = new JMenuItem("Get Mail");
     JMenuItem exit = new JMenuItem("Exit");
     JMenuItem delete_menu = new JMenuItem("Delete Mail");
@@ -28,11 +27,9 @@ public class Menu extends JMenuBar implements ActionListener {
     public Menu() {
         JMenu file = new JMenu("File", true);
         JMenu edit = new JMenu("Edit", true);
-        new_ID.addActionListener(this);
         get_Mail.addActionListener(this);
         exit.addActionListener(this);
         inbox_menu.addActionListener(this);
-        file.add(new_ID);
         file.add(get_Mail);
         file.add(exit);
         edit.add(refresh_menu);
@@ -50,11 +47,6 @@ public class Menu extends JMenuBar implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        if (e.getSource() == new_ID) {
-            JFrame nmwindow = new NewMail();
-            nmwindow.setVisible(true);
-        }
         if (e.getSource() == exit) {
             System.exit(0); // does this make sense?
         }

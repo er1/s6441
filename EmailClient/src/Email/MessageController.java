@@ -9,7 +9,7 @@ import util.Util;
  */
 public class MessageController {
 
-    MessageStore store;
+    Mailbox store;
     // What should I be doing here? this is dumb
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
@@ -18,7 +18,7 @@ public class MessageController {
      * MessageController Constructor
      * @param messagestore
      */
-    public MessageController(MessageStore messagestore) {
+    public MessageController(Mailbox messagestore) {
         store = messagestore;
     }
 

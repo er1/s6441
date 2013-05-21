@@ -22,7 +22,7 @@ public class FileSystemFolder implements Folder {
     String name = new String();
     //Need the mailboxID to get persistenceStore, unless we get the persistStore
     //from the controller?
-    PersistentStorage persistStore = null;//PersistentStorage.getFileSystemStorage(mailboxID);
+    PersistentStorage persistStore = PersistentStorage.getInstance();
 
     /**
      * Constructor for initialization
@@ -32,6 +32,9 @@ public class FileSystemFolder implements Folder {
         this.folders = Util.newArrayList();
         this.messages = Util.newArrayList();
         this.id = id;
+        //FIXME extract last field
+        this.name = id;
+        this.sync();
     }
 
     @Override
@@ -58,12 +61,15 @@ public class FileSystemFolder implements Folder {
     public ArrayList<Message> getMessages() {
         ArrayList<String> messageList = persistStore.loadMessageListFromFolder(id);
         ArrayList<Message> messages = Util.newArrayList();
-        for (String messagePath : messageList) {
+        if (null != messageList) {
+            for (String messagePath : messageList) {
             PlainTextMessage msg = (new PlainTextMessage());
             msg.setId(messagePath);
             msg.parse(persistStore.loadMessage(messagePath));
             messages.add(msg);
+            }
         }
+        this.messages = messages;
         return messages;
     }
 
@@ -71,20 +77,23 @@ public class FileSystemFolder implements Folder {
     public ArrayList<Folder> getSubfolders() {
         ArrayList<String> subFolderList = persistStore.loadSubfolders(id);
         ArrayList<Folder> subFolders = Util.newArrayList();
-
+        if (null != subFolderList) {
         for (String subfolder : subFolderList) {
             FileSystemFolder folder = new FileSystemFolder(subfolder);
             //FIXME populate ArrayList in folder? Or In constructor?
             //Or does the folder do it as needed.
             subFolders.add(folder);
 
+            }
         }
+        this.folders = subFolders;
         return subFolders;
     }
 
     @Override
     public void addMessage(Message msg) {
         persistStore.newMessage(msg.getId());
+        this.messages.add(msg);
     }
 
     @Override
@@ -97,22 +106,26 @@ public class FileSystemFolder implements Folder {
     @Override
     public void deleteMessage(Message msg) {
         persistStore.deleteMessage(msg.getId());
+        this.messages.remove(msg);
     }
 
     @Override
     public void addFolder(Folder folder) {
         persistStore.newFolderInMailbox(folder.getId());
+        this.folders.add(folder);
     }
 
     @Override
     public void deleteFolder(Folder folder) {
         persistStore.deleteFolderAndAllContents(folder.getId());
+        this.folders.remove(folder);
     }
 
     @Override
     public void sync() {
         //TODO Maybe this is where we can re-read from FileSystem and repopulate
         //the arraylists for messages and folders?
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.getMessages();
+        this.getSubfolders();
     }
 }

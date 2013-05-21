@@ -1,6 +1,8 @@
 package ui.SwingMain;
 
 import Email.DummyStore;
+import Email.FileSystemFolder;
+import Email.FileSystemMailbox;
 import Email.MessageController;
 import java.awt.BorderLayout;
 import javax.swing.*;
@@ -23,7 +25,7 @@ public class MainWindow extends JFrame {
     public MainWindow() {
         super("Email Client");
 
-        MessageController controller = new MessageController(new DummyStore());
+        MessageController controller = new MessageController(new FileSystemMailbox("test"));
 
         this.windowMenu = new Menu();
         this.toolbar = new ToolRibbon();

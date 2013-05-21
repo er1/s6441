@@ -32,7 +32,7 @@ class FileSystemStorage extends PersistentStorage {
 
     FileSystemStorage(String mailBoxID) {
         if (null == instance) {
-            String path = getHomeFolderPathWithSeparator() + mailBoxID + File.separator;
+            String path = getHomeFolderPathWithSeparator() + File.separator;
             mailBoxPath = path;
             logger.log(Level.INFO, "mailBoxPath set to {0}", mailBoxPath);
             newFolder(mailBoxPath);
@@ -209,7 +209,7 @@ class FileSystemStorage extends PersistentStorage {
 
         for (String folder : initialFolders)
         {
-            newFolderInMailbox(folder);
+            //newFolderInMailbox(folder);
         }
     }
 }

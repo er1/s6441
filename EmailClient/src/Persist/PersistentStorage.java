@@ -13,6 +13,8 @@ import java.util.Set;
  */
 public abstract class PersistentStorage {
 
+    static private PersistentStorage instance;
+
     /**
      * Static Factory method to request a File System Persistent store
      *
@@ -20,8 +22,15 @@ public abstract class PersistentStorage {
      * @return A Persistent Storage that uses the File System as the back end
      */
     public static PersistentStorage getFileSystemStorage(String mailBoxID) {
-        FileSystemStorage fileSystemStorage = new FileSystemStorage(mailBoxID);
-        return fileSystemStorage;
+        if (instance == null);
+        {
+            FileSystemStorage fileSystemStorage = new FileSystemStorage(mailBoxID);
+            instance = fileSystemStorage;
+            return fileSystemStorage;
+        }
+    }
+    public static PersistentStorage getInstance() {
+        return instance;
     }
 
     /**

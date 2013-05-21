@@ -8,7 +8,7 @@ package Email;
  *
  * @author chanman
  */
-public class DummyStore extends TemporaryFolder implements MessageStore {
+public class DummyStore extends TemporaryFolder implements Mailbox {
 
     // Some temporary boxes
     private Folder drafts = new TemporaryFolder("Drafts");

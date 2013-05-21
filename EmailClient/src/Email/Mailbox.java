@@ -5,7 +5,7 @@ package Email;
  *
  * @author chanman
  */
-public interface MessageStore extends Folder {
+public interface Mailbox extends Folder {
 
     /**
      * Get the Drafts folder
