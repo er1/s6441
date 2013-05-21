@@ -1,0 +1,16 @@
+#![Compose]
+#![Compose]
+#!>>
+#!Sub-Usecase of Compose email
+#!Composing to an email
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Compose
+view:OK=controller.composeNewEmail(EmailID)
+controller:Window=model.getComposewindow(EmailID)
+controller:controller.composeMail(Email)
