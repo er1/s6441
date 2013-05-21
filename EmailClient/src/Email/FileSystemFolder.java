@@ -4,6 +4,7 @@
  */
 package Email;
 import Persist.PersistentStorage;
+import java.io.File;
 import java.util.ArrayList;
 import util.Util;
 
@@ -33,7 +34,7 @@ public class FileSystemFolder implements Folder {
         this.messages = Util.newArrayList();
         this.id = id;
         //FIXME extract last field
-        this.name = id;
+        this.name = getFolderNameFromId(id);
         this.sync();
     }
 
@@ -127,5 +128,11 @@ public class FileSystemFolder implements Folder {
         //the arraylists for messages and folders?
         this.getMessages();
         this.getSubfolders();
+    }
+
+    private String getFolderNameFromId(String id1) {
+        //FIXME
+        File temp = new File(id1);
+        return temp.getName();
     }
 }
