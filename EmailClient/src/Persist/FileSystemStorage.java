@@ -28,6 +28,7 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     String mailBoxPath;
+    private String mailBoxID;
     static private FileSystemStorage instance = null;
 
     FileSystemStorage(String mailBoxID) {
@@ -37,8 +38,14 @@ class FileSystemStorage extends PersistentStorage {
             logger.log(Level.INFO, "mailBoxPath set to {0}", mailBoxPath);
             newFolder(mailBoxPath);
             initialiseMailboxFolder();
+            this.mailBoxID = mailBoxID;
             this.instance = this;
         }
+    }
+
+    @Override
+    public String getMailboxID() {
+        return this.mailBoxID;
     }
 
     private String getHomeFolderPathWithSeparator(){

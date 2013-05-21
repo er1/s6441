@@ -32,6 +32,8 @@ public abstract class PersistentStorage {
         return instance;
     }
 
+    abstract public String getMailboxID();
+
     /**
      * New Folder will be created in a given path
      * @param fullPath
