@@ -35,7 +35,7 @@ class SwingUserInterface extends UserInterface {
                 JOptionPane.QUESTION_MESSAGE,
                 null,
                 null,
-                "mailBoxID");
+                "test");
         frame.setVisible(true);
         String inputString = null;
         if (result == null) {
