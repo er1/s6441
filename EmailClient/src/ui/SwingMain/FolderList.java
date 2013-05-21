@@ -128,7 +128,7 @@ public class FolderList extends JPanel {
 
     void makeMenu(Point mouseposition) {
         TreePath path = messageTree.getPathForLocation(mouseposition.x, mouseposition.y);
-        String last = (String) path.getLastPathComponent();
+        String last = path.toString();
 
         JPopupMenu menu = new FolderMenu(last);
 

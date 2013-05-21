@@ -41,7 +41,7 @@ class FileSystemStorage extends PersistentStorage {
         }
     }
 
-    private final String getHomeFolderPathWithSeparator(){
+    private String getHomeFolderPathWithSeparator(){
         return System.getProperty("user.home") + File.separator;
     }
 
