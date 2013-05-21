@@ -33,6 +33,20 @@ class FolderTableModel extends AbstractTableModel {
     }
 
     @Override
+    public String getColumnName(int col) {
+        switch (col) {
+            case 0:
+                return "Date";
+            case 1:
+                return "From";
+            case 2:
+                return "Subject";
+            default:
+                return new String();
+        }
+    }
+
+    @Override
     public Object getValueAt(int row, int col) {
         Summary summary = controller.getEmailSummary(messages[row]);
 
