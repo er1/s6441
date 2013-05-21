@@ -9,8 +9,16 @@ import java.util.ArrayList;
  */
 public interface Folder {
 
+    /**
+     * Get Id
+     * @return id
+     */
     public String getId();
 
+    /**
+     * Set Id
+     * @param id
+     */
     public void setId(String id);
 
     /**

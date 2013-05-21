@@ -31,9 +31,9 @@ public class ToolRibbon extends JToolBar implements ActionListener {
     JButton replyButton;
 
     /**
-     *
+     * Function to resize image icon 
      * @param original
-     * @return
+     * @return resizedImage
      */
     public ImageIcon resizeImageIcon(ImageIcon original) {
         Image img = original.getImage();
@@ -55,8 +55,7 @@ public class ToolRibbon extends JToolBar implements ActionListener {
     }
 
     /**
-     *
-     * @return
+     * constructor for toolBar with toolTip and hotKeys
      */
     public ToolRibbon() {
         Dimension size = new Dimension(64, 64);
@@ -136,7 +135,7 @@ public class ToolRibbon extends JToolBar implements ActionListener {
 
     /**
      *
-     * @param e
+     * @param e event detected
      */
     @Override
     public void actionPerformed(ActionEvent e) {

@@ -11,7 +11,7 @@ public class Main {
 
     static Logger logger = Logger.getLogger(Main.class.getName());
     /**
-     *
+     * main method to call gui interface and persistent storage
      * @param args Array of any command line arguments passed in
      */
     public static void main(String args[]) {

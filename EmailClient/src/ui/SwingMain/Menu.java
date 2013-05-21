@@ -23,8 +23,7 @@ public class Menu extends JMenuBar implements ActionListener {
     JMenuItem reply_menu = new JMenuItem("Reply Mail");
 
     /**
-     *
-     * @return A Swing MenuBar
+     * Constructor for creating menu bar
      */
     public Menu() {
         JMenu file = new JMenu("File", true);

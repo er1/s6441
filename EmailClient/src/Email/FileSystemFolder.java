@@ -24,6 +24,10 @@ public class FileSystemFolder implements Folder {
     //from the controller?
     PersistentStorage persistStore = null;//PersistentStorage.getFileSystemStorage(mailboxID);
 
+    /**
+     * Constructor for initialization
+     * @param id
+     */
     public FileSystemFolder(String id) {
         this.folders = Util.newArrayList();
         this.messages = Util.newArrayList();

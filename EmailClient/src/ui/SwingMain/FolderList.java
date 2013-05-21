@@ -105,6 +105,11 @@ public class FolderList extends JPanel {
         }
     }
 
+    /**
+     * constructor
+     * @param controller
+     * @param messagelist
+     */
     public FolderList(MessageController controller, MessageList messagelist) {
         super();
         store = controller;
@@ -130,6 +135,9 @@ public class FolderList extends JPanel {
         menu.show(this, mouseposition.x, mouseposition.y);
     }
 
+    /**
+     * Function to refresh the Tree Hierarchy 
+     */
     public void refresh() {
         messageTree = new JTree(new FolderTreeModel(store));
         this.add(messageTree);

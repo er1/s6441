@@ -15,6 +15,10 @@ public class LabeledTextField extends Container {
     JTextField textField;
     BorderLayout layout;
 
+    /**
+     * constructor to initialize label and textField
+     * @param label
+     */
     public LabeledTextField(String label) {
         this.layout = new BorderLayout();
         this.label = new JLabel(label + ":");
@@ -26,14 +30,27 @@ public class LabeledTextField extends Container {
         this.add(this.textField);
     }
 
+    /**
+     * Set text to textField
+     * @param text
+     */
     public void setText(String text) {
         textField.setText(text);
     }
 
+    /**
+     * Get text from textField
+     * @return
+     */
     public String getText() {
         return textField.getText();
     }
 
+    /**
+     * Set tool tip 
+     * @param tooltip
+     * @return LabeledTextField object with updated tooltip
+     */
     public LabeledTextField tooltip(String tooltip) {
         textField.setToolTipText(tooltip);
         return this;

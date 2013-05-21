@@ -17,6 +17,8 @@ public class MessageList extends JTable {
 
     /**
      * Constructor
+     * @param controller
+     * @param content  
      */
     public MessageList(MessageController controller, Content content) {
         this.controller = controller;
@@ -30,6 +32,10 @@ public class MessageList extends JTable {
         });
     }
 
+    /**
+     * Function to display folder given the folder Id
+     * @param folderId
+     */
     public void displayFolder(String folderId) {
 
         model = new FolderTableModel(controller, folderId);

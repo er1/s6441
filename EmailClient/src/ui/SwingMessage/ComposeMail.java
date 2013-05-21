@@ -18,8 +18,7 @@ public class ComposeMail extends JFrame implements ActionListener {
     JButton saveDraftButton;
 
     /**
-     *
-     * @param msg The message object used to populate fields
+     * Constructor for composing mail
      */
     public ComposeMail() {
         super("Email");
