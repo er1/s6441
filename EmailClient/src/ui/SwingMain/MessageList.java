@@ -28,7 +28,6 @@ public class MessageList extends JTable {
                 changemessage();
             }
         });
-
     }
 
     public void displayFolder(String folderId) {

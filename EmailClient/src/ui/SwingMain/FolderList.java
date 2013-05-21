@@ -28,9 +28,9 @@ public class FolderList extends JPanel {
         String id;
         String name;
 
-        public FolderNode(String id, String name) {
+        public FolderNode(MessageController controller, String id) {
             this.id = id;
-            this.name = name;
+            this.name = controller.getFolderName(id);
         }
 
         public String getId() {
@@ -39,6 +39,11 @@ public class FolderList extends JPanel {
 
         public String getName() {
             return name;
+        }
+        
+        @Override
+        public String toString() {
+            return getName();
         }
     }
 
@@ -51,20 +56,20 @@ public class FolderList extends JPanel {
         }
 
         @Override
-        public String getRoot() {
-            return controller.getRootFolderId();
+        public Object getRoot() {
+            return new FolderNode(controller, controller.getRootFolderId());
         }
 
         @Override
         public Object getChild(Object folderid, int index) {
-            String id = (String) folderid;
+            String id = ((FolderNode) folderid).getId();
             String[] folders = controller.getFolderList(id);
-            return folders[index];
+            return new FolderNode(controller, folders[index]);
         }
 
         @Override
         public int getChildCount(Object folderid) {
-            String id = (String) folderid;
+            String id = ((FolderNode) folderid).getId();
             String[] folders = controller.getFolderList(id);
             return folders.length;
         }
@@ -81,8 +86,8 @@ public class FolderList extends JPanel {
 
         @Override
         public int getIndexOfChild(Object parent, Object child) {
-            String parentid = (String) parent;
-            String childid = (String) child;
+            String parentid = ((FolderNode) parent).getId();
+            String childid = ((FolderNode) child).getId();
             String[] folders = controller.getFolderList(parentid);
             return Arrays.asList(folders).indexOf(childid);
         }
@@ -148,7 +153,7 @@ public class FolderList extends JPanel {
 
     private void changefolder() {
         TreePath path = messageTree.getSelectionPath();
-        String id = (String) path.getLastPathComponent();
+        String id = ((FolderNode) path.getLastPathComponent()).getId();
         list.displayFolder(id);
     }
 }
