@@ -1,0 +1,17 @@
+#![Delete]
+#!>>
+#!Deleting a selected folder
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Delete Folder
+view:OK=controller.DeleteFolder()
+controller:OK=model.MoveFolder(Folder,TrashFolder)
+controller:view.updateTreeHierarchy()
+view:model.getTreeHierarchy(Folder)
+controller:view.openParentFolder()
+
