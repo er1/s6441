@@ -89,4 +89,9 @@ public class DummyStore extends TemporaryFolder implements Mailbox {
     public Folder getTrash() {
         return trash;
     }
+
+    @Override
+    public void moveFolder(String sourcePath, String destinationPath) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

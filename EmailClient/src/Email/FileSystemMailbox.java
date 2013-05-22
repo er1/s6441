@@ -63,4 +63,9 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
         String folderName = "Trash";
         return getFolder(folderName);
     }
+
+    @Override
+    public void moveFolder(String sourcePath, String destinationPath) {
+        storage.moveFolder(sourcePath, destinationPath);
+    }
 }

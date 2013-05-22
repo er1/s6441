@@ -99,6 +99,7 @@ public class FolderMenu extends JPopupMenu {
         // get name     
         String moveName = getName("Move Folder");
         logger.log(Level.INFO, moveName);
+        moveName = "test"  + File.separator  + "Inbox" + File.separator + File.separator + moveName;
         if(moveName != null)
         {
             MessageController.getInstance().moveFolder(selected + File.separator, moveName);

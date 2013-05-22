@@ -41,4 +41,6 @@ public interface Mailbox extends Folder {
      * @return Trash
      */
     Folder getTrash();
+
+    public void moveFolder(String sourcePath, String destinationPath);
 }

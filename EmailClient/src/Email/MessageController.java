@@ -376,8 +376,10 @@ public class MessageController extends Observable {
         this.notifyObservers();
     }
 
-    public void moveFolder(String string, String destinationFolder) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void moveFolder(String sourcePath, String destinationPath) {
+       store.moveFolder(sourcePath, destinationPath);
+       this.setChanged();
+        this.notifyObservers();
     }
 
     public void compose(String to, String subject, String content) {
