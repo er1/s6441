@@ -5,26 +5,36 @@
 package ui.SwingMain;
 
 import Email.MessageController;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import ui.LabeledTextField;
 
 /**
- * FolderMenu which is an extention of right click menu in tree bar 
+ * FolderMenu which is an extention of right click menu in tree bar
+ *
  * @author chanman
  */
 public class FolderMenu extends JPopupMenu {
 
     static final Logger logger = Logger.getLogger(FolderMenu.class.getName());
+
     static {
         logger.setParent(Logger.getLogger(FolderMenu.class.getPackage().getName()));
     }
     String selected;
+    LabeledTextField nameFolder;
+    JButton cancelName;
+    JButton okName;
 
     FolderMenu(String selectedFolder) {
         selected = selectedFolder;
@@ -68,21 +78,36 @@ public class FolderMenu extends JPopupMenu {
     }
 
     private void moveFolder() {
-        // get destination (a foldeid
-        // selected -> folderID
-        // controller.move(...)
-        // update tree
+        // get name
+        
+        String moveName = getName();
+        logger.log(Level.INFO, moveName);
+        if(moveName != null)
+        {
+        MessageController.getInstance().moveFolder(selected + File.separator + moveName);
+        }
+    }
 
-        JOptionPane.showMessageDialog(null, "Move", null, JOptionPane.ERROR_MESSAGE);
+    @Override
+    public String getName() {
+        Object result;
+        result = JOptionPane.showInputDialog(this, "Name", "Folder Name", JOptionPane.QUESTION_MESSAGE, null, null, "name");
+        String newName = (String)result;        
+        return newName;
     }
 
     private void newFolder() {
+
+        String newName = getName();
         // get name
         logger.log(Level.INFO, selected);
-        // selected -> folderID
-        MessageController.getInstance().newfolder(selected+File.separator+"test");
+        // selected -> folderID\
+        if(newName != null)
+        {
+        MessageController.getInstance().newfolder(selected + File.separator + newName);
+        }
         // update tree
 
-        JOptionPane.showMessageDialog(null, "New", null, JOptionPane.ERROR_MESSAGE);
+        // JOptionPane.showMessageDialog(null, "New", null, JOptionPane.ERROR_MESSAGE);
     }
 }
