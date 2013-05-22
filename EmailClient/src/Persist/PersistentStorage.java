@@ -7,7 +7,7 @@ package Persist;
 import java.util.ArrayList;
 
 /**
- *
+ * Persistent Storage is for requesting File System store
  * @author anasalkhatib
  */
 public abstract class PersistentStorage {
@@ -28,10 +28,18 @@ public abstract class PersistentStorage {
             return fileSystemStorage;
         }
     }
+    /**
+     * Get instance of Persistent Storage
+     * @return instance 
+     */
     public static PersistentStorage getInstance() {
         return instance;
     }
 
+    /**
+     * Get the id of mail box
+     * @return MailBoxID 
+     */
     abstract public String getMailboxID();
 
     /**
