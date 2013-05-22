@@ -88,9 +88,8 @@ public class FolderMenu extends JPopupMenu {
     }
 
     private void moveFolder() {
-        // get name
-        
-        String moveName = getName();
+        // get name     
+        String moveName = getName("Move Folder");
         logger.log(Level.INFO, moveName);
         if(moveName != null)
         {
@@ -98,10 +97,9 @@ public class FolderMenu extends JPopupMenu {
         }
     }
 
-    @Override
-    public String getName() {
+    public String getName(String title) {
         Object result;
-        result = JOptionPane.showInputDialog(this, "Name:", "Create New Folder", JOptionPane.QUESTION_MESSAGE, null, null, "name");
+        result = JOptionPane.showInputDialog(this, "Name:", title, JOptionPane.QUESTION_MESSAGE, null, null, "name");
         String newName = (String)result;        
         return newName;
     }
@@ -109,7 +107,7 @@ public class FolderMenu extends JPopupMenu {
     private void newFolder() {
 
         // get name
-        String newName = getName();
+        String newName = getName("Create New Folder");
             
         logger.log(Level.INFO, selected);
         // selected -> folderID\
