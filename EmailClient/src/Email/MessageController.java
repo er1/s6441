@@ -199,7 +199,6 @@ public class MessageController extends Observable {
         // update anyone waiting on updates
         this.setChanged();
         this.notifyObservers();
-        Ï
     }
 
     /**
