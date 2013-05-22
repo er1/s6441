@@ -76,7 +76,7 @@ public class FolderMenu extends JPopupMenu {
 
         int choice = JOptionPane.showConfirmDialog(
 					null,
-					"Are you sure you want to delete the folder and move all of its contents into Trash?",
+					"Are you sure you want to delete the folder?",
 					"Delete Folder",
 					JOptionPane.YES_NO_OPTION,
 					JOptionPane.WARNING_MESSAGE
