@@ -13,5 +13,7 @@ model:Model[a]
 user:view.sendMail
 view:OK=controller.sendNewEmail(EmailID,Subject)
 controller:Sender=model.getMessage(EmailID,Subject)
+controller:controller.composeMail(new)
+view:ok=controller.cmwindow()
 controller:controller.persistentStograge(Email)
 view:movetoSend()
