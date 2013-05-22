@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
@@ -19,12 +21,13 @@ import javax.swing.tree.TreePath;
 
 /**
  * FolderList class displays tree hierarchy dynamically
- * 
+ *
  */
 public class FolderList extends JPanel {
 
     MessageController store;
     MessageList list;
+    FolderTreeModel model;
     JTree messageTree;
 
     private class FolderNode {
@@ -44,7 +47,7 @@ public class FolderList extends JPanel {
         public String getName() {
             return name;
         }
-        
+
         @Override
         public String toString() {
             return getName();
@@ -111,6 +114,7 @@ public class FolderList extends JPanel {
 
     /**
      * constructor
+     *
      * @param controller
      * @param messagelist
      */
@@ -119,6 +123,12 @@ public class FolderList extends JPanel {
         store = controller;
         list = messagelist;
         init();
+        store.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object o1) {
+                refresh();
+            }
+        });
     }
 
     private void init() {
@@ -128,23 +138,8 @@ public class FolderList extends JPanel {
         setSize(size);
         setMinimumSize(size);
 
-    }
-
-    void makeMenu(Point mouseposition) {
-        TreePath path = messageTree.getPathForLocation(mouseposition.x, mouseposition.y);
-        FolderNode temp = (FolderNode)path.getLastPathComponent();
-        String last = temp.getId();
-
-        JPopupMenu menu = new FolderMenu(last);
-
-        menu.show(this, mouseposition.x, mouseposition.y);
-    }
-
-    /**
-     * Function to refresh the Tree Hierarchy 
-     */
-    public void refresh() {
-        messageTree = new JTree(new FolderTreeModel(store));
+        model = new FolderTreeModel(store);
+        messageTree = new JTree(model);
         this.add(messageTree);
 
         messageTree.addMouseListener(new MouseAdapter() {
@@ -164,9 +159,30 @@ public class FolderList extends JPanel {
         });
     }
 
+    void makeMenu(Point mouseposition) {
+        TreePath path = messageTree.getPathForLocation(mouseposition.x, mouseposition.y);
+        FolderNode temp = (FolderNode) path.getLastPathComponent();
+        String last = temp.getId();
+
+        JPopupMenu menu = new FolderMenu(last);
+        menu.show(this, mouseposition.x, mouseposition.y);
+    }
+
+    /**
+     * Function to refresh the Tree Hierarchy
+     */
+    public void refresh() {
+        model = new FolderTreeModel(store);
+        messageTree.setModel(model);
+    }
+
     private void changefolder() {
-        TreePath path = messageTree.getSelectionPath();
-        String id = ((FolderNode) path.getLastPathComponent()).getId();
-        list.displayFolder(id);
+        try {
+            TreePath path = messageTree.getSelectionPath();
+            String id = ((FolderNode) path.getLastPathComponent()).getId();
+            list.displayFolder(id);
+        } catch (NullPointerException e) {
+            // FIXME
+        }
     }
 }

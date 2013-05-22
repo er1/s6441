@@ -2,13 +2,13 @@ package Email;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import javax.swing.SingleSelectionModel;
+import java.util.Observable;
 import util.Util;
 
 /**
  * Message controller class
  */
-public class MessageController{
+public class MessageController extends Observable {
 
     private static MessageController instance = null;
     Mailbox store;
@@ -18,22 +18,22 @@ public class MessageController{
 
     /**
      * MessageController Constructor
+     *
      * @param messagestore
      */
     private MessageController(Mailbox messagestore) {
         store = messagestore;
     }
-    static public MessageController getInstance(Mailbox messagestore)
-    {
-        if(instance == null)
-        {
+
+    static public MessageController getInstance(Mailbox messagestore) {
+        if (instance == null) {
             instance = new MessageController(messagestore);
         }
         return instance;
-        
-    }  
-    static public MessageController getInstance()
-    {
+
+    }
+
+    static public MessageController getInstance() {
         return instance;
     }
 
@@ -59,7 +59,8 @@ public class MessageController{
 
     /**
      * Get sub folders from a folder
-     * @param folderId 
+     *
+     * @param folderId
      * @return Array of string id's of all the sub folders inside our folder
      */
     public String[] getFolderList(String folderId) {
@@ -77,6 +78,7 @@ public class MessageController{
 
     /**
      * Get email list from a folder
+     *
      * @param folderId Id of folder
      * @return Array of string id's of all the messages inside our folder
      */
@@ -102,6 +104,7 @@ public class MessageController{
 
     /**
      * Get email content
+     *
      * @param id
      * @return content
      */
@@ -116,16 +119,23 @@ public class MessageController{
 
     /**
      * Set email content
+     *
      * @param id
      * @param content
      */
     public void setEmailContent(String id, String content) {
         Message message = getMessageFromId(id);
         message.setContent(content);
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
+
     }
 
     /**
      * Get email summary
+     *
      * @param messageId Id of Message
      * @return Summary of the Message
      */
@@ -138,6 +148,7 @@ public class MessageController{
 
     /**
      * Set email header
+     *
      * @param messageId Message Id
      * @param key Key
      * @param value Value
@@ -145,10 +156,16 @@ public class MessageController{
     public void setEmailHeader(String messageId, String key, String value) {
         Message msg = getMessageFromId(messageId);
         msg.setHeader(key, value);
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
+
     }
 
     /**
      * Get email header
+     *
      * @param messageId Message Id
      * @param key Key for which we want a value
      * @return Value of particular key within message header
@@ -160,30 +177,48 @@ public class MessageController{
 
     /**
      * Mark message as read
+     *
      * @param messageId Message Id
      */
     public void markRead(String messageId) {
         setEmailHeader(messageId, "X-Read", "FIXME: Set to NOW()");
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
     }
 
     /**
      * Mark message as unread
+     *
      * @param messageId Message Id
      */
     public void markUnread(String messageId) {
         setEmailHeader(messageId, "X-Read", null);
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
+        Ï
     }
 
     /**
      * Delete message for given messageId
+     *
      * @param messageId Message Id
      */
     public void delete(String messageId) {
         // FIXME;
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
+
     }
 
     /**
      * Move message to specified destination folder
+     *
      * @param messageId Message Id
      * @param destinationFolderId Destination Folder Id
      */
@@ -196,6 +231,7 @@ public class MessageController{
     //FIXME Not sure what this does
     /**
      * Compose a new message
+     *
      * @return message
      */
     public String compose() {
@@ -204,10 +240,10 @@ public class MessageController{
 
     /**
      * Create Reply content from the original message
-     * @param  originalMessage
+     *
+     * @param originalMessage
      * @return replyid
      */
-    
     String reply(String originalMessage) {
         // create a new message
         String replyid = compose();
@@ -234,12 +270,18 @@ public class MessageController{
         replymsg.setHeader("To", to);
         replymsg.setHeader("Subject", subject);
 
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
+
+
         return replyid;
     }
 
     // get particular folder ids
     /**
      * Get root folder id
+     *
      * @return id
      */
     public String getRootFolderId() {
@@ -248,6 +290,7 @@ public class MessageController{
 
     /**
      * Get drafts folder id
+     *
      * @return id
      */
     public String getDraftsFolderId() {
@@ -256,6 +299,7 @@ public class MessageController{
 
     /**
      * Get inbox folder id
+     *
      * @return id
      */
     public String getInboxFolderId() {
@@ -264,6 +308,7 @@ public class MessageController{
 
     /**
      * Get outbox folder id
+     *
      * @return id
      */
     public String getOutboxFolderId() {
@@ -272,6 +317,7 @@ public class MessageController{
 
     /**
      * Get sent messages folder id
+     *
      * @return id
      */
     public String getSentMessagesFolderId() {
@@ -280,6 +326,7 @@ public class MessageController{
 
     /**
      * Get trash folder id
+     *
      * @return id
      */
     public String getTrashFolderId() {
@@ -288,6 +335,7 @@ public class MessageController{
 
     /**
      * Get the name of a folder
+     *
      * @param folder
      * @return folderName
      */
@@ -297,7 +345,10 @@ public class MessageController{
 
     public void newfolder(String selected) {
         Folder newOne = new FileSystemFolder(selected);
-        store.addFolder(newOne);    
+        store.addFolder(newOne);
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
     }
-    
 }
