@@ -18,8 +18,8 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 /**
- *
- * @author KarthikKrishnan
+ * FolderList class displays tree hierarchy dynamically
+ * 
  */
 public class FolderList extends JPanel {
 

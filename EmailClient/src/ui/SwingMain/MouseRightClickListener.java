@@ -19,7 +19,7 @@ import javax.swing.tree.TreePath;
 import Email.TemporaryFolder;
 
 /**
- *
+ * Handles when right mouse is clicked on selecting tree folder
  * @author Bargavi
  */
 public class MouseRightClickListener extends MouseAdapter implements ActionListener{
