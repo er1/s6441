@@ -350,4 +350,18 @@ public class MessageController extends Observable {
         this.setChanged();
         this.notifyObservers();
     }
+    
+    public void deletefolder(String selected)
+    {
+        Folder folder;
+        folder = getFolderFromId(selected);
+        store.deleteFolder(folder);
+        
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public void moveFolder(String string) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -74,7 +74,17 @@ public class FolderMenu extends JPopupMenu {
         // controller.delete(folderIO)
         // update tree
 
-        JOptionPane.showMessageDialog(null, "Delete " + selected, null, JOptionPane.ERROR_MESSAGE);
+        int choice = JOptionPane.showConfirmDialog(
+					null,
+					"Are you sure you want to delete the folder and move all of its contents into Trash?",
+					"Delete Folder",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.WARNING_MESSAGE
+					);
+	if(choice == JOptionPane.YES_OPTION)
+        {
+            MessageController.getInstance().deletefolder(selected);
+        }		
     }
 
     private void moveFolder() {
@@ -84,27 +94,28 @@ public class FolderMenu extends JPopupMenu {
         logger.log(Level.INFO, moveName);
         if(moveName != null)
         {
-        MessageController.getInstance().moveFolder(selected + File.separator + moveName);
+            MessageController.getInstance().moveFolder(selected + File.separator + moveName);
         }
     }
 
     @Override
     public String getName() {
         Object result;
-        result = JOptionPane.showInputDialog(this, "Name", "Folder Name", JOptionPane.QUESTION_MESSAGE, null, null, "name");
+        result = JOptionPane.showInputDialog(this, "Name:", "Create New Folder", JOptionPane.QUESTION_MESSAGE, null, null, "name");
         String newName = (String)result;        
         return newName;
     }
 
     private void newFolder() {
 
-        String newName = getName();
         // get name
+        String newName = getName();
+            
         logger.log(Level.INFO, selected);
         // selected -> folderID\
         if(newName != null)
         {
-        MessageController.getInstance().newfolder(selected + File.separator + newName);
+            MessageController.getInstance().newfolder(selected + File.separator + newName);
         }
         // update tree
 
