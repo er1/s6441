@@ -376,7 +376,7 @@ public class MessageController extends Observable {
         this.notifyObservers();
     }
 
-    public void moveFolder(String string) {
+    public void moveFolder(String string, String destinationFolder) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

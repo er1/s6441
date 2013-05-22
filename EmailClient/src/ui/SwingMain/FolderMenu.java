@@ -42,7 +42,7 @@ public class FolderMenu extends JPopupMenu {
         JMenuItem deleteFolder = new JMenuItem("Delete");
         JMenuItem newFolder = new JMenuItem("New Folder");
         JMenuItem moveFolder = new JMenuItem("Move");
-
+        System.out.println("Selected path" + selected);
         deleteFolder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -63,10 +63,18 @@ public class FolderMenu extends JPopupMenu {
                 moveFolder();
             }
         });
-
+      String[] seperated;
+        seperated = selected.split("\\\\");
+      System.out.println("Spereated --> "+ seperated[1]);
+      if ("Inbox".equals(seperated[1]) )
+        {
         this.add(deleteFolder);
         this.add(newFolder);
         this.add(moveFolder);
+        } 
+      else{
+         
+            }
     }
 
     private void deleteFolder() {
@@ -93,7 +101,7 @@ public class FolderMenu extends JPopupMenu {
         logger.log(Level.INFO, moveName);
         if(moveName != null)
         {
-            MessageController.getInstance().moveFolder(selected + File.separator + moveName);
+            MessageController.getInstance().moveFolder(selected + File.separator, moveName);
         }
     }
 
