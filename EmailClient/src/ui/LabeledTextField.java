@@ -9,6 +9,11 @@ import java.awt.Container;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/**
+ * Labeled Text Field class returns text field with labels and tool tip 
+ * inserted into a Container
+ * @author KarthikKrishnan
+ */
 public class LabeledTextField extends Container {
 
     JLabel label;

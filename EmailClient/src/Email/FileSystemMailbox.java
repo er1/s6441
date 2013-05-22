@@ -1,4 +1,4 @@
-/*
+/**
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -8,7 +8,8 @@ import Persist.PersistentStorage;
 import java.util.HashMap;
 
 /**
- *
+ * File System Mailbox retrieves the respective messages or sub folders
+ * for the folders from the persistent storage system
  * @author anasalkhatib
  */
 public class FileSystemMailbox extends FileSystemFolder implements Mailbox {

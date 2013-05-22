@@ -10,8 +10,7 @@ import net.miginfocom.swing.MigLayout;
 public class NewMail extends JFrame implements ActionListener {
 
     /**
-     *
-     * @return the new message window to display
+     * 
      */
     public NewMail() {
         super("New Mail");
