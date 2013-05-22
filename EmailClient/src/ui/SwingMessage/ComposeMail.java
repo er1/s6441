@@ -84,8 +84,10 @@ public class ComposeMail extends JFrame implements ActionListener {
             this.dispose();
         }
         if (e.getSource() == sendMailButton) {
-            MessageController.getInstance().compose();
-            //MessageController.getInstance().setEmailContent(null, null);
+            MessageController.getInstance().compose(
+                    toField.getText(),
+                    subjectField.getText(),
+                    messageContentTextArea.getText());
             this.setVisible(false);
             this.dispose();
         }

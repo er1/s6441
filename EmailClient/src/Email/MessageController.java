@@ -237,17 +237,7 @@ public class MessageController extends Observable {
      *
      * @return message
      */
-    public String compose() {
-        Message newMsg = new PlainTextMessage();
-        UUID messageId = UUID.randomUUID();
-        newMsg.setId("test/Drafts/" + messageId);
-        newMsg.setHeader("From", "");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        newMsg.setHeader("Date", dateFormat.format(date));
-        newMsg.setHeader("To", "");
-        newMsg.setHeader("Subject", "");
-        newMsg.setContent("");
+    public String compose(Message newMsg) {
         store.addMessage(newMsg);
         return newMsg.getId();
     }
@@ -260,7 +250,17 @@ public class MessageController extends Observable {
      */
     String reply(String originalMessage) {
         // create a new message
-        String replyid = compose();
+        Message newMsg = new PlainTextMessage();
+        UUID messageId = UUID.randomUUID();
+        newMsg.setId(getDraftsFolderId() + messageId);
+        newMsg.setHeader("From", "");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        newMsg.setHeader("Date", dateFormat.format(date));
+        newMsg.setHeader("To", "");
+        newMsg.setHeader("Subject", "");
+        newMsg.setContent("");
+        String replyid = compose(newMsg);
         Message replymsg = getMessageFromId(replyid);
 
         // get the original message and use it to create the reply content
@@ -378,5 +378,19 @@ public class MessageController extends Observable {
 
     public void moveFolder(String string, String destinationFolder) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void compose(String to, String subject, String content) {
+        Message newMsg = new PlainTextMessage();
+        UUID messageId = UUID.randomUUID();
+        newMsg.setId("test/Drafts/" + messageId);
+        newMsg.setHeader("From", to);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        newMsg.setHeader("Date", dateFormat.format(date));
+        newMsg.setHeader("To", to);
+        newMsg.setHeader("Subject", subject);
+        newMsg.setContent(content);
+        compose(newMsg);
     }
 }
