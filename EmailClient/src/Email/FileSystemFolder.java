@@ -95,6 +95,7 @@ public class FileSystemFolder implements Folder {
     @Override
     public void addMessage(Message msg) {
         persistStore.newMessage(msg.getId());
+        persistStore.saveMessage(msg.getId(), msg.serialize());
         this.messages.add(msg);
     }
 

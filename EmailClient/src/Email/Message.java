@@ -55,4 +55,6 @@ public interface Message {
      String[] getCC();
      String[] getBCC();
      */
+    
+    String serialize();
 }
