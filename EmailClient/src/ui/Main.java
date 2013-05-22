@@ -17,7 +17,7 @@ public class Main {
     public static void main(String args[]) {
         UserInterface gui = UserInterface.getSwingUserInterface();
         String userID = gui.getUserID();
-        logger.log(Level.INFO, "UserId: " + userID);
+        logger.log(Level.INFO, "UserId: {0}", userID);
         PersistentStorage persistentStorage = PersistentStorage.getFileSystemStorage(userID);
         gui.display();
         //persistentStorage.load(); ???

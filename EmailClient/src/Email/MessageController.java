@@ -2,13 +2,15 @@ package Email;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.swing.SingleSelectionModel;
 import util.Util;
 
 /**
  * Message controller class
  */
-public class MessageController {
+public class MessageController{
 
+    private static MessageController instance = null;
     Mailbox store;
     // What should I be doing here? this is dumb
     HashMap<String, Message> messageLookup = Util.newHashMap();
@@ -18,8 +20,21 @@ public class MessageController {
      * MessageController Constructor
      * @param messagestore
      */
-    public MessageController(Mailbox messagestore) {
+    private MessageController(Mailbox messagestore) {
         store = messagestore;
+    }
+    static public MessageController getInstance(Mailbox messagestore)
+    {
+        if(instance == null)
+        {
+            instance = new MessageController(messagestore);
+        }
+        return instance;
+        
+    }  
+    static public MessageController getInstance()
+    {
+        return instance;
     }
 
     private Message getMessageFromId(String messageId) {
@@ -279,4 +294,10 @@ public class MessageController {
     public String getFolderName(String folder) {
         return getFolderFromId(folder).getName();
     }
+
+    public void newfolder(String selected) {
+        Folder newOne = new FileSystemFolder(selected);
+        store.addFolder(newOne);    
+    }
+    
 }

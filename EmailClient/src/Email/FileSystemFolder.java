@@ -35,6 +35,7 @@ public class FileSystemFolder implements Folder {
         this.id = id;
         //FIXME extract last field
         this.name = getFolderNameFromId(id);
+        persistStore.newFolderInMailbox(id);
         this.sync();
     }
 

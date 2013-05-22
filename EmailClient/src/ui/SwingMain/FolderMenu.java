@@ -4,8 +4,12 @@
  */
 package ui.SwingMain;
 
+import Email.MessageController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -16,11 +20,15 @@ import javax.swing.JPopupMenu;
  */
 public class FolderMenu extends JPopupMenu {
 
+    static final Logger logger = Logger.getLogger(FolderMenu.class.getName());
+    static {
+        logger.setParent(Logger.getLogger(FolderMenu.class.getPackage().getName()));
+    }
     String selected;
 
     FolderMenu(String selectedFolder) {
         selected = selectedFolder;
-
+        //String path = pathFromString(selectedFolder);
         JMenuItem deleteFolder = new JMenuItem("Delete");
         JMenuItem newFolder = new JMenuItem("New Folder");
         JMenuItem moveFolder = new JMenuItem("Move");
@@ -56,7 +64,7 @@ public class FolderMenu extends JPopupMenu {
         // controller.delete(folderIO)
         // update tree
 
-        JOptionPane.showMessageDialog(null, "Delete " + selected.toString(), null, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Delete " + selected, null, JOptionPane.ERROR_MESSAGE);
     }
 
     private void moveFolder() {
@@ -70,8 +78,9 @@ public class FolderMenu extends JPopupMenu {
 
     private void newFolder() {
         // get name
+        logger.log(Level.INFO, selected);
         // selected -> folderID
-        // controller.newfolder(folderIO,name)
+        MessageController.getInstance().newfolder(selected+File.separator+"test");
         // update tree
 
         JOptionPane.showMessageDialog(null, "New", null, JOptionPane.ERROR_MESSAGE);
