@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 /**
- *
+ * FolderMenu which is an extention of right click menu in tree bar, which has  
  * @author chanman
  */
 public class FolderMenu extends JPopupMenu {

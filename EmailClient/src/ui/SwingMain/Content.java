@@ -3,6 +3,10 @@ package ui.SwingMain;
 import Email.MessageController;
 import javax.swing.JTextArea;
 
+/**
+ * Content shows the Message for the Inbox, Outbox, Drafts, Sent Mail using persistent Storage
+ * @author KarthikKrishnan
+ */
 public class Content extends JTextArea {
 
     MessageController store;

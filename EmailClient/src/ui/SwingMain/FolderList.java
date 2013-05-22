@@ -17,6 +17,10 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+/**
+ *
+ * @author KarthikKrishnan
+ */
 public class FolderList extends JPanel {
 
     MessageController store;
