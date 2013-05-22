@@ -27,7 +27,7 @@ public class MainWindow extends JFrame {
         String mailBoxID = Persist.PersistentStorage.getInstance().getMailboxID();
         MessageController controller = new MessageController(new FileSystemMailbox(mailBoxID));
 
-        this.windowMenu = new Menu();
+        //this.windowMenu = new Menu();
         this.toolbar = new ToolRibbon();
         this.content = new Content(controller);
         this.messages = new MessageList(controller, this.content);

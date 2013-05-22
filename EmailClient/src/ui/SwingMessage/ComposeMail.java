@@ -80,5 +80,10 @@ public class ComposeMail extends JFrame implements ActionListener {
             this.setVisible(false);
             this.dispose();
         }
+        if (e.getSource() == sendMailButton) {
+            
+            this.setVisible(false);
+            this.dispose();
+        }
     }
 }

@@ -47,7 +47,6 @@ class SwingUserInterface extends UserInterface {
             inputString = (String) result;
             if (inputString.isEmpty()) {
                 frame.dispose();
-
                 inputString = getUserID();
             }
         }
