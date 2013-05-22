@@ -1,8 +1,12 @@
 package Email;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.UUID;
 import util.Util;
 
 /**
@@ -234,7 +238,18 @@ public class MessageController extends Observable {
      * @return message
      */
     public String compose() {
-        return new String();
+        Message newMsg = new PlainTextMessage();
+        UUID messageId = UUID.randomUUID();
+        newMsg.setId("test/Drafts/" + messageId);
+        newMsg.setHeader("From", "");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        newMsg.setHeader("Date", dateFormat.format(date));
+        newMsg.setHeader("To", "");
+        newMsg.setHeader("Subject", "");
+        newMsg.setContent("");
+        store.addMessage(newMsg);
+        return newMsg.getId();
     }
 
     /**

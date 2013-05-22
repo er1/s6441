@@ -1,5 +1,6 @@
 package ui.SwingMessage;
 
+import Email.MessageController;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.BorderLayout;
@@ -30,9 +31,11 @@ public class ComposeMail extends JFrame implements ActionListener {
 
         sendMailButton = new JButton("Send");
         sendMailButton.setToolTipText("Sends mail to the corresponding To information");
+        sendMailButton.addActionListener(this);
 
         saveDraftButton = new JButton("Draft");
         saveDraftButton.setToolTipText("Save mail in Draft folder, Does not send mail");
+        saveDraftButton.addActionListener(this);
 
         cancelMailButton = new JButton("Cancel");
         cancelMailButton.setToolTipText("Delete the mail and move it to recycle bin draft");
@@ -81,7 +84,8 @@ public class ComposeMail extends JFrame implements ActionListener {
             this.dispose();
         }
         if (e.getSource() == sendMailButton) {
-            
+            MessageController.getInstance().compose();
+            //MessageController.getInstance().setEmailContent(null, null);
             this.setVisible(false);
             this.dispose();
         }
