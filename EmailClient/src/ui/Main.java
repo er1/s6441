@@ -4,7 +4,7 @@ import Persist.PersistentStorage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
- *
+ * Main Class initiates the entire operation
  * @author anasalkhatib
  */
 public class Main {

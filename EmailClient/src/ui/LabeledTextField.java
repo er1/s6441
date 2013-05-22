@@ -45,7 +45,7 @@ public class LabeledTextField extends Container {
 
     /**
      * Get text from textField
-     * @return
+     * @return text
      */
     public String getText() {
         return textField.getText();
