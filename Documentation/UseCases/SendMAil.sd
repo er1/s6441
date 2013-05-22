@@ -1,0 +1,17 @@
+#![Send]
+#![Send]
+#!>>
+#!Sub-Usecase of Send email
+#!Composing to an email
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.sendMail
+view:OK=controller.sendNewEmail(EmailID,Subject)
+controller:Sender=model.getMessage(EmailID,Subject)
+controller:controller.persistentStograge(Email)
+view:movetoSend()
