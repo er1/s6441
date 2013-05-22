@@ -160,7 +160,7 @@ public class MessageController {
     }
 
     /**
-     *
+     * Delete message for given messageId
      * @param messageId Message Id
      */
     public void delete(String messageId) {
@@ -180,8 +180,8 @@ public class MessageController {
 
     //FIXME Not sure what this does
     /**
-     * 
-     * @return
+     * Compose a new message
+     * @return message
      */
     public String compose() {
         return new String();

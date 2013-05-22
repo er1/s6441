@@ -1,7 +1,7 @@
 package Email;
 
 /**
- *
+ * Summary Class is for getting/setting fields like Date,From,To,CC,BCC,Subject from/to the message
  * @author chanman
  */
 public class Summary {

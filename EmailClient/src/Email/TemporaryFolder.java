@@ -28,7 +28,7 @@ public class TemporaryFolder implements Folder {
 
     /**
      * Get id
-     * @return
+     * @return id
      */
     @Override
     public String getId() {

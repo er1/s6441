@@ -24,7 +24,7 @@ public interface Folder {
     /**
      * Get the name of a Folder
      *
-     * @return
+     * @return name
      */
     public String getName();
 
