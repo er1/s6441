@@ -17,7 +17,7 @@ import javax.swing.KeyStroke;
 import ui.SwingMessage.ComposeMail;
 
 /**
- *
+ * Creating and handling tool bar menu
  * @author anasalkhatib
  */
 public class ToolRibbon extends JToolBar implements ActionListener {

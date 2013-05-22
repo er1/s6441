@@ -5,7 +5,7 @@
 package Email;
 
 /**
- *
+ * DummyStore is for testing purposes
  * @author chanman
  */
 public class DummyStore extends TemporaryFolder implements Mailbox {

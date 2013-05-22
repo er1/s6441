@@ -1,7 +1,7 @@
 package ui;
 
 /**
- *
+ * User interface class
  * @author anasalkhatib
  */
 public abstract class UserInterface {
@@ -22,7 +22,7 @@ public abstract class UserInterface {
     abstract public void display();
     /**
      * Function to get userID
-     * @return
+     * @return userId
      */
     abstract public String getUserID();
 }
