@@ -52,9 +52,8 @@ public class FileSystemMailboxTest {
     public void testGetDrafts() {
        
         FileSystemMailbox instance = new FileSystemMailbox(mailboxID);
-        FileSystemFolder expResult = null;
-        FileSystemFolder result = instance.getDrafts();
-        //assertEquals(expResult, result);
+        Folder result = instance.getDrafts();
+        assertEquals("Drafts", result.getName());
         
     }
 
@@ -65,9 +64,8 @@ public class FileSystemMailboxTest {
     public void testGetInbox() {
        
         FileSystemMailbox instance = new FileSystemMailbox(mailboxID);
-        Folder expResult = null;
         Folder result = instance.getInbox();
-        //assertEquals(expResult, result);
+        assertEquals("Inbox", result.getName());
     }
 
     /**
@@ -77,9 +75,8 @@ public class FileSystemMailboxTest {
     public void testGetOutbox() {
        
         FileSystemMailbox instance = new FileSystemMailbox(mailboxID);
-        Folder expResult = null;
         Folder result = instance.getOutbox();
-        //assertEquals(expResult, result);
+        assertEquals("Outbox", result.getName());
     }
 
     /**
@@ -89,9 +86,8 @@ public class FileSystemMailboxTest {
     public void testGetSentMessages() {
        
         FileSystemMailbox instance = new FileSystemMailbox(mailboxID);;
-        Folder expResult = null;
         Folder result = instance.getSentMessages();
-        //assertEquals(expResult, result);
+        assertEquals("Sent", result.getName());
     }
 
     /**
@@ -101,8 +97,7 @@ public class FileSystemMailboxTest {
     public void testGetTrash() {
      
         FileSystemMailbox instance = new FileSystemMailbox(mailboxID);
-        Folder expResult = null;
         Folder result = instance.getTrash();
-        //assertEquals(expResult, result);
+        assertEquals("Trash", result.getName());
     }
 }
