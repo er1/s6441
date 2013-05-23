@@ -1,10 +1,13 @@
 package ui.SwingMain;
 
 import Email.MessageController;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import ui.SwingMessage.ComposeMail;
 
 /**
  * Email list Display
@@ -17,8 +20,9 @@ public class MessageList extends JTable {
 
     /**
      * Constructor
+     *
      * @param controller
-     * @param content  
+     * @param content
      */
     public MessageList(MessageController controller, Content content) {
         this.controller = controller;
@@ -30,10 +34,35 @@ public class MessageList extends JTable {
                 changemessage();
             }
         });
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent me) {
+                if (me.getClickCount() >= 2) {
+                    openmessage();
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent me) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent me) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent me) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+            }
+        });
     }
 
     /**
      * Function to display folder given the folder Id
+     *
      * @param folderId
      */
     public void displayFolder(String folderId) {
@@ -46,5 +75,12 @@ public class MessageList extends JTable {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
         content.showMessage(messageid);
+    }
+
+    private void openmessage() {
+        int selected = this.getSelectedRow();
+        String messageid = model.getMessageId(selected);
+        (new ComposeMail(messageid)).setVisible(true);
+        
     }
 }

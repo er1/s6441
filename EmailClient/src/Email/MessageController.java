@@ -243,7 +243,7 @@ public class MessageController extends Observable {
         newMsg.setId(messageId.toString());
         Folder drafts = store.getDrafts();
         drafts.addMessage(newMsg);
-        return newMsg.getId();
+        return getIdfromMessage(newMsg);
     }
 
     public void updateDate(String messageid) {

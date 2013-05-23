@@ -106,7 +106,7 @@ public class PlainTextMessage implements Message {
         // Zero or more lines of header followed by an empty line
         Pattern headerlines = Pattern.compile("^([^\r\n]+\r?\n)*\r?\n");
         Matcher matcher = headerlines.matcher(rawmsg);
-        
+
         if (!matcher.find()) {
             return null;
         }
@@ -133,7 +133,7 @@ public class PlainTextMessage implements Message {
         }
 
         msg.setContent(rawmsg.substring(matcher.end()));
-        
+
         return msg;
     }
 }
