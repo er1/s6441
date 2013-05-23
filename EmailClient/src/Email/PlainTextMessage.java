@@ -99,6 +99,7 @@ public class PlainTextMessage implements Message {
      * Parse a raw message from storage into this object
      *
      * @param rawmsg
+     * @return object of PlainTextMessage
      */
     public static PlainTextMessage parse(String rawmsg) {
         PlainTextMessage msg = new PlainTextMessage();

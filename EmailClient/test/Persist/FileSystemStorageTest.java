@@ -95,9 +95,9 @@ public class FileSystemStorageTest {
     public void testLoadMessageListFromFolder() {
         System.out.println("loadMessageListFromFolder");
         String folder = "";
-        String[] expResult = null;
-        String[] result = instance.loadMessageListFromFolder(folder);
-        assertArrayEquals(expResult, result);
+        Set<String> expResult = null;
+        Set<String> result = (Set<String>)instance.loadMessageListFromFolder(folder);
+        assertSame(expResult, result);
     }
 
     /**
@@ -108,7 +108,7 @@ public class FileSystemStorageTest {
         System.out.println("loadSubfolders");
         String folder = "Inbox";
         Set<String> emptySet = null;
-        Set<String> result = instance.loadSubfolders(folder);
+        Set<String> result = (Set<String>) instance.loadSubfolders(folder);
         assertSame(emptySet, result);
     }
 

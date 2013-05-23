@@ -106,14 +106,12 @@ Compose Mail Window is a common window created from Send New Mail, Reply To Mail
 
 > Right Click Event is enabled for all events in the GUI, 
 
-      - ToolBar
-         - Compose Mail - 
-         - Reply Mail
-         - Delete Mail
-         - Forward Mail
-         - Refresh Mail 
-      - Right Click
-         - New Folder
-         - MoveFolder
-         - Delete Folder 
-
+      
+| ToolBar        | Hot Key       |
+| -------------  |:-------------:|
+| Compose Mail   | Alt + N       | 
+| Reply Mail     | Alt + R       | 
+| Delete Mail    | Alt + D       | 
+| Forward Mail   | Alt + F       | 
+| Refresh Mail   | F5            |        
+      

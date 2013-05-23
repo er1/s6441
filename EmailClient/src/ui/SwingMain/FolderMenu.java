@@ -109,6 +109,11 @@ public class FolderMenu extends JPopupMenu {
         pickedFolderId = selected;
     }
 
+    /**
+     * Get name from user
+     * @param title
+     * @return name
+     */
     public String getName(String title) {
         Object result;
         result = JOptionPane.showInputDialog(this, "Name:", title, JOptionPane.QUESTION_MESSAGE, null, null, "name");

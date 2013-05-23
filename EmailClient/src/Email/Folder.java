@@ -95,7 +95,15 @@ public interface Folder {
      */
     void sync();
 
+    /**
+     * Creates a new folder 
+     * @param name
+     */
     public void createFolder(String name);
 
+    /**
+     * Moves a folder to specified destination folder
+     * @param dest
+     */
     public void moveFolder(Folder dest);
 }

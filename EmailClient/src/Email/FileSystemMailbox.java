@@ -18,6 +18,10 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
     private HashMap<String, FileSystemFolder> topLevelFolders;
     private PersistentStorage storage = PersistentStorage.getInstance();
 
+    /**
+     * Constructor
+     * @param mailboxID
+     */
     public FileSystemMailbox(String mailboxID) {
         super(mailboxID, null);
         this.topLevelFolders = new HashMap<String, FileSystemFolder>();
