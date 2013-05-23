@@ -19,6 +19,28 @@ Inital Phase Development
 - Libraries: Swing
 - Development Environment: NetBeans 7.3 w/ EMMA
 
+### Achitecture
+
+The Email Client project is broken up into three main layers or packages
+- `Persist` for the backing date storage on the filesystem
+- `Email` for thr domail level handling of Messages and their corresponding mailbox
+- `ui` and `ui.*` for the user interface
+ 
+#### Persist
+Persist provides objects to create move delete and otherwise manage files in the filesystem with no notion of how Messages work higher up.
+
+#### Email
+Email contains most of the work for handling messages such as accessing Persist for storage and maps concepts such as Emails and Folders to Objects such as `Message` and `Folder`.
+Each of these objects are then extended to objects such as `FileSystemFolder` and `PlainTextMessage` to represent these objects given that they will be stored via `Persist`
+`Message`s and `Folder`s are contains by a `Mailbox` which is extended to work with `Persist` via `FileSystemMailbox`.
+The `Email` Package also provides `MessageController` which provides access to a `Mailbox` by a higher level, this object is the only point of interaction needed for a higher level.
+`MessageController` is implemented as a Singleton so that this object does not need to be passed around to all other higher level objects but can be accessed when needed.
+This imposes a restriction that only one Mailbox can be used per instance of the application.
+
+#### User Interface
+`ui.*` accesses `MessageController` to provide Swing widgets for the application.
+
+
 ### Initail GUI
 
 Email Client ID gui gets userID from the user to create a new Email client for the particular user.
