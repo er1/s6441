@@ -23,7 +23,8 @@ public class FileSystemFolderTest {
     private ArrayList<Message> messages;
     private ArrayList<Folder> folders;
     private PersistentStorage persistStore;
-    
+    private FileSystemFolder parent;
+            
     public FileSystemFolderTest() {
     }
     
@@ -41,6 +42,7 @@ public class FileSystemFolderTest {
         this.messages = new ArrayList<Message> ();
         this.folders = new ArrayList<Folder> ();
         this.persistStore = PersistentStorage.getFileSystemStorage(id);
+        this.parent = null;
     }
     
     @After
@@ -53,7 +55,7 @@ public class FileSystemFolderTest {
     @Test
     public void testSetGetId() {
         
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         
         String expResult = "id";
         instance.setId(expResult);
@@ -66,7 +68,7 @@ public class FileSystemFolderTest {
      */
     @Test
     public void testSetGetName() {
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         
         String expResult = "id";
         instance.setName(expResult);
@@ -90,7 +92,7 @@ public class FileSystemFolderTest {
         ArrayList<Message> expResult = new ArrayList<Message> ();
         expResult.add((Message)msg);
                 
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         instance.addMessage(msg);
         
         ArrayList result = instance.getMessages();
@@ -103,7 +105,7 @@ public class FileSystemFolderTest {
     @Test
      public void testGetSubfolders() {
         
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         ArrayList expResult = null;
         ArrayList result = instance.getSubfolders();
         //assertEquals(expResult, result);
@@ -126,7 +128,7 @@ public class FileSystemFolderTest {
         ArrayList<Message> expResult = new ArrayList<Message> ();
         expResult.add((Message)msg);
         
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         instance.addMessageCopy(msg);
         
         ArrayList result = instance.getMessages();
@@ -149,7 +151,7 @@ public class FileSystemFolderTest {
                 + "\r\n"
                 + "Hello, World\r\n");
                 
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         instance.addMessage(msg);
         
         instance.deleteMessage(msg);
@@ -162,7 +164,7 @@ public class FileSystemFolderTest {
     @Test
     public void testAddAndDeleteFolder() {
         Folder folder = new TemporaryFolder("name");
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         instance.addFolder(folder);
         
         instance.deleteFolder(folder);
@@ -175,7 +177,7 @@ public class FileSystemFolderTest {
     @Test
     public void testSync() {
         
-        FileSystemFolder instance = new FileSystemFolder(id);
+        FileSystemFolder instance = new FileSystemFolder(id,parent);
         instance.sync();
         
     }
