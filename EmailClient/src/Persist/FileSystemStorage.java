@@ -54,7 +54,7 @@ class FileSystemStorage extends PersistentStorage {
 
     @Override
     public boolean newFolder(String fullPath) {
-        File folder = new File(fullPath);
+        File folder = new File(mailBoxPath + fullPath);
         //TODO Handle return, or leave it up to caller?
         return folder.mkdir();
     }

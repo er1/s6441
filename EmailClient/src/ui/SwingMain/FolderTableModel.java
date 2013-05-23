@@ -16,10 +16,17 @@ class FolderTableModel extends AbstractTableModel {
 
     MessageController controller;
     String[] messages;
+    boolean isOutbound = false;
 
     public FolderTableModel(MessageController controller, String folderId) {
         this.controller = controller;
         messages = controller.getEmailList(folderId);
+
+        if ((folderId.equals(controller.getOutboxFolderId()))
+                || (folderId.equals(controller.getSentMessagesFolderId()))) {
+            isOutbound = true;
+
+        }
     }
 
     @Override
@@ -38,7 +45,11 @@ class FolderTableModel extends AbstractTableModel {
             case 0:
                 return "Date";
             case 1:
-                return "From";
+                if (isOutbound) {
+                    return "To";
+                } else {
+                    return "From";
+                }
             case 2:
                 return "Subject";
             default:
@@ -54,7 +65,12 @@ class FolderTableModel extends AbstractTableModel {
             case 0:
                 return summary.getDate();
             case 1:
-                return summary.getFrom();
+                if (isOutbound) {
+                    return summary.getTo();
+                } else {
+                    return summary.getFrom();
+                }
+
             case 2:
                 return summary.getSubject();
             default:

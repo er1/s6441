@@ -7,7 +7,6 @@ package ui.SwingMain;
 import Email.MessageController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -24,6 +23,8 @@ import static ui.SwingMain.FolderMenu.logger;
  */
 public class FolderMenu extends JPopupMenu {
 
+    // FIXME: find a better solution for this
+    static String pickedFolderId;
     MessageController controller;
     static final Logger logger = Logger.getLogger(FolderMenu.class.getName());
 
@@ -41,8 +42,14 @@ public class FolderMenu extends JPopupMenu {
 
         JMenuItem deleteFolder = new JMenuItem("Delete");
         JMenuItem newFolder = new JMenuItem("New Folder");
-        JMenuItem moveFolder = new JMenuItem("Move");
-        System.out.println("Selected path" + selected);
+        JMenuItem moveFolder = new JMenuItem("Move to ...");
+        
+        if (pickedFolderId != null) {
+            moveFolder.setText("Move to " + controller.getFolderName(pickedFolderId));
+        }
+        
+        JMenuItem pickFolder = new JMenuItem("Pick this folder");
+
         deleteFolder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -64,16 +71,24 @@ public class FolderMenu extends JPopupMenu {
             }
         });
 
+        pickFolder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                pickFolder();
+            }
+        });
+
+
         // if (selected) {
         this.add(deleteFolder);
         this.add(newFolder);
         this.add(moveFolder);
+        this.add(pickFolder);
         //       } else {
         //       }
     }
 
     private void deleteFolder() {
-
         int choice = JOptionPane.showConfirmDialog(
                 null,
                 "Are you sure you want to delete the folder?",
@@ -87,13 +102,11 @@ public class FolderMenu extends JPopupMenu {
     }
 
     private void moveFolder() {
-        // get name     
-        String moveName = getName("Move Folder");
-        logger.log(Level.INFO, moveName);
-        moveName = "test" + File.separator + "Inbox" + File.separator + File.separator + moveName;
-        if (moveName != null) {
-            MessageController.getInstance().moveFolder(selected + File.separator, moveName);
-        }
+        MessageController.getInstance().moveFolder(selected, pickedFolderId);
+    }
+
+    private void pickFolder() {
+        pickedFolderId = selected;
     }
 
     public String getName(String title) {

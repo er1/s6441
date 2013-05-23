@@ -78,8 +78,6 @@ public class FileSystemFolder implements Folder {
         }
         this.messages = messageNames;
 
-        logger.log(Level.INFO, "getMsg in {0}", this.getPath());
-
         return messageNames;
     }
 
@@ -102,8 +100,6 @@ public class FileSystemFolder implements Folder {
             }
         }
         this.folders = subFolders;
-
-        logger.log(Level.INFO, "getDir in {0}", this.getPath());
 
         return subFolders;
     }

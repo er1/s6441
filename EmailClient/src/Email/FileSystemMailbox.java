@@ -6,8 +6,6 @@ package Email;
 
 import Persist.PersistentStorage;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * File System Mailbox retrieves the respective messages or sub folders for the
@@ -19,12 +17,10 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
 
     private HashMap<String, FileSystemFolder> topLevelFolders;
     private PersistentStorage storage = PersistentStorage.getInstance();
-    static final Logger logger = Logger.getLogger(FileSystemMailbox.class.getName());
 
     public FileSystemMailbox(String mailboxID) {
         super(mailboxID, null);
         this.topLevelFolders = new HashMap<String, FileSystemFolder>();
-        logger.log(Level.INFO, "This Mailbox is at {0}", this.getPath());
     }
 
     private FileSystemFolder getFolder(String folderName) {

@@ -135,7 +135,6 @@ public class FolderList extends JPanel {
         this.setLayout(new BorderLayout());
 
         Dimension size = new Dimension(200, 200); // can be arbitrarily changed
-        setSize(size);
         setMinimumSize(size);
 
         model = new FolderTreeModel(store);
