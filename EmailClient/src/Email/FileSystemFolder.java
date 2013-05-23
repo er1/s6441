@@ -28,7 +28,8 @@ public class FileSystemFolder implements Folder {
     /**
      * Constructor for initialization
      *
-     * @param id
+     * @param name 
+     * @param parent  
      */
     public FileSystemFolder(String name, FileSystemFolder parent) {
         this.name = name;
@@ -161,14 +162,26 @@ public class FileSystemFolder implements Folder {
         persistStore.moveFolder(this.getPath(), fsdest.getPath());
     }
 
+    /**
+     * Set the parent folder
+     * @param parent
+     */
     public void setParent(FileSystemFolder parent) {
         this.parent = parent;
     }
 
+    /**
+     * Get the parent folder
+     * @return parent
+     */
     public FileSystemFolder getParent() {
         return parent;
     }
 
+    /**
+     * Get the path
+     * @return path
+     */
     public String getPath() {
         return parent.getPath() + File.separator + this.getName();
     }

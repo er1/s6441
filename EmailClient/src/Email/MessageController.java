@@ -29,6 +29,11 @@ public class MessageController extends Observable {
         store = messagestore;
     }
 
+    /**
+     * Get the instance ofMessageController
+     * @param messagestore
+     * @return instance
+     */
     static public MessageController getInstance(Mailbox messagestore) {
         if (instance == null) {
             instance = new MessageController(messagestore);
@@ -37,6 +42,10 @@ public class MessageController extends Observable {
 
     }
 
+    /**
+     * Get the instance ofMessageController
+     * @return instance
+     */
     static public MessageController getInstance() {
         return instance;
     }
@@ -246,6 +255,10 @@ public class MessageController extends Observable {
         return getIdfromMessage(newMsg);
     }
 
+    /**
+     * Update the date
+     * @param messageid
+     */
     public void updateDate(String messageid) {
         Message msg = this.getMessageFromId(messageid);
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -360,6 +373,11 @@ public class MessageController extends Observable {
         return getFolderFromId(folder).getName();
     }
 
+    /**
+     * Create a new folder
+     * @param in
+     * @param name
+     */
     public void newFolder(String in, String name) {
         Folder folder = getFolderFromId(in);
         folder.createFolder(name);
@@ -369,6 +387,10 @@ public class MessageController extends Observable {
         this.notifyObservers();
     }
 
+    /**
+     * Delete a folder selected
+     * @param selected
+     */
     public void deletefolder(String selected) {
         Folder folder;
         folder = getFolderFromId(selected);
@@ -378,6 +400,11 @@ public class MessageController extends Observable {
         this.notifyObservers();
     }
 
+    /**
+     * Move folder form source to destination
+     * @param sourcePath
+     * @param destinationPath
+     */
     public void moveFolder(String sourcePath, String destinationPath) {
         Folder source = this.getFolderFromId(sourcePath);
         Folder dest = this.getFolderFromId(destinationPath);

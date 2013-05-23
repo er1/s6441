@@ -21,6 +21,10 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
     private PersistentStorage storage = PersistentStorage.getInstance();
     static final Logger logger = Logger.getLogger(FileSystemMailbox.class.getName());
 
+    /**
+     * Constructor
+     * @param mailboxID
+     */
     public FileSystemMailbox(String mailboxID) {
         super(mailboxID, null);
         this.topLevelFolders = new HashMap<String, FileSystemFolder>();

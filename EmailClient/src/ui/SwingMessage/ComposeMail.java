@@ -21,6 +21,7 @@ public class ComposeMail extends JFrame {
 
     /**
      * Constructor for composing mail
+     * @param messageId 
      */
     public ComposeMail(String messageId) {
         super("Email");
