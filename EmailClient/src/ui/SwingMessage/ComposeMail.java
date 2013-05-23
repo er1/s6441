@@ -104,6 +104,7 @@ public class ComposeMail extends JFrame {
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
         controller.setEmailHeader(messageId, "To", toField.getText());
         controller.setEmailContent(messageId, messageContentTextArea.getText());
+        controller.updateDate(messageId);
     }
 
     void send() {
