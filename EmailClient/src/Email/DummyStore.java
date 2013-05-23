@@ -91,7 +91,7 @@ public class DummyStore extends TemporaryFolder implements Mailbox {
     }
 
     @Override
-    public void moveFolder(String sourcePath, String destinationPath) {
+    public void moveFolder(Folder destination) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

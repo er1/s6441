@@ -14,7 +14,6 @@ public class PlainTextMessage implements Message {
 
     private String content = new String();
     private HashMap<String, String> header;
-
     // ID used the the messagecontroller for bookeeping
     private String id = new String();
 
@@ -27,16 +26,20 @@ public class PlainTextMessage implements Message {
 
     /**
      * Get id
+     *
      * @return id
      */
+    @Override
     public String getId() {
         return this.id;
     }
 
     /**
      * Set id
+     *
      * @param id
      */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -73,7 +76,7 @@ public class PlainTextMessage implements Message {
     /**
      * Turn this Message into a String for storage
      *
-     * @return rawmessage
+     * @return raw message
      */
     public String serialize() {
         String msg = new String();
@@ -95,18 +98,21 @@ public class PlainTextMessage implements Message {
     /**
      * Parse a raw message from storage into this object
      *
-     * @param msg
+     * @param rawmsg
      */
-    public void parse(String msg) {
+    public static PlainTextMessage parse(String rawmsg) {
+        PlainTextMessage msg = new PlainTextMessage();
+
         // Zero or more lines of header followed by an empty line
         Pattern headerlines = Pattern.compile("^([^\r\n]+\r?\n)*\r?\n");
-        Matcher matcher = headerlines.matcher(msg);
-        matcher.find();
+        Matcher matcher = headerlines.matcher(rawmsg);
+        
+        if (!matcher.find()) {
+            return null;
+        }
 
-
-        String allLines = msg.substring(matcher.start(), matcher.end());
+        String allLines = rawmsg.substring(matcher.start(), matcher.end());
         String[] lines = allLines.split("\n");
-        header.clear();
 
         for (String line : lines) {
             int colon = line.indexOf(":");
@@ -122,10 +128,12 @@ public class PlainTextMessage implements Message {
 
             // set values
             if (key.length() > 0) {
-                this.setHeader(key, value);
+                msg.setHeader(key, value);
             }
         }
 
-        content = msg.substring(matcher.end());
+        msg.setContent(rawmsg.substring(matcher.end()));
+        
+        return msg;
     }
 }

@@ -95,4 +95,14 @@ public class TemporaryFolder implements Folder {
     public void setName(String n) {
         name = n;
     }
+
+    @Override
+    public void createFolder(String name) {
+        this.addFolder(new TemporaryFolder(name));
+    }
+
+    @Override
+    public void moveFolder(Folder dest) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

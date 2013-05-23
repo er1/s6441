@@ -237,30 +237,33 @@ public class MessageController extends Observable {
      *
      * @return message
      */
-    public String compose(Message newMsg) {
-        store.addMessage(newMsg);
+    public String compose() {
+        Message newMsg = new PlainTextMessage();
+        UUID messageId = UUID.randomUUID();
+        newMsg.setId(messageId.toString());
+        Folder drafts = store.getDrafts();
+        drafts.addMessage(newMsg);
         return newMsg.getId();
+    }
+
+    public void updateDate(String messageid) {
+        Message msg = this.getMessageFromId(messageid);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        msg.setHeader("Date", dateFormat.format(date));
     }
 
     /**
      * Create Reply content from the original message
      *
      * @param originalMessage
-     * @return replyid
+     * @return reply id
      */
     String reply(String originalMessage) {
         // create a new message
-        Message newMsg = new PlainTextMessage();
-        UUID messageId = UUID.randomUUID();
-        newMsg.setId(getDraftsFolderId() + messageId);
-        newMsg.setHeader("From", "");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        newMsg.setHeader("Date", dateFormat.format(date));
-        newMsg.setHeader("To", "");
-        newMsg.setHeader("Subject", "");
-        newMsg.setContent("");
-        String replyid = compose(newMsg);
+        String replyid = compose();
+        updateDate(replyid);
+
         Message replymsg = getMessageFromId(replyid);
 
         // get the original message and use it to create the reply content
@@ -357,42 +360,30 @@ public class MessageController extends Observable {
         return getFolderFromId(folder).getName();
     }
 
-    public void newfolder(String selected) {
-        Folder newOne = new FileSystemFolder(selected);
-        store.addFolder(newOne);
+    public void newFolder(String in, String name) {
+        Folder folder = getFolderFromId(in);
+        folder.createFolder(name);
 
         // update anyone waiting on updates
         this.setChanged();
         this.notifyObservers();
     }
-    
-    public void deletefolder(String selected)
-    {
+
+    public void deletefolder(String selected) {
         Folder folder;
         folder = getFolderFromId(selected);
         store.deleteFolder(folder);
-        
+
         this.setChanged();
         this.notifyObservers();
     }
 
     public void moveFolder(String sourcePath, String destinationPath) {
-       store.moveFolder(sourcePath, destinationPath);
-       this.setChanged();
-        this.notifyObservers();
-    }
+        Folder source = this.getFolderFromId(sourcePath);
+        Folder dest = this.getFolderFromId(destinationPath);
+        source.moveFolder(dest);
 
-    public void compose(String to, String subject, String content) {
-        Message newMsg = new PlainTextMessage();
-        UUID messageId = UUID.randomUUID();
-        newMsg.setId("test/Drafts/" + messageId);
-        newMsg.setHeader("From", to);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        newMsg.setHeader("Date", dateFormat.format(date));
-        newMsg.setHeader("To", to);
-        newMsg.setHeader("Subject", subject);
-        newMsg.setContent(content);
-        compose(newMsg);
+        this.setChanged();
+        this.notifyObservers();
     }
 }

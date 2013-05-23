@@ -3,16 +3,15 @@
  * and open the template in the editor.
  */
 package Persist;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Util;
@@ -22,20 +21,21 @@ import util.Util;
  * @author anasalkhatib
  */
 class FileSystemStorage extends PersistentStorage {
+
     static final Logger logger = Logger.getLogger(FileSystemStorage.class.getName());
+
     static {
         logger.setParent(Logger.getLogger(FileSystemStorage.class.getPackage().getName()));
     }
-
     String mailBoxPath;
     private String mailBoxID;
     static private FileSystemStorage instance = null;
 
     FileSystemStorage(String mailBoxID) {
         if (null == instance) {
-            String path = getHomeFolderPathWithSeparator() + File.separator;
+            String path = getHomeFolderPathWithSeparator();
             mailBoxPath = path;
-            logger.log(Level.INFO, "mailBoxPath set to {0}", mailBoxPath);
+            logger.log(Level.INFO, "mailboxes are in {0} ", mailBoxPath);
             newFolder(mailBoxPath + File.separator + mailBoxID);
             this.mailBoxID = mailBoxID;
             initialiseMailboxFolder();
@@ -48,17 +48,17 @@ class FileSystemStorage extends PersistentStorage {
         return this.mailBoxID;
     }
 
-    private String getHomeFolderPathWithSeparator(){
+    private String getHomeFolderPathWithSeparator() {
         return System.getProperty("user.home") + File.separator;
     }
 
     @Override
-    public boolean newFolder(String fullPath)
-    {
+    public boolean newFolder(String fullPath) {
         File folder = new File(fullPath);
         //TODO Handle return, or leave it up to caller?
         return folder.mkdir();
     }
+
     @Override
     public boolean newFolderInMailbox(String newFolderPath) {
         File folder = new File(mailBoxPath + newFolderPath);
@@ -72,12 +72,12 @@ class FileSystemStorage extends PersistentStorage {
         ArrayList<String> mesageList = null;
         if (!parentFolder.isDirectory() || !parentFolder.exists()) {
             return mesageList;
-        };
+        }
         mesageList = Util.newArrayList();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
             if (file.isFile()) {
-                mesageList.add(folder + File.separator + file.getName() + File.separator);
+                mesageList.add(folder + File.separator + file.getName());
                 logger.log(Level.INFO, mesageList.toString());
             }
         }
@@ -88,15 +88,15 @@ class FileSystemStorage extends PersistentStorage {
     public ArrayList<String> loadSubfolders(String folder) {
         File parentFolder = new File(mailBoxPath + folder);
         ArrayList<String> folderList = null;
-        if (!parentFolder.isDirectory() || !parentFolder.exists()) {
+        if (!parentFolder.exists() || !parentFolder.isDirectory()) {
             return folderList;
-        };
+        }
         folderList = Util.newArrayList();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
             if (file.isDirectory()) {
                 logger.log(Level.INFO, file.toString());
-                folderList.add(folder + File.separator + file.getName() + File.separator);
+                folderList.add(folder + File.separator + file.getName());
                 logger.log(Level.INFO, folderList.toString());
             }
         }
@@ -178,7 +178,7 @@ class FileSystemStorage extends PersistentStorage {
         try {
             scanner = new Scanner(new FileInputStream(mailBoxPath + messagePath));
             while (scanner.hasNextLine()) {
-                text.append(scanner.nextLine() + NL);
+                text.append(scanner.nextLine()).append(NL);
             }
 
         } catch (FileNotFoundException ex) {
@@ -214,9 +214,8 @@ class FileSystemStorage extends PersistentStorage {
         initialFolders.add("Sent");
         initialFolders.add("Trash");
 
-        for (String folder : initialFolders)
-        {
-            logger.log(Level.INFO, File.separator + mailBoxID + File.separator +folder);
+        for (String folder : initialFolders) {
+            logger.log(Level.INFO, File.separator + mailBoxID + File.separator + folder);
             newFolderInMailbox(File.separator + mailBoxID + File.separator + folder);
         }
     }

@@ -11,12 +11,14 @@ public interface Folder {
 
     /**
      * Get Id
+     *
      * @return id
      */
     public String getId();
 
     /**
      * Set Id
+     *
      * @param id
      */
     public void setId(String id);
@@ -92,4 +94,8 @@ public interface Folder {
      * This may be overloaded for special cases such as Inbox and Outbox
      */
     void sync();
+
+    public void createFolder(String name);
+
+    public void moveFolder(Folder dest);
 }

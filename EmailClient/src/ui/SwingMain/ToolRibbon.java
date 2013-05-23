@@ -1,5 +1,6 @@
 package ui.SwingMain;
 
+import Email.MessageController;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -20,7 +21,7 @@ import ui.SwingMessage.ComposeMail;
  * Creating and handling tool bar menu
  * @author anasalkhatib
  */
-public class ToolRibbon extends JToolBar implements ActionListener {
+public class ToolRibbon extends JToolBar {
 
     JButton deleteButton;
     JButton forwardButton;
@@ -133,23 +134,13 @@ public class ToolRibbon extends JToolBar implements ActionListener {
         this.add(deleteButton);
     }
 
-    /**
-     *
-     * @param e event detected
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == composeButton) {
-            ComposeMail cmwindow = new ComposeMail();
-            cmwindow.setVisible(true);
-        }
-    }
-
     private void doRefresh() {
     }
 
     private void doCompose() {
-        ComposeMail compose = new ComposeMail();
+        MessageController controller = MessageController.getInstance();
+        String id = controller.compose();
+        ComposeMail compose = new ComposeMail(id);
         compose.setVisible(true);
     }
 

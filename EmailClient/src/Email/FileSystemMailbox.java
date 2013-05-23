@@ -1,27 +1,30 @@
 /**
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template, choose Tools | Templates and open the template in
+ * the editor.
  */
 package Email;
 
 import Persist.PersistentStorage;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * File System Mailbox retrieves the respective messages or sub folders
- * for the folders from the persistent storage system
+ * File System Mailbox retrieves the respective messages or sub folders for the
+ * folders from the persistent storage system
+ *
  * @author anasalkhatib
  */
 public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
+
     private HashMap<String, FileSystemFolder> topLevelFolders;
     private PersistentStorage storage = PersistentStorage.getInstance();
+    static final Logger logger = Logger.getLogger(FileSystemMailbox.class.getName());
 
     public FileSystemMailbox(String mailboxID) {
-        //This is where we get the mailboxID
-        //But this applies only to the main mailBoxFolder
-        //How should the other folder classes get mailBoxId?
-        super(mailboxID);
+        super(mailboxID, null);
         this.topLevelFolders = new HashMap<String, FileSystemFolder>();
+        logger.log(Level.INFO, "This Mailbox is at {0}", this.getPath());
     }
 
     private FileSystemFolder getFolder(String folderName) {
@@ -29,7 +32,8 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
             return topLevelFolders.get(folderName);
         }
 
-        FileSystemFolder fsFolder = new FileSystemFolder(folderName);
+        // ???
+        FileSystemFolder fsFolder = new FileSystemFolder(folderName, this);
         topLevelFolders.put(folderName, fsFolder);
         return fsFolder;
     }
@@ -65,7 +69,16 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
     }
 
     @Override
-    public void moveFolder(String sourcePath, String destinationPath) {
-        storage.moveFolder(sourcePath, destinationPath);
+    public void setParent(FileSystemFolder parent) {
+    }
+
+    @Override
+    public FileSystemFolder getParent() {
+        return null;
+    }
+
+    @Override
+    public String getPath() {
+        return this.getName();
     }
 }

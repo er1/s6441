@@ -3,50 +3,52 @@
  * and open the template in the editor.
  */
 package Email;
+
 import Persist.PersistentStorage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import util.Util;
 
 /**
  * Implementation of File System
+ *
  * @author anasalkhatib
  */
 public class FileSystemFolder implements Folder {
-    //Id of the folder has to be path relative to mailboxPath
-    //e.g id for <MailboxPath>/Inbox = Inbox
-    //    id for <MailboxPath>/Inbox/SubFolder = Inbox/SubFolder
-    String id = new String();
+
+    private FileSystemFolder parent;
     ArrayList<Message> messages;
     ArrayList<Folder> folders;
-    // name of <MailboxPath>/Inbox/SubFolder = SubFolder
     String name = new String();
-    //Need the mailboxID to get persistenceStore, unless we get the persistStore
-    //from the controller?
     PersistentStorage persistStore = PersistentStorage.getInstance();
+    static final Logger logger = Logger.getLogger(FileSystemFolder.class.getName());
 
     /**
      * Constructor for initialization
+     *
      * @param id
      */
-    public FileSystemFolder(String id) {
+    public FileSystemFolder(String name, FileSystemFolder parent) {
+        this.name = name;
+        this.parent = parent;
+
         this.folders = Util.newArrayList();
         this.messages = Util.newArrayList();
-        this.id = id;
-        //FIXME extract last field
-        this.name = getFolderNameFromId(id);
-        persistStore.newFolderInMailbox(id);
+
         this.sync();
     }
 
     @Override
     public String getId() {
-        return this.id;
+        return this.getPath();
     }
 
     @Override
     public void setId(String id) {
-        this.id = id;
+        // FIXME; should never be called;
+        throw new NullPointerException();
     }
 
     @Override
@@ -61,42 +63,61 @@ public class FileSystemFolder implements Folder {
 
     @Override
     public ArrayList<Message> getMessages() {
-        ArrayList<String> messageList = persistStore.loadMessageListFromFolder(id);
-        ArrayList<Message> messages = Util.newArrayList();
+
+        ArrayList<String> messageList = persistStore.loadMessageListFromFolder(this.getPath());
+        ArrayList<Message> messageNames = Util.newArrayList();
         if (null != messageList) {
             for (String messagePath : messageList) {
-            PlainTextMessage msg = (new PlainTextMessage());
-            msg.setId(messagePath);
-            msg.parse(persistStore.loadMessage(messagePath));
-            messages.add(msg);
+                String filecontent = persistStore.loadMessage(messagePath);
+                PlainTextMessage msg = PlainTextMessage.parse(filecontent);
+                if (msg != null) {
+                    msg.setId(messagePath);
+                    messageNames.add(msg);
+                }
             }
         }
-        this.messages = messages;
-        return messages;
+        this.messages = messageNames;
+
+        logger.log(Level.INFO, "getMsg in {0}", this.getPath());
+
+        return messageNames;
     }
 
     @Override
     public ArrayList<Folder> getSubfolders() {
-        ArrayList<String> subFolderList = persistStore.loadSubfolders(id);
+        ArrayList<String> subFolderList = persistStore.loadSubfolders(this.getPath());
         ArrayList<Folder> subFolders = Util.newArrayList();
         if (null != subFolderList) {
-        for (String subfolder : subFolderList) {
-            FileSystemFolder folder = new FileSystemFolder(subfolder);
-            //FIXME populate ArrayList in folder? Or In constructor?
-            //Or does the folder do it as needed.
-            subFolders.add(folder);
+            for (String subfolder : subFolderList) {
+
+                // FIXME:
+                String[] sep = subfolder.split(File.separator);
+                String last = sep[sep.length - 1];
+                FileSystemFolder folder = new FileSystemFolder(last, this);
+                //FIXME populate ArrayList in folder? Or In constructor?
+                //Or does the folder do it as needed.
+                // TODO: proxy pattern might work here   -e
+                subFolders.add(folder);
 
             }
         }
         this.folders = subFolders;
+
+        logger.log(Level.INFO, "getDir in {0}", this.getPath());
+
         return subFolders;
     }
 
     @Override
     public void addMessage(Message msg) {
-        persistStore.newMessage(msg.getId());
-        persistStore.saveMessage(msg.getId(), msg.serialize());
-        this.messages.add(msg);
+        PlainTextMessage m = (PlainTextMessage) msg;
+        String id = m.getId();
+        String fn = id.substring(id.lastIndexOf(File.separator) + 1);
+        String newid = this.getPath() + File.separator + fn;
+        msg.setId(newid);
+        persistStore.newMessage(m.getId());
+        persistStore.saveMessage(m.getId(), m.serialize());
+        this.messages.add(m);
     }
 
     @Override
@@ -127,14 +148,33 @@ public class FileSystemFolder implements Folder {
     @Override
     public void sync() {
         //TODO Maybe this is where we can re-read from FileSystem and repopulate
-        //the arraylists for messages and folders?
+        //the arraylists for messageNames and folders?
+        // TODO: yes it is   -e
         this.getMessages();
         this.getSubfolders();
     }
 
-    private String getFolderNameFromId(String id1) {
-        //FIXME
-        File temp = new File(id1);
-        return temp.getName();
+    @Override
+    public void moveFolder(Folder destination) {
+        FileSystemFolder fsdest;
+        fsdest = (FileSystemFolder) destination;
+        persistStore.moveFolder(this.getPath(), fsdest.getPath());
+    }
+
+    public void setParent(FileSystemFolder parent) {
+        this.parent = parent;
+    }
+
+    public FileSystemFolder getParent() {
+        return parent;
+    }
+
+    public String getPath() {
+        return parent.getPath() + File.separator + this.getName();
+    }
+
+    @Override
+    public void createFolder(String name) {
+        persistStore.newFolder(this.getPath() + File.separator + name);
     }
 }
