@@ -1,10 +1,13 @@
 package ui.SwingMain;
 
 import Email.MessageController;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import ui.SwingMessage.ComposeMail;
@@ -37,6 +40,10 @@ public class MessageList extends JTable {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent me) {
+                if (SwingUtilities.isRightMouseButton(me)) {
+                    makeMenu(me.getPoint());
+                }
+
                 if (me.getClickCount() >= 2) {
                     openmessage();
                 }
@@ -60,6 +67,16 @@ public class MessageList extends JTable {
         });
     }
 
+    void makeMenu(Point mouseposition) {
+        
+        // get row
+        int row = this.rowAtPoint(mouseposition);
+        // get id of row
+        String id = (String) this.model.getValueAt(row, -1);
+        JPopupMenu menu = new MessageMenu(id);
+        menu.show(this, mouseposition.x, mouseposition.y);
+    }
+
     /**
      * Function to display folder given the folder Id
      *
@@ -81,6 +98,6 @@ public class MessageList extends JTable {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
         (new ComposeMail(messageid)).setVisible(true);
-        
+
     }
 }

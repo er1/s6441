@@ -7,6 +7,7 @@ package ui.SwingMain;
 import Email.MessageController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -14,7 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import ui.LabeledTextField;
-import static ui.SwingMain.FolderMenu.logger;
+import util.Util;
 
 /**
  * FolderMenu which is an extention of right click menu in tree bar
@@ -43,11 +44,11 @@ public class FolderMenu extends JPopupMenu {
         JMenuItem deleteFolder = new JMenuItem("Delete");
         JMenuItem newFolder = new JMenuItem("New Folder");
         JMenuItem moveFolder = new JMenuItem("Move to ...");
-        
+
         if (pickedFolderId != null) {
             moveFolder.setText("Move to " + controller.getFolderName(pickedFolderId));
         }
-        
+
         JMenuItem pickFolder = new JMenuItem("Pick this folder");
 
         deleteFolder.addActionListener(new ActionListener() {
@@ -78,14 +79,21 @@ public class FolderMenu extends JPopupMenu {
             }
         });
 
+        ArrayList<String> staticfolders = Util.newArrayList();
+        staticfolders.add(controller.getRootFolderId());
+        staticfolders.add(controller.getInboxFolderId());
+        staticfolders.add(controller.getOutboxFolderId());
+        staticfolders.add(controller.getDraftsFolderId());
+        staticfolders.add(controller.getSentMessagesFolderId());
+        staticfolders.add(controller.getTrashFolderId());
 
-        // if (selected) {
-        this.add(deleteFolder);
         this.add(newFolder);
-        this.add(moveFolder);
+        if (!staticfolders.contains(selected)) {
+            this.add(deleteFolder);
+            this.add(moveFolder);
+        }
+
         this.add(pickFolder);
-        //       } else {
-        //       }
     }
 
     private void deleteFolder() {
@@ -111,6 +119,7 @@ public class FolderMenu extends JPopupMenu {
 
     /**
      * Get name from user
+     *
      * @param title
      * @return name
      */

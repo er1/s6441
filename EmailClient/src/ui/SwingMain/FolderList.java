@@ -9,10 +9,11 @@ import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -23,12 +24,11 @@ import javax.swing.tree.TreePath;
  * FolderList class displays tree hierarchy dynamically
  *
  */
-public class FolderList extends JPanel {
+public class FolderList extends JTree {
 
     MessageController store;
     MessageList list;
     FolderTreeModel model;
-    JTree messageTree;
 
     private class FolderNode {
 
@@ -135,13 +135,12 @@ public class FolderList extends JPanel {
         this.setLayout(new BorderLayout());
 
         Dimension size = new Dimension(200, 200); // can be arbitrarily changed
-        setMinimumSize(size);
 
         model = new FolderTreeModel(store);
-        messageTree = new JTree(model);
-        this.add(messageTree);
 
-        messageTree.addMouseListener(new MouseAdapter() {
+        this.setMaximumSize(size);
+
+        this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isRightMouseButton(e)) {
@@ -150,16 +149,33 @@ public class FolderList extends JPanel {
             }
         });
 
-        messageTree.addTreeSelectionListener(new TreeSelectionListener() {
+        this.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent tse) {
                 changefolder();
             }
         });
+
+        this.addTreeExpansionListener(new TreeExpansionListener() {
+            @Override
+            public void treeExpanded(TreeExpansionEvent tee) {
+                sizechanged();
+            }
+
+            @Override
+            public void treeCollapsed(TreeExpansionEvent tee) {
+                sizechanged();
+            }
+        });
+    }
+
+    void sizechanged() {
+        // TODO: have the layout resize
+        this.doLayout();
     }
 
     void makeMenu(Point mouseposition) {
-        TreePath path = messageTree.getPathForLocation(mouseposition.x, mouseposition.y);
+        TreePath path = this.getPathForLocation(mouseposition.x, mouseposition.y);
         FolderNode temp = (FolderNode) path.getLastPathComponent();
         String last = temp.getId();
 
@@ -172,12 +188,12 @@ public class FolderList extends JPanel {
      */
     public void refresh() {
         model = new FolderTreeModel(store);
-        messageTree.setModel(model);
+        this.setModel(model);
     }
 
     private void changefolder() {
         try {
-            TreePath path = messageTree.getSelectionPath();
+            TreePath path = this.getSelectionPath();
             String id = ((FolderNode) path.getLastPathComponent()).getId();
             list.displayFolder(id);
         } catch (NullPointerException e) {

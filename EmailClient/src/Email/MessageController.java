@@ -413,4 +413,15 @@ public class MessageController extends Observable {
         this.setChanged();
         this.notifyObservers();
     }
+    
+    public void doSendRecieve() {
+        Folder outbox = store.getOutbox();
+        Folder sent = store.getSentMessages();
+        
+        ArrayList<Message> outbound = store.getOutbox().getMessages();
+        for (Message out : outbound) {
+            sent.addMessage(out);
+            this.getIdfromMessage(out);
+        }
+    }
 }

@@ -62,6 +62,9 @@ class FolderTableModel extends AbstractTableModel {
         Summary summary = controller.getEmailSummary(messages[row]);
 
         switch (col) {
+            case -1:
+                return messages[row];
+
             case 0:
                 return summary.getDate();
             case 1:
