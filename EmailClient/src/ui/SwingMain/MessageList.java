@@ -10,7 +10,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import ui.SwingMessage.ComposeMail;
+import ui.SwingMessage.MessageEditor;
 
 /**
  * Email list Display
@@ -19,6 +19,7 @@ public class MessageList extends JTable {
 
     MessageController controller;
     Content content;
+    ToolRibbon toolribbon;
     FolderTableModel model;
 
     /**
@@ -27,9 +28,10 @@ public class MessageList extends JTable {
      * @param controller
      * @param content
      */
-    public MessageList(MessageController controller, Content content) {
+    public MessageList(MessageController controller, Content content, ToolRibbon toolribbon) {
         this.controller = controller;
         this.content = content;
+        this.toolribbon = toolribbon;
         ListSelectionModel lsm = this.getSelectionModel();
         lsm.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -68,7 +70,7 @@ public class MessageList extends JTable {
     }
 
     void makeMenu(Point mouseposition) {
-        
+
         // get row
         int row = this.rowAtPoint(mouseposition);
         // get id of row
@@ -86,18 +88,23 @@ public class MessageList extends JTable {
 
         model = new FolderTableModel(controller, folderId);
         this.setModel(model);
+
+        toolribbon.setSelectedFolder(folderId);
     }
 
     private void changemessage() {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
         content.showMessage(messageid);
+
+        toolribbon.setSelectedMessage(messageid);
+
     }
 
     private void openmessage() {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
-        (new ComposeMail(messageid)).setVisible(true);
+        (new MessageEditor(messageid)).setVisible(true);
 
     }
 }

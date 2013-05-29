@@ -9,7 +9,7 @@ import ui.LabeledTextField;
 /**
  * Compose Mail Window
  */
-public class ComposeMail extends JFrame {
+public class MessageEditor extends JFrame {
 
     String messageId;
     LabeledTextField subjectField;
@@ -23,7 +23,7 @@ public class ComposeMail extends JFrame {
      * Constructor for composing mail
      * @param messageId 
      */
-    public ComposeMail(String messageId) {
+    public MessageEditor(String messageId) {
         super("Email");
 
         this.messageId = messageId;

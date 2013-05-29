@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import ui.SwingMessage.ComposeMail;
+import ui.SwingMessage.MessageEditor;
 
 public class MessageMenu extends JPopupMenu {
 
@@ -45,7 +45,7 @@ public class MessageMenu extends JPopupMenu {
     }
 
     void open() {
-        (new ComposeMail(selected)).setVisible(true);
+        (new MessageEditor(selected)).setVisible(true);
     }
 
     void delete() {

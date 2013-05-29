@@ -214,6 +214,9 @@ class FileSystemStorage extends PersistentStorage {
         initialFolders.add("Sent");
         initialFolders.add("Trash");
 
+        initialFolders.add("Templates");
+        initialFolders.add("Meetings");
+
         for (String folder : initialFolders) {
             logger.log(Level.INFO, File.separator + mailBoxID + File.separator + folder);
             newFolderInMailbox(File.separator + mailBoxID + File.separator + folder);

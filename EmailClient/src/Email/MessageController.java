@@ -31,6 +31,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the instance ofMessageController
+     *
      * @param messagestore
      * @return instance
      */
@@ -44,6 +45,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the instance ofMessageController
+     *
      * @return instance
      */
     static public MessageController getInstance() {
@@ -257,6 +259,7 @@ public class MessageController extends Observable {
 
     /**
      * Update the date
+     *
      * @param messageid
      */
     public void updateDate(String messageid) {
@@ -272,7 +275,7 @@ public class MessageController extends Observable {
      * @param originalMessage
      * @return reply id
      */
-    String reply(String originalMessage) {
+    public String reply(String originalMessage) {
         // create a new message
         String replyid = compose();
         updateDate(replyid);
@@ -288,10 +291,10 @@ public class MessageController extends Observable {
 
         // get the headers based on the original message
         String to = original.getHeaderValue("From");
-        String subject = original.getHeaderValue("subject");
+        String subject = original.getHeaderValue("Subject");
 
         // add RE to the subject if it is not already there
-        if (!"RE:".equals(subject.substring(0, 3).toUpperCase())) {
+        if (subject.length() < 3 || !"RE:".equals(subject.substring(0, 3).toUpperCase())) {
             subject = "RE: " + subject;
         }
 
@@ -304,8 +307,40 @@ public class MessageController extends Observable {
         this.setChanged();
         this.notifyObservers();
 
-
         return replyid;
+    }
+
+    public String forward(String currentMessage) {
+        // create a new message
+        String forwardid = compose();
+        updateDate(forwardid);
+
+        Message forwardmsg = getMessageFromId(forwardid);
+
+        // get the original message and use it to create the reply content
+        Message original = getMessageFromId(currentMessage);
+
+        String forwardContent = original.getContent();
+        forwardContent = "\r\n\r\n" + forwardContent;
+        forwardContent = forwardContent.replaceAll("\n", "\n> ");
+
+        // get the headers based on the original message
+        String subject = original.getHeaderValue("Subject");
+
+        // add RE to the subject if it is not already there
+        if (subject.length() < 4 || !"FWD:".equals(subject.substring(0, 4).toUpperCase())) {
+            subject = "Fwd: " + subject;
+        }
+
+        // set the headers and content of the reply
+        forwardmsg.setContent(forwardContent);
+        forwardmsg.setHeader("Subject", subject);
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
+
+        return forwardid;
     }
 
     // get particular folder ids
@@ -375,6 +410,7 @@ public class MessageController extends Observable {
 
     /**
      * Create a new folder
+     *
      * @param in
      * @param name
      */
@@ -389,6 +425,7 @@ public class MessageController extends Observable {
 
     /**
      * Delete a folder selected
+     *
      * @param selected
      */
     public void deletefolder(String selected) {
@@ -402,6 +439,7 @@ public class MessageController extends Observable {
 
     /**
      * Move folder form source to destination
+     *
      * @param sourcePath
      * @param destinationPath
      */
@@ -413,11 +451,11 @@ public class MessageController extends Observable {
         this.setChanged();
         this.notifyObservers();
     }
-    
+
     public void doSendRecieve() {
         Folder outbox = store.getOutbox();
         Folder sent = store.getSentMessages();
-        
+
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
             sent.addMessage(out);

@@ -14,7 +14,7 @@ import java.awt.GridLayout;
 public class MainWindow extends JFrame {
 
     JMenuBar windowMenu;
-    JToolBar toolbar;
+    ToolRibbon toolbar;
     FolderList folders;
     MessageList messages;
     Content content;
@@ -30,7 +30,7 @@ public class MainWindow extends JFrame {
         //this.windowMenu = new Menu();
         this.toolbar = new ToolRibbon();
         this.content = new Content(controller);
-        this.messages = new MessageList(controller, this.content);
+        this.messages = new MessageList(controller, this.content, this.toolbar);
         this.messages.displayFolder(controller.getInboxFolderId());
         this.folders = new FolderList(controller, this.messages);
 

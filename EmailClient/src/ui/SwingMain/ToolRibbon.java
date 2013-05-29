@@ -15,10 +15,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
-import ui.SwingMessage.ComposeMail;
+import ui.SwingMessage.MessageEditor;
 
 /**
  * Creating and handling tool bar menu
+ *
  * @author anasalkhatib
  */
 public class ToolRibbon extends JToolBar {
@@ -30,9 +31,13 @@ public class ToolRibbon extends JToolBar {
     JButton refreshButton;
     JButton composeButton;
     JButton replyButton;
+    MessageController controller;
+    String currentMessage;
+    String currentFolder;
 
     /**
-     * Function to resize image icon 
+     * Function to resize image icon
+     *
      * @param original
      * @return resizedImage
      */
@@ -59,6 +64,8 @@ public class ToolRibbon extends JToolBar {
      * constructor for toolBar with toolTip and hotKeys
      */
     public ToolRibbon() {
+        controller = MessageController.getInstance();
+
         Dimension size = new Dimension(64, 64);
         refreshButton = makeButton("resources/refresh.png", "Send/Receive messages (F5)", size);
         composeButton = makeButton("resources/compose.png", "Compose New Message (Alt + N)", size);
@@ -74,17 +81,17 @@ public class ToolRibbon extends JToolBar {
                 doRefresh();
             }
         });
-        
+
         Action refresh = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 System.out.println("refresh");
                 doRefresh();
             }
         };
-        refreshButton.getInputMap().put(KeyStroke.getKeyStroke("F5"),"Refresh");
-        refreshButton.getActionMap().put("Refresh",refresh);
-        
+        refreshButton.getInputMap().put(KeyStroke.getKeyStroke("F5"), "Refresh");
+        refreshButton.getActionMap().put("Refresh", refresh);
+
         composeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -92,7 +99,7 @@ public class ToolRibbon extends JToolBar {
             }
         });
         composeButton.setMnemonic(KeyEvent.VK_N);
-        
+
         markUnreadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -108,7 +115,7 @@ public class ToolRibbon extends JToolBar {
             }
         });
         replyButton.setMnemonic(KeyEvent.VK_R);
-        
+
         forwardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -135,24 +142,43 @@ public class ToolRibbon extends JToolBar {
     }
 
     private void doRefresh() {
+        controller.doSendRecieve();
     }
 
     private void doCompose() {
-        MessageController controller = MessageController.getInstance();
         String id = controller.compose();
-        ComposeMail compose = new ComposeMail(id);
+        MessageEditor compose = new MessageEditor(id);
         compose.setVisible(true);
     }
 
     private void doReply() {
+        String id = controller.reply(currentMessage);
+        MessageEditor compose = new MessageEditor(id);
     }
 
     private void doMarkUnread() {
+        controller.markUnread(currentMessage);
     }
 
     private void doForward() {
+        String id = controller.forward(currentMessage);
+        MessageEditor compose = new MessageEditor(id);
     }
 
     private void doDelete() {
+        String trash = controller.getTrashFolderId();
+        if (currentFolder.equals(trash)) {
+            controller.delete(currentMessage);
+        } else {
+            controller.moveMessageToFolder(currentMessage, trash);
+        }
+    }
+
+    public void setSelectedMessage(String messageid) {
+        currentMessage = messageid;
+    }
+
+    public void setSelectedFolder(String folderid) {
+        currentFolder = folderid;
     }
 }
