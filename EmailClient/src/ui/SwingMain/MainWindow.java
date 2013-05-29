@@ -1,7 +1,5 @@
 package ui.SwingMain;
 
-import Email.DummyStore;
-import Email.FileSystemFolder;
 import Email.FileSystemMailbox;
 import Email.MessageController;
 import java.awt.BorderLayout;

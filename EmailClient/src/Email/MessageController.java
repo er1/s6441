@@ -310,6 +310,11 @@ public class MessageController extends Observable {
         return replyid;
     }
 
+    /**
+     *
+     * @param currentMessage
+     * @return
+     */
     public String forward(String currentMessage) {
         // create a new message
         String forwardid = compose();
@@ -452,6 +457,9 @@ public class MessageController extends Observable {
         this.notifyObservers();
     }
 
+    /**
+     *
+     */
     public void doSendRecieve() {
         Folder outbox = store.getOutbox();
         Folder sent = store.getSentMessages();

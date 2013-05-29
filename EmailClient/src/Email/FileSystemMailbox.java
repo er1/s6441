@@ -1,7 +1,3 @@
-/**
- * To change this template, choose Tools | Templates and open the template in
- * the editor.
- */
 package Email;
 
 import Persist.PersistentStorage;
@@ -19,7 +15,9 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
     private PersistentStorage storage = PersistentStorage.getInstance();
 
     /**
-     * Constructor
+     * Constructor create a Mailbox object to represent a mailbox on the file
+     * system.
+     *
      * @param mailboxID
      */
     public FileSystemMailbox(String mailboxID) {

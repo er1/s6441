@@ -1,7 +1,9 @@
 package Email;
 
 /**
- * Summary Class is for getting/setting fields like Date,From,To,CC,BCC,Subject from/to the message
+ * Summary Class is for getting/setting fields like Date,From,To,CC,BCC,Subject
+ * from/to the message
+ *
  * @author chanman
  */
 public class Summary {
@@ -27,8 +29,9 @@ public class Summary {
 
     /**
      * Set Date
+     *
      * @param date
-     * @return Summary object with updated date 
+     * @return Summary object with updated date
      */
     public Summary Date(String date) {
         this.date = date;
@@ -37,6 +40,7 @@ public class Summary {
 
     /**
      * Set To
+     *
      * @param to
      * @return Summary object with updated To
      */
@@ -47,6 +51,7 @@ public class Summary {
 
     /**
      * Set From
+     *
      * @param from
      * @return Summary object with updated From
      */
@@ -57,6 +62,7 @@ public class Summary {
 
     /**
      * Set Cc
+     *
      * @param cc
      * @return Summary object with updated cc
      */
@@ -67,6 +73,7 @@ public class Summary {
 
     /**
      * Set Bcc
+     *
      * @param bcc
      * @return Summary object with updated bcc
      */
@@ -77,6 +84,7 @@ public class Summary {
 
     /**
      * Set subject
+     *
      * @param subject
      * @return Summary object with updated subject
      */
@@ -86,7 +94,8 @@ public class Summary {
     }
 
     /**
-     * Set read 
+     * Set read
+     *
      * @param isRead
      * @return Summary object with updated isRead field
      */
@@ -97,6 +106,7 @@ public class Summary {
 
     /**
      * Get Date
+     *
      * @return date
      */
     public String getDate() {
@@ -105,6 +115,7 @@ public class Summary {
 
     /**
      * Get To
+     *
      * @return To
      */
     public String getTo() {
@@ -113,6 +124,7 @@ public class Summary {
 
     /**
      * Get From
+     *
      * @return From
      */
     public String getFrom() {
@@ -121,6 +133,7 @@ public class Summary {
 
     /**
      * Get CC
+     *
      * @return cc
      */
     public String getCc() {
@@ -129,6 +142,7 @@ public class Summary {
 
     /**
      * Get Bcc
+     *
      * @return bcc
      */
     public String getBcc() {
@@ -137,6 +151,7 @@ public class Summary {
 
     /**
      * Get subject
+     *
      * @return subject
      */
     public String getSubject() {
@@ -145,6 +160,7 @@ public class Summary {
 
     /**
      * Is message read
+     *
      * @return true/false
      */
     public boolean isRead() {

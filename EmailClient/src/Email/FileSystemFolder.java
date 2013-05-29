@@ -1,20 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Email;
 
 import Persist.PersistentStorage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Util;
 
 /**
- * Implementation of File System
+ * Implementation of Folder for the File System
  *
- * @author anasalkhatib
+ * @author anasalkhatib, chanman
  */
 public class FileSystemFolder implements Folder {
 
@@ -26,10 +21,10 @@ public class FileSystemFolder implements Folder {
     static final Logger logger = Logger.getLogger(FileSystemFolder.class.getName());
 
     /**
-     * Constructor for initialization
+     * Create an object to represent a folder on the filesystem
      *
-     * @param name 
-     * @param parent  
+     * @param name The name of this folder
+     * @param parent The object the represents the folder containing this one
      */
     public FileSystemFolder(String name, FileSystemFolder parent) {
         this.name = name;
@@ -152,16 +147,13 @@ public class FileSystemFolder implements Folder {
         this.getSubfolders();
     }
 
-    @Override
-    public void moveFolder(Folder destination) {
-        FileSystemFolder fsdest;
-        fsdest = (FileSystemFolder) destination;
-        persistStore.moveFolder(this.getPath(), fsdest.getPath());
-    }
-
     /**
      * Set the parent folder
-     * @param parent
+     *
+     * This should be called in the event that this folder has been moved and
+     * it's parent has therefore changed
+     *
+     * @param parent the new parent for this folder
      */
     public void setParent(FileSystemFolder parent) {
         this.parent = parent;
@@ -169,15 +161,20 @@ public class FileSystemFolder implements Folder {
 
     /**
      * Get the parent folder
-     * @return parent
+     *
+     * This is called to establish where this folder is and as a means back to
+     * the root
+     *
+     * @return parent the parent object for this folder
      */
     public FileSystemFolder getParent() {
         return parent;
     }
 
     /**
-     * Get the path
-     * @return path
+     * Get the path for this folder on the File System relative the the mailbox
+     *
+     * @return path a string that can be passed to PersistentStorage
      */
     public String getPath() {
         return parent.getPath() + File.separator + this.getName();
@@ -186,5 +183,12 @@ public class FileSystemFolder implements Folder {
     @Override
     public void createFolder(String name) {
         persistStore.newFolder(this.getPath() + File.separator + name);
+    }
+
+    @Override
+    public void moveFolder(Folder destination) {
+        FileSystemFolder fsdest;
+        fsdest = (FileSystemFolder) destination;
+        persistStore.moveFolder(this.getPath(), fsdest.getPath());
     }
 }

@@ -10,30 +10,30 @@ import java.util.ArrayList;
 public interface Folder {
 
     /**
-     * Get Id
+     * Get the ID of a Folder
      *
-     * @return id
+     * @return id the unique ID for this folder
      */
     public String getId();
 
     /**
-     * Set Id
+     * Set the ID of a Folder
      *
-     * @param id
+     * @param id the unique ID for this folder
      */
     public void setId(String id);
 
     /**
      * Get the name of a Folder
      *
-     * @return name
+     * @return name the display name for this folder
      */
     public String getName();
 
     /**
      * Set this name of a Folder
      *
-     * @param name
+     * @param name the display name for this folder
      */
     public void setName(String name);
 
@@ -52,9 +52,9 @@ public interface Folder {
     ArrayList<Folder> getSubfolders();
 
     /**
-     * Add msg to this folder
+     * Add message to this folder
      *
-     * @param msg
+     * @param msg the Message to add to this Folder
      */
     void addMessage(Message msg);
 
@@ -66,18 +66,18 @@ public interface Folder {
     void addMessageCopy(Message msg);
 
     /**
-     * Remove msg from this folder
+     * Delete a Message from this folder
      *
-     * @param msg
+     * @param msg the Message to delete
      */
     void deleteMessage(Message msg);
 
     /**
-     * Add folder as a subfolder of this folder
+     * Add folder as a sub-folder of this folder
      *
      * If this folder already exists then it will be moved to this folder
      *
-     * @param folder
+     * @param folder the folder to be added to this one
      */
     void addFolder(Folder folder);
 
@@ -96,13 +96,15 @@ public interface Folder {
     void sync();
 
     /**
-     * Creates a new folder 
+     * Creates a new folder
+     *
      * @param name
      */
     public void createFolder(String name);
 
     /**
      * Moves a folder to specified destination folder
+     *
      * @param dest
      */
     public void moveFolder(Folder dest);

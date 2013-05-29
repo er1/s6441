@@ -9,12 +9,14 @@ public interface Message {
 
     /**
      * Get id
+     *
      * @return id
      */
     public String getId();
 
     /**
      * Set id
+     *
      * @param id
      */
     public void setId(String id);
