@@ -1,0 +1,132 @@
+//HOW-TO
+//Git pull
+//Check the list, Start with [BUG-1] [BUG-2] and NEW-FEATURES
+//Please put your name next to the task you are working on, commit and push it
+//Then start working, when done change the TAG to [DONE]
+
+
+TODO Project 1:
+
+Unit Tests:
+    
+    -[BUG-1] Fix All Failing Unit tests
+        -All existing UT should pass, with no errors.
+	-[BUG-3] More covergage check abt GUI classes{remove for test or add it}
+
+Create Subfolders:
+    
+    -[BUG-1] Anywhere other than inbox should not allow subfolders
+
+Move Mail:
+    
+    -[BUG-1] Does not work currently, right click menu shows option but does nothing
+
+Initial Startup:
+
+    -[BUG-2] If the mailbox folder doesn't exist at start it doesn't get created.
+        -Workaround: Create subfolder in user home directory with Mailbox id before launching.
+
+Compose New Email:
+    
+    -[BUG-2] Window should close when Send/Save is selected
+    
+    -[BUG-2] Content from the compose window is not being written to file on "Save"
+    
+    -[BUG-3] A new message is being created in drafts as soon as the compose window is opened
+
+Displaying Folder heirarchy:
+    
+    -[BUG-3] Window does not resize to fit folders being displayed
+    
+    -[BUG-3] Refresh of folder list closes all open subfolders
+
+Move Subfolders:
+
+    -[IMPROVE] Works but not intuitive
+
+Menu:
+	-[BUG-3] Right Click
+        -All options in the right click menu should work
+	-[IMPROVE] All Functions should have Menu bar
+	-[IMPROVE] Hot Keys functions 
+
+Sync Fuctions:
+    [BUG-2] Does not refresh display after sync
+        - Transfer the msg from outbox to Sent after delivering the msg works, but should update folder list
+
+Graphical user Interface:
+ 	- [BUG-3] 
+	    - INBOX -> {Display column Date/FROM/Subject}
+	    - Other Top level Folders
+        {The top header display should get updated e.g., if we click Sent folder the diaplay should change to DATE/TO/SUBJECT}
+
+Delete Folder:
+	- Done
+
+Forward And Reply:
+	- [IMPROVEMENT] Not need for the project but we can add for improvement
+
+Receiving Mail:
+    -[IMPROVEMENT] Currently not handled
+
+
+
+-----------------------------
+Project Phase 2 Requirements
+-----------------------------
+
+
+[ERIC] Email Templates
+
+    - Create Template (High Priority)
+
+    - Create new message from template (High Priority)
+
+    - Update Template
+
+    - Delete Template
+
+
+
+[KARTHIK] Email Search:
+
+    - Only in Inbox (High Priority)
+
+    - Search for keywords in all fields in all messages (High Priority)
+
+    -[IMPROVEMENTS] Specify field (From, Date, Subject, Content)
+
+
+[BARGAVI] Email Filters
+
+    - Periodically filter incoming messages and move to particular folders
+
+    - Create filter/rule (based on criteria [From/To/Subject/Content]) and move that to the destination folder
+
+[ANAS+] Meeting
+
+    - Create New Meeting 
+
+    - Choose date
+
+    - Message
+
+    - Recipients
+
+    - Send email message to all recipients
+
+    - List Meetings
+
+    - Edit Meetings
+
+    - Choose date
+
+    - Message
+
+    - Recipients
+
+    - send updated message
+
+    - Delete Meeting
+
+    - update recipients
