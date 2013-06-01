@@ -42,6 +42,8 @@ public class MessageEditor extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 send();
+                setVisible(false);
+                dispose();
             }
         });
 
@@ -51,6 +53,8 @@ public class MessageEditor extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 save();
+                setVisible(false);
+                dispose();
             }
         });
 

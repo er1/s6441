@@ -28,7 +28,7 @@ Initial Startup:
 
 Compose New Email:
     
-    -[BUG-2] Window should close when Send/Save is selected
+    -[BARGAVI - Done] Window should close when Send/Save is selected
     
     -[BUG-2] Content from the compose window is not being written to file on "Save"
     
