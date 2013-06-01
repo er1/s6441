@@ -148,12 +148,15 @@ public class ToolRibbon extends JToolBar {
     private void doCompose() {
         String id = controller.compose();
         MessageEditor compose = new MessageEditor(id);
+        compose.init();
         compose.setVisible(true);
     }
 
     private void doReply() {
         String id = controller.reply(currentMessage);
         MessageEditor compose = new MessageEditor(id);
+        compose.init();
+        compose.setVisible(true);
     }
 
     private void doMarkUnread() {
@@ -163,6 +166,8 @@ public class ToolRibbon extends JToolBar {
     private void doForward() {
         String id = controller.forward(currentMessage);
         MessageEditor compose = new MessageEditor(id);
+        compose.init();
+        compose.setVisible(true);
     }
 
     private void doDelete() {

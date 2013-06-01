@@ -18,6 +18,7 @@ public class TemporaryFolder implements Folder {
 
     /**
      * Constructor to initialize folders,messages and name
+     *
      * @param n
      */
     public TemporaryFolder(String n) {
@@ -28,6 +29,7 @@ public class TemporaryFolder implements Folder {
 
     /**
      * Get id
+     *
      * @return id
      */
     @Override
@@ -37,6 +39,7 @@ public class TemporaryFolder implements Folder {
 
     /**
      * Set id
+     *
      * @param id
      */
     @Override

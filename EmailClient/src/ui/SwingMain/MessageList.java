@@ -104,7 +104,9 @@ public class MessageList extends JTable {
     private void openmessage() {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
-        (new MessageEditor(messageid)).setVisible(true);
-
+        
+        MessageEditor editor = new MessageEditor(messageid);
+        editor.init();
+        editor.setVisible(true);
     }
 }

@@ -45,7 +45,9 @@ public class MessageMenu extends JPopupMenu {
     }
 
     void open() {
-        (new MessageEditor(selected)).setVisible(true);
+        MessageEditor editor = new MessageEditor(selected);
+        editor.init();
+        editor.setVisible(true);
     }
 
     void delete() {

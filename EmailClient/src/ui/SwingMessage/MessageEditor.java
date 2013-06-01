@@ -15,23 +15,26 @@ public class MessageEditor extends JFrame {
     LabeledTextField subjectField;
     LabeledTextField toField;
     JTextArea messageContentTextArea;
-    JButton cancelMailButton;
-    JButton sendMailButton;
-    JButton saveDraftButton;
 
     /**
      * Constructor for composing mail
-     * @param messageId 
+     *
+     * @param messageId
      */
     public MessageEditor(String messageId) {
         super("Email");
-
         this.messageId = messageId;
+    }
 
+    public void init() {
         // Contruct fields
         subjectField = new LabeledTextField("Subject");
         toField = new LabeledTextField("To");
         messageContentTextArea = new JTextArea();
+
+        JButton cancelMailButton;
+        JButton sendMailButton;
+        JButton saveDraftButton;
 
         sendMailButton = new JButton("Send");
         sendMailButton.setToolTipText("Sends mail to the corresponding To information");
@@ -52,7 +55,7 @@ public class MessageEditor extends JFrame {
         });
 
         cancelMailButton = new JButton("Close");
-        cancelMailButton.setToolTipText("Move this message to the trash");
+        cancelMailButton.setToolTipText("Close this message");
         cancelMailButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -86,8 +89,6 @@ public class MessageEditor extends JFrame {
         this.setSize(650, 380);
 
         this.refresh();
-
-        this.setVisible(true);
     }
 
     /**

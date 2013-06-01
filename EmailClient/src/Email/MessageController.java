@@ -466,6 +466,7 @@ public class MessageController extends Observable {
 
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
+            
             sent.addMessage(out);
             this.getIdfromMessage(out);
         }
