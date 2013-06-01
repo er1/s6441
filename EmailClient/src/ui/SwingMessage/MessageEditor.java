@@ -111,11 +111,15 @@ public class MessageEditor extends JFrame {
         controller.setEmailHeader(messageId, "To", toField.getText());
         controller.setEmailContent(messageId, messageContentTextArea.getText());
         controller.updateDate(messageId);
+        controller.moveMessageToFolder(messageId, controller.getDraftsFolderId());
     }
 
     void send() {
-        save();
         MessageController controller = MessageController.getInstance();
+        controller.setEmailHeader(messageId, "Subject", subjectField.getText());
+        controller.setEmailHeader(messageId, "To", toField.getText());
+        controller.setEmailContent(messageId, messageContentTextArea.getText());
+        controller.updateDate(messageId);
         controller.moveMessageToFolder(messageId, controller.getOutboxFolderId());
     }
 }

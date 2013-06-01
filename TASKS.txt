@@ -30,7 +30,7 @@ Compose New Email:
     
     -[BARGAVI - Done] Window should close when Send/Save is selected
     
-    -[BUG-2] Content from the compose window is not being written to file on "Save"
+    -[BARGAVI - Done] Content from the compose window is not being written to file on "Save"
     
     -[BUG-3] A new message is being created in drafts as soon as the compose window is opened
 
