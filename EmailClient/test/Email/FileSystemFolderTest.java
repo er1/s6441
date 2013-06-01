@@ -23,7 +23,8 @@ public class FileSystemFolderTest {
     private ArrayList<Message> messages;
     private ArrayList<Folder> folders;
     private PersistentStorage persistStore;
-    private FileSystemFolder parent;
+    private Mailbox parent;
+
             
     public FileSystemFolderTest() {
     }
@@ -42,7 +43,7 @@ public class FileSystemFolderTest {
         this.messages = new ArrayList<Message> ();
         this.folders = new ArrayList<Folder> ();
         this.persistStore = PersistentStorage.getFileSystemStorage(id);
-        this.parent = null;
+        this.parent = (Mailbox) new FileSystemMailbox(id);
     }
     
     @After
@@ -50,25 +51,11 @@ public class FileSystemFolderTest {
     }
 
     /**
-     * Test of getId and setId method, of class FileSystemFolder.
-     */
-    @Test
-    public void testSetGetId() {
-        
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
-        
-        String expResult = "id";
-        instance.setId(expResult);
-        String result = instance.getId();
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test of getName and setName method, of class FileSystemFolder.
      */
     @Test
     public void testSetGetName() {
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
+        FileSystemFolder instance = new FileSystemFolder(id,(FileSystemMailbox)parent);
         
         String expResult = "id";
         instance.setName(expResult);
@@ -82,21 +69,23 @@ public class FileSystemFolderTest {
      */
     @Test
       public void testAddAndGetMessages() {
-        PlainTextMessage msg = new PlainTextMessage();
-        msg.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        PlainTextMessage msg;
+        msg = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
                 + "\r\n"
                 + "Hello, World\r\n");
+       
         ArrayList<Message> expResult = new ArrayList<Message> ();
         expResult.add((Message)msg);
                 
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
+        FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
+        
         instance.addMessage(msg);
         
         ArrayList result = instance.getMessages();
-        //assertEquals(expResult, result);   
+        assertEquals(expResult, result);
     }
 
     /**
@@ -104,11 +93,19 @@ public class FileSystemFolderTest {
      */
     @Test
      public void testGetSubfolders() {
+       
+        ArrayList<Folder> expResult = new ArrayList<Folder>();
         
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
-        ArrayList expResult = null;
-        ArrayList result = instance.getSubfolders();
-        //assertEquals(expResult, result);
+        Folder folder = new TemporaryFolder("folder");
+        Folder f1= new TemporaryFolder("folder1");
+        Folder f2= new TemporaryFolder("folder2");
+        folder.addFolder(f1);
+        folder.addFolder(f2);
+        expResult.add(f1);
+        expResult.add(f2);
+        
+        ArrayList result = folder.getSubfolders();
+        assertEquals(expResult, result);
     }
 
     /**
@@ -117,22 +114,23 @@ public class FileSystemFolderTest {
     @Test
     public void testAddMessageCopy() {
         
-        PlainTextMessage msg = new PlainTextMessage();
-        msg.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        PlainTextMessage msg;
+        msg = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
                 + "\r\n"
                 + "Hello, World\r\n");
-        
+       
         ArrayList<Message> expResult = new ArrayList<Message> ();
         expResult.add((Message)msg);
-        
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
+                
+        FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
+       
         instance.addMessageCopy(msg);
         
         ArrayList result = instance.getMessages();
-        //assertEquals(expResult, result);
+        assertEquals(expResult, result);
         
     }
 
@@ -141,44 +139,49 @@ public class FileSystemFolderTest {
      */
     @Test
     public void testAddAndDeleteMessage() {
-        System.out.println("deleteMessage");
         
-        PlainTextMessage msg = new PlainTextMessage();
-        msg.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        PlainTextMessage msg;
+        msg = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
                 + "\r\n"
                 + "Hello, World\r\n");
                 
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
+        FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
         instance.addMessage(msg);
         
         instance.deleteMessage(msg);
-        
+
     }
 
     /**
-     * Test of addAndFolder method, of class FileSystemFolder.
+     * Test of addFolder and DeleteFolder method, of class FileSystemFolder.
      */
     @Test
     public void testAddAndDeleteFolder() {
-        Folder folder = new TemporaryFolder("name");
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
+        
+        String expResult = "folder";
+        Folder folder = new TemporaryFolder(expResult);
+        FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
         instance.addFolder(folder);
         
-        instance.deleteFolder(folder);
+        assertEquals(expResult, folder.getName());
         
+        instance.deleteFolder(folder);
+        assertEquals(expResult,folder.getName());
     }
 
-    /**
-     * Test of sync method, of class FileSystemFolder.
+     /**
+     * Test of getParent and setParent method, of class FileSystemFolder.
      */
     @Test
-    public void testSync() {
+    public void testSetGetParent() {
         
-        FileSystemFolder instance = new FileSystemFolder(id,parent);
-        instance.sync();
-        
+        FileSystemFolder instance = new FileSystemFolder(id,(FileSystemMailbox)parent);        
+        instance.setParent((FileSystemFolder)this.parent);
+        FileSystemFolder result = instance.getParent();
+        assertEquals(parent.getName(), result.getName());
+       
     }
 }

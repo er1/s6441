@@ -63,7 +63,7 @@ public class PlainTextMessageTest {
         assertEquals(expResult, result);
         
         expResult = "Hello, World\r\n";
-        instance.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        instance = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
@@ -80,12 +80,12 @@ public class PlainTextMessageTest {
      */
     @Test
     public void testGetHeaderValue() {
-        PlainTextMessage instance = new PlainTextMessage();
+        PlainTextMessage instance;
         
         String expResult;
         String result;
        
-        instance.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        instance = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
@@ -146,12 +146,12 @@ public class PlainTextMessageTest {
      */
     @Test
     public void testParse() {
-        PlainTextMessage instance = new PlainTextMessage();
+        PlainTextMessage instance;
         
         String expResult;
         String result;
         
-        instance.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        instance = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
