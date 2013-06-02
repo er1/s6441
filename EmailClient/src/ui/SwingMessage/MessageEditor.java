@@ -14,22 +14,31 @@ public class MessageEditor extends JFrame {
     String messageId;
     LabeledTextField subjectField;
     LabeledTextField toField;
+    LabeledTextField fromField;
     JTextArea messageContentTextArea;
+
+    public enum Type {
+
+        COMPOSE, VIEW, TEMPLATE
+    };
+    Type type;
 
     /**
      * Constructor for composing mail
      *
      * @param messageId
      */
-    public MessageEditor(String messageId) {
+    public MessageEditor(String messageId, Type type) {
         super("Email");
         this.messageId = messageId;
+        this.type = type;
     }
 
     public void init() {
         // Contruct fields
-        subjectField = new LabeledTextField("Subject");
-        toField = new LabeledTextField("To");
+        subjectField = new LabeledTextField("Subject").tooltip("The subject of this message");
+        toField = new LabeledTextField("To").tooltip("This message is for");
+        fromField = new LabeledTextField("From").tooltip("This message is from");
         messageContentTextArea = new JTextArea();
 
         JButton cancelMailButton;
@@ -68,12 +77,24 @@ public class MessageEditor extends JFrame {
             }
         });
 
+        if (type == Type.VIEW) {
+            subjectField.setEditable(false);
+            toField.setEditable(false);
+            fromField.setEditable(false);
+            messageContentTextArea.setEditable(false);
+        }
+
         // Make header
         JPanel headerPanel = new JPanel();
         BoxLayout headerLayout = new BoxLayout(headerPanel, BoxLayout.Y_AXIS);
         headerPanel.setLayout(headerLayout);
 
-        headerPanel.add(toField);
+        if (type == Type.VIEW) {
+            headerPanel.add(fromField);
+        } else {
+            headerPanel.add(toField);
+        }
+
         headerPanel.add(subjectField);
 
         // Make footer
@@ -102,6 +123,7 @@ public class MessageEditor extends JFrame {
         MessageController controller = MessageController.getInstance();
         subjectField.setText(controller.getEmailHeader(messageId, "Subject"));
         toField.setText(controller.getEmailHeader(messageId, "To"));
+        fromField.setText(controller.getEmailHeader(messageId, "From"));
         messageContentTextArea.setText(controller.getEmailContent(messageId));
     }
 

@@ -6,8 +6,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 /**
- * Labeled Text Field class returns text field with labels and tool tip 
- * inserted into a Container
+ * Labeled Text Field class returns text field with labels and tool tip inserted
+ * into a Container
+ *
  * @author KarthikKrishnan
  */
 public class LabeledTextField extends Container {
@@ -18,6 +19,7 @@ public class LabeledTextField extends Container {
 
     /**
      * constructor to initialize label and textField
+     *
      * @param label
      */
     public LabeledTextField(String label) {
@@ -33,6 +35,7 @@ public class LabeledTextField extends Container {
 
     /**
      * Set text to textField
+     *
      * @param text
      */
     public void setText(String text) {
@@ -41,6 +44,7 @@ public class LabeledTextField extends Container {
 
     /**
      * Get text from textField
+     *
      * @return text
      */
     public String getText() {
@@ -48,12 +52,22 @@ public class LabeledTextField extends Container {
     }
 
     /**
-     * Set tool tip 
+     * Set tool tip
+     *
      * @param tooltip
      * @return LabeledTextField object with updated tooltip
      */
     public LabeledTextField tooltip(String tooltip) {
         textField.setToolTipText(tooltip);
         return this;
+    }
+
+    /**
+     * set if the field is editable or not
+     *
+     * @param editable
+     */
+    public void setEditable(boolean editable) {
+        textField.setEditable(editable);
     }
 }

@@ -80,7 +80,7 @@ public class ToolRibbon extends JToolBar {
 
         markUnreadButton = makeButton("resources/unread.png", "Mark this message as not read", size);
         ruleButton = makeButton("resources/rules.png", "Create rules/filters (F6)", size);
-        
+
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -143,17 +143,17 @@ public class ToolRibbon extends JToolBar {
                 doRule();
             }
         });
-        
+
         Action rule = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 doRule();
             }
         };
-        
+
         ruleButton.getInputMap().put(KeyStroke.getKeyStroke("F6"), "Rules");
         ruleButton.getActionMap().put("Rules", rule);
-        
+
         meetingsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -180,7 +180,7 @@ public class ToolRibbon extends JToolBar {
 
     private void doCompose() {
         String id = controller.compose();
-        MessageEditor compose = new MessageEditor(id);
+        MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
         compose.init();
         compose.setVisible(true);
     }
@@ -194,7 +194,7 @@ public class ToolRibbon extends JToolBar {
 
     private void doReply() {
         String id = controller.reply(currentMessage);
-        MessageEditor compose = new MessageEditor(id);
+        MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
         compose.init();
         compose.setVisible(true);
     }
@@ -205,7 +205,7 @@ public class ToolRibbon extends JToolBar {
 
     private void doForward() {
         String id = controller.forward(currentMessage);
-        MessageEditor compose = new MessageEditor(id);
+        MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
         compose.init();
         compose.setVisible(true);
     }
@@ -218,7 +218,7 @@ public class ToolRibbon extends JToolBar {
             controller.moveMessageToFolder(currentMessage, trash);
         }
     }
-    
+
     private void doRule() {
         RulesEditor rules = new RulesEditor();
         rules.init();
