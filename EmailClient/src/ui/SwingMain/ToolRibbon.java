@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import ui.SwingMeeting.MeetingEditor;
 import ui.SwingMessage.MessageEditor;
 import ui.SwingRules.RulesEditor;
 
@@ -33,6 +34,7 @@ public class ToolRibbon extends JToolBar {
     JButton composeButton;
     JButton replyButton;
     JButton ruleButton;
+    JButton meetingsButton;
     MessageController controller;
     String currentMessage;
     String currentFolder;
@@ -74,6 +76,7 @@ public class ToolRibbon extends JToolBar {
         replyButton = makeButton("resources/reply.png", "Reply to the selected message (Alt + R)", size);
         forwardButton = makeButton("resources/forward.png", "Forward the selected message (Alt + F)", size);
         deleteButton = makeButton("resources/delete.png", "Send the selected message to the trash (Alt + D)", size);
+        meetingsButton = makeButton("resources/meetings.png", "Create a new meeting (Alt + M)", size);
 
         markUnreadButton = makeButton("resources/unread.png", "Mark this message as not read", size);
         ruleButton = makeButton("resources/rules.png", "Create rules/filters (F6)", size);
@@ -151,6 +154,14 @@ public class ToolRibbon extends JToolBar {
         ruleButton.getInputMap().put(KeyStroke.getKeyStroke("F6"), "Rules");
         ruleButton.getActionMap().put("Rules", rule);
         
+        meetingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doCreateMeeting();
+            }
+        });
+        meetingsButton.setMnemonic(KeyEvent.VK_M);
+
         this.setRollover(true);
         this.add(refreshButton);
         this.add(composeButton);
@@ -159,6 +170,8 @@ public class ToolRibbon extends JToolBar {
         this.add(forwardButton);
         this.add(deleteButton);
         this.add(ruleButton);
+        this.add(meetingsButton);
+
     }
 
     private void doRefresh() {
@@ -170,6 +183,13 @@ public class ToolRibbon extends JToolBar {
         MessageEditor compose = new MessageEditor(id);
         compose.init();
         compose.setVisible(true);
+    }
+
+    private void doCreateMeeting() {
+        String id = controller.createMeeting();
+        MeetingEditor meeting = new MeetingEditor(id);
+        meeting.init();
+        meeting.setVisible(true);
     }
 
     private void doReply() {
