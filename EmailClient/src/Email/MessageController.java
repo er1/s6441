@@ -245,6 +245,9 @@ public class MessageController extends Observable {
         Message msg = getMessageFromId(messageId);
         Folder destination = getFolderFromId(destinationFolderId);
         destination.addMessage(msg);
+
+        this.setChanged();
+        this.notifyObservers();
     }
 
     //FIXME Not sure what this does
@@ -262,6 +265,19 @@ public class MessageController extends Observable {
         return getIdfromMessage(newMsg);
     }
 
+    public String composeFrom(String template) {
+        String id = compose();
+        
+        Message temp = this.getMessageFromId(template);
+        Message msg = this.getMessageFromId(id);
+                
+        msg.setContent(temp.getContent());
+        msg.setHeader("Subject", temp.getHeaderValue("Subject"));
+        msg.setHeader("To", temp.getHeaderValue("To"));
+        
+        return id;
+    }
+    
     /**
      * Update the date
      *
@@ -272,6 +288,9 @@ public class MessageController extends Observable {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         msg.setHeader("Date", dateFormat.format(date));
+
+        this.setChanged();
+        this.notifyObservers();
     }
 
     /**
@@ -407,7 +426,26 @@ public class MessageController extends Observable {
     public String getTrashFolderId() {
         return getIdfromFolder(store.getTrash());
     }
+    
+        /**
+     * Get template folder id
+     *
+     * @return id
+     */
+    public String getTemplateFolderId() {
+        return getIdfromFolder(store.getTemplates());
+    }
 
+        
+        /**
+     * Get template folder id
+     *
+     * @return id
+     */
+    public String getMeetingFolderId() {
+        return getIdfromFolder(store.getMeetings());
+    }
+    
     /**
      * Get the name of a folder
      *
