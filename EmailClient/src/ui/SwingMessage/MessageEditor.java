@@ -110,6 +110,7 @@ public class MessageEditor extends JFrame {
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
         controller.setEmailHeader(messageId, "To", toField.getText());
         controller.setEmailContent(messageId, messageContentTextArea.getText());
+        controller.setEmailHeader(messageId, "From", controller.getRootFolderId());
         controller.updateDate(messageId);
         controller.moveMessageToFolder(messageId, controller.getDraftsFolderId());
     }
@@ -119,6 +120,7 @@ public class MessageEditor extends JFrame {
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
         controller.setEmailHeader(messageId, "To", toField.getText());
         controller.setEmailContent(messageId, messageContentTextArea.getText());
+        controller.setEmailHeader(messageId, "From", controller.getRootFolderId());
         controller.updateDate(messageId);
         controller.moveMessageToFolder(messageId, controller.getOutboxFolderId());
     }
