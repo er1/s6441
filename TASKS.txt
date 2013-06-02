@@ -19,7 +19,7 @@ Create Subfolders:
 
 Move Mail:
     
-    -[BARGAVI - BUG-1] Does not work currently, right click menu shows option but does nothing
+    -[BARGAVI - DONE] Does not work currently, right click menu shows option but does nothing
 
 Initial Startup:
 

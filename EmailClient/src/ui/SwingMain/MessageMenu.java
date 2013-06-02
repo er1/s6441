@@ -3,6 +3,8 @@ package ui.SwingMain;
 import Email.MessageController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import ui.SwingMessage.MessageEditor;
@@ -50,11 +52,28 @@ public class MessageMenu extends JPopupMenu {
         editor.setVisible(true);
     }
 
-    void delete() {
+    void delete() {  
         controller.moveMessageToFolder(selected, controller.getTrashFolderId());
     }
 
     void move() {
-//        controller.moveMessageToFolder(selected, selected);
+        
+        String path = System.getProperty("user.home") + File.separator ;
+        String inboxPath = path + Persist.PersistentStorage.getInstance().getMailboxID() 
+                + File.separator + "Inbox";
+        
+        String destinationPath;
+        JFileChooser fc = new JFileChooser(inboxPath);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setAcceptAllFileFilterUsed(false);
+        fc.setDialogTitle("Move selected mail to folder");
+        int res = fc.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            
+            destinationPath = fc.getSelectedFile().getPath();
+            destinationPath = destinationPath.substring(path.length());
+            
+            controller.moveMessageToFolder(selected, destinationPath);
+        }    
     }
 }
