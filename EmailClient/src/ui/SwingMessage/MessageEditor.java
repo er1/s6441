@@ -19,7 +19,7 @@ public class MessageEditor extends JFrame {
 
     public enum Type {
 
-        COMPOSE, VIEW, TEMPLATE
+        COMPOSE, VIEW
     };
     Type type;
 
@@ -45,6 +45,8 @@ public class MessageEditor extends JFrame {
         JButton sendMailButton;
         JButton saveDraftButton;
 
+        JButton saveTemplateButton;
+
         sendMailButton = new JButton("Send");
         sendMailButton.setToolTipText("Sends mail to the corresponding To information");
         sendMailButton.addActionListener(new ActionListener() {
@@ -56,8 +58,8 @@ public class MessageEditor extends JFrame {
             }
         });
 
-        saveDraftButton = new JButton("Save");
-        saveDraftButton.setToolTipText("Save this message");
+        saveDraftButton = new JButton("Save as Draft");
+        saveDraftButton.setToolTipText("Save this message in the Draft Folder");
         saveDraftButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -76,6 +78,18 @@ public class MessageEditor extends JFrame {
                 dispose();
             }
         });
+
+        saveTemplateButton = new JButton("Save as Template");
+        saveTemplateButton.setToolTipText("Save this message as a template");
+        saveTemplateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                saveTemplate();
+                setVisible(false);
+                dispose();
+            }
+        });
+
 
         if (type == Type.VIEW) {
             subjectField.setEditable(false);
@@ -106,6 +120,8 @@ public class MessageEditor extends JFrame {
         footerPanel.add(saveDraftButton);
         footerPanel.add(cancelMailButton);
 
+        footerPanel.add(saveTemplateButton);
+        
         this.setLayout(new BorderLayout());
 
         this.add(headerPanel, BorderLayout.NORTH);
@@ -135,6 +151,16 @@ public class MessageEditor extends JFrame {
         controller.setEmailHeader(messageId, "From", controller.getRootFolderId());
         controller.updateDate(messageId);
         controller.moveMessageToFolder(messageId, controller.getDraftsFolderId());
+    }
+
+    void saveTemplate() {
+        MessageController controller = MessageController.getInstance();
+        controller.setEmailHeader(messageId, "Subject", subjectField.getText());
+        controller.setEmailHeader(messageId, "To", toField.getText());
+        controller.setEmailContent(messageId, messageContentTextArea.getText());
+        controller.setEmailHeader(messageId, "From", controller.getRootFolderId());
+        controller.updateDate(messageId);
+        controller.moveMessageToFolder(messageId, controller.getTemplateFolderId());
     }
 
     void send() {

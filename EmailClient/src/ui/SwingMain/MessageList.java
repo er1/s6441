@@ -19,6 +19,7 @@ public class MessageList extends JTable {
 
     MessageController controller;
     Content content;
+    String folderid;
     ToolRibbon toolribbon;
     FolderTableModel model;
 
@@ -75,7 +76,7 @@ public class MessageList extends JTable {
         int row = this.rowAtPoint(mouseposition);
         // get id of row
         String id = (String) this.model.getValueAt(row, -1);
-        JPopupMenu menu = new MessageMenu(id);
+        JPopupMenu menu = new MessageMenu(id, folderid);
         menu.show(this, mouseposition.x, mouseposition.y);
     }
 
@@ -85,6 +86,7 @@ public class MessageList extends JTable {
      * @param folderId
      */
     public void displayFolder(String folderId) {
+        this.folderid = folderId;
 
         model = new FolderTableModel(controller, folderId);
         this.setModel(model);
@@ -104,6 +106,10 @@ public class MessageList extends JTable {
     private void openmessage() {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
+
+        if (folderid.equals(controller.getTemplateFolderId())) {
+            messageid = controller.composeFrom(messageid);
+        }
 
         MessageEditor editor = new MessageEditor(messageid, MessageEditor.Type.COMPOSE);
         editor.init();
