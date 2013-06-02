@@ -79,6 +79,9 @@ public class MessageTransfer {
                 scanner.close();
             }
         }
+        
+        firstFilePicked.delete();
+        
         return text.toString();
 
     }

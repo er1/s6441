@@ -466,16 +466,24 @@ public class MessageController extends Observable {
     public void doSendRecieve() {
         Folder outbox = store.getOutbox();
         Folder sent = store.getSentMessages();
+        Folder inbox = store.getInbox();
 
+        String userId = store.getUserId();
+        
         MessageTransfer transfer = MessageTransfer.getInstance();
 
-        while (transfer.MessageExistFor("in")) {
-            String message = transfer.getMessageFor("in");
-            PlainTextMessage.parse(message);
+        while (transfer.MessageExistFor(userId)) {
+            String message = transfer.getMessageFor(userId);
+            Message newMsg = PlainTextMessage.parse(message);
+            UUID messageId = UUID.randomUUID();
+            newMsg.setId(messageId.toString());
+            inbox.addMessage(newMsg);
         }
 
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
+            out.setHeader("From", store.getUserId());
+            
             PlainTextMessage msg = (PlainTextMessage) out; // FIXME (this is pretty derpy)
             String content = msg.serialize();
 
@@ -486,7 +494,7 @@ public class MessageController extends Observable {
             if (mailmat.find()) {
                 to = mailmat.group(1).trim();
             }
-            
+
             Pattern userpat = Pattern.compile("([^@]+)@.*");
             Matcher usermat = userpat.matcher(to);
 
@@ -499,6 +507,10 @@ public class MessageController extends Observable {
             sent.addMessage(out);
             this.getIdfromMessage(out);
         }
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers();
     }
 
     public String getMeetingsFolderId() {
