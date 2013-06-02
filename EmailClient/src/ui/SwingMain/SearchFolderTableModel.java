@@ -6,6 +6,8 @@ package ui.SwingMain;
 
 import Email.MessageController;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import util.Util;
 
 /**
@@ -13,19 +15,6 @@ import util.Util;
  * @author chanman
  */
 public class SearchFolderTableModel extends FolderTableModel {
-    
-    SearchFolderTableModel(MessageController controller, String folderId, FilterRule rule) {
-        super(controller, folderId);
-
-        ArrayList<String> found = Util.newArrayList();
-
-        for (String messageid : messages) {
-            if (rule.matches(messageid)) {
-                messages = (String[]) found.toArray();
-            }
-        }
-        messages = (String[])found.toArray();
-    }
     
     SearchFolderTableModel(MessageController controller, String folderId, String searchText) {
         super(controller, folderId);

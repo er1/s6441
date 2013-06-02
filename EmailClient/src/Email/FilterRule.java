@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ui.SwingMain;
+package Email;
 
 import Email.MessageController;
 import java.util.ArrayList;
@@ -12,20 +12,15 @@ import java.util.ArrayList;
  * @author Bargavi
  */
 public class FilterRule {
-
-    MessageController controller;
+    
     String fromText;
     String subjectText;
     String contentText;
     String moveToFolder;
-    ArrayList<FilterRule> listOfRules = new ArrayList<FilterRule>();
-    
-    public FilterRule(MessageController store) {
-        controller = store;
-    }
-    
+   
     public boolean matches(String messageid) {
         
+        MessageController controller = MessageController.getInstance();
         String from = controller.getEmailHeader(messageid, "From");
         String subject = controller.getEmailHeader(messageid, "Subject");
         String content = controller.getEmailContent(messageid);
@@ -39,11 +34,7 @@ public class FilterRule {
         return false;
 
     }
-
-    public void createFilterRule() {
-        listOfRules.add(this);
-    }
-
+    
     public void setFromField(String fromText) {
         this.fromText = fromText;
     }

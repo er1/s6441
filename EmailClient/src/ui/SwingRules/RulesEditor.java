@@ -13,7 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import ui.LabeledTextField;
-import ui.SwingMain.FilterRule;
+import Email.FilterRule;
 
 /**
  *
@@ -25,11 +25,9 @@ public class RulesEditor extends JFrame{
     LabeledTextField subjectField;
     LabeledTextField contentField;
     LabeledTextField moveToField;
-    MessageController controller;
     
-    public RulesEditor(MessageController controller) {
+    public RulesEditor() {
         super("Rules/Filters");
-        this.controller = controller;
     }
     
     public void init() {
@@ -37,7 +35,6 @@ public class RulesEditor extends JFrame{
         subjectField = new LabeledTextField("Subject contains");
         contentField = new LabeledTextField("Message text contains");
         moveToField = new LabeledTextField("Move to");
-        
         JButton createButton = new JButton("Create");
         createButton.setToolTipText("create rule");
         createButton.addActionListener(new ActionListener() {
@@ -84,15 +81,14 @@ public class RulesEditor extends JFrame{
     }
     
     void createRule() {
-        
-        FilterRule rule = new FilterRule(controller);
+          
+        FilterRule rule = new FilterRule();
         
         rule.setFromField(fromField.getText());
         rule.setsubjectField(subjectField.getText());
         rule.setcontentField(contentField.getText());
         rule.setmoveToField(moveToField.getText());
-        rule.createFilterRule();
-        
+        MessageController.getInstance().addRule(rule);
     }
     
 }

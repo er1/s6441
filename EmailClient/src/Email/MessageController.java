@@ -19,6 +19,7 @@ public class MessageController extends Observable {
 
     private static MessageController instance = null;
     Mailbox store;
+    Rules rules;
     // What should I be doing here? this is dumb
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
@@ -30,6 +31,7 @@ public class MessageController extends Observable {
      */
     private MessageController(Mailbox messagestore) {
         store = messagestore;
+        
     }
 
     /**
@@ -528,5 +530,12 @@ public class MessageController extends Observable {
         UUID messageId = UUID.randomUUID();
         newMeeting.setId(messageId.toString());
         return getIdfromMessage(newMeeting);
+    }
+
+    public void loadRules() {
+        rules = new Rules();
+    }
+    public void addRule(FilterRule rule) {
+        rules.addRule(rule);
     }
 }

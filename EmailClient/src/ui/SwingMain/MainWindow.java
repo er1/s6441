@@ -26,7 +26,7 @@ public class MainWindow extends JFrame {
         super("Email Client");
         String mailBoxID = Persist.PersistentStorage.getInstance().getMailboxID();
         MessageController controller = MessageController.getInstance(new FileSystemMailbox(mailBoxID));
-
+        controller.loadRules();
         //this.windowMenu = new Menu();
         this.toolbar = new ToolRibbon();
         this.content = new Content(controller);
@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
         this.folders = new FolderList(controller, this.messages);
 
         this.searchBar = new LabeledTextField("Search");
-
+        
         // Create the main layout
         BorderLayout layout = new BorderLayout();
         this.setLayout(layout);
