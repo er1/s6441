@@ -45,7 +45,11 @@ class FileSystemStorage extends PersistentStorage {
     }
 
     private String getHomeFolderPathWithSeparator() {
-        return System.getProperty("user.home") + File.separator;
+        File mailboxdir = new File(System.getProperty("user.home") + File.separator + "_mailbox");
+        if (!mailboxdir.exists()) {
+            mailboxdir.mkdir();
+        }
+        return System.getProperty("user.home") + File.separator + "_mailbox" + File.separator;
     }
 
     @Override
