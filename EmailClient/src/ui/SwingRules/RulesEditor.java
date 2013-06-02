@@ -4,6 +4,7 @@
  */
 package ui.SwingRules;
 
+import Email.MessageController;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import ui.LabeledTextField;
+import ui.SwingMain.FilterRule;
 
 /**
  *
@@ -23,9 +25,11 @@ public class RulesEditor extends JFrame{
     LabeledTextField subjectField;
     LabeledTextField contentField;
     LabeledTextField moveToField;
+    MessageController controller;
     
-    public RulesEditor() {
+    public RulesEditor(MessageController controller) {
         super("Rules/Filters");
+        this.controller = controller;
     }
     
     public void init() {
@@ -80,6 +84,14 @@ public class RulesEditor extends JFrame{
     }
     
     void createRule() {
+        
+        FilterRule rule = new FilterRule(controller);
+        
+        rule.setFromField(fromField.getText());
+        rule.setsubjectField(subjectField.getText());
+        rule.setcontentField(contentField.getText());
+        rule.setmoveToField(moveToField.getText());
+        rule.createFilterRule();
         
     }
     

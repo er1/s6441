@@ -14,6 +14,19 @@ import util.Util;
  */
 public class SearchFolderTableModel extends FolderTableModel {
     
+    SearchFolderTableModel(MessageController controller, String folderId, FilterRule rule) {
+        super(controller, folderId);
+
+        ArrayList<String> found = Util.newArrayList();
+
+        for (String messageid : messages) {
+            if (rule.matches(messageid)) {
+                messages = (String[]) found.toArray();
+            }
+        }
+        messages = (String[])found.toArray();
+    }
+    
     SearchFolderTableModel(MessageController controller, String folderId, String searchText) {
         super(controller, folderId);
     

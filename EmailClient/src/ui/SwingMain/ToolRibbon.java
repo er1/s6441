@@ -220,7 +220,7 @@ public class ToolRibbon extends JToolBar {
     }
 
     private void doRule() {
-        RulesEditor rules = new RulesEditor();
+        RulesEditor rules = new RulesEditor(controller);
         rules.init();
         rules.setVisible(true);
     }
