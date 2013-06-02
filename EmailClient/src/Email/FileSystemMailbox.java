@@ -79,4 +79,16 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
     public String getPath() {
         return this.getName();
     }
+
+    @Override
+    public Folder getMeetings() {
+        String folderName = "Meetings";
+        return getFolder(folderName);
+    }
+
+    @Override
+    public Folder getTemplates() {
+        String folderName = "Templates";
+        return getFolder(folderName);
+    }
 }

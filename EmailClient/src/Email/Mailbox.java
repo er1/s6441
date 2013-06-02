@@ -41,4 +41,8 @@ public interface Mailbox extends Folder {
      * @return Trash
      */
     Folder getTrash();
+
+    Folder getMeetings();
+
+    Folder getTemplates();
 }

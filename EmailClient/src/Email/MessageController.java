@@ -466,9 +466,17 @@ public class MessageController extends Observable {
 
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
-            
+
             sent.addMessage(out);
             this.getIdfromMessage(out);
         }
+    }
+
+    public String getMeetingsFolderId() {
+        return getIdfromFolder(store.getMeetings());
+    }
+
+    public String getTemplatesFolderId() {
+        return getIdfromFolder(store.getTemplates());
     }
 }

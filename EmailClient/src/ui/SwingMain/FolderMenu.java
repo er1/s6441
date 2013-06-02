@@ -75,6 +75,8 @@ public class FolderMenu extends JPopupMenu {
             }
         });
 
+        //FIXME
+        //Should be a cal to controller that returns all Top level directories
         ArrayList<String> staticfolders = Util.newArrayList();
         staticfolders.add(controller.getRootFolderId());
         staticfolders.add(controller.getInboxFolderId());
@@ -82,14 +84,18 @@ public class FolderMenu extends JPopupMenu {
         staticfolders.add(controller.getDraftsFolderId());
         staticfolders.add(controller.getSentMessagesFolderId());
         staticfolders.add(controller.getTrashFolderId());
+        staticfolders.add(controller.getMeetingsFolderId());
+        staticfolders.add(controller.getTemplatesFolderId());
 
-        this.add(newFolder);
         if (!staticfolders.contains(selected)) {
             this.add(deleteFolder);
             this.add(moveFolder);
+            this.add(newFolder);
+            this.add(pickFolder);
+        } else if (selected.equals(controller.getInboxFolderId())) {
+            this.add(newFolder);
+            this.add(pickFolder);
         }
-
-        this.add(pickFolder);
     }
 
     private void deleteFolder() {

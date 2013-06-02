@@ -15,7 +15,7 @@ Unit Tests:
 
 Create Subfolders:
     
-    -[ANAS - BUG-1] Anywhere other than inbox should not allow subfolders
+    -[ANAS - DONE] Anywhere other than inbox should not allow subfolders
 
 Move Mail:
     
@@ -69,7 +69,8 @@ Forward And Reply:
 Receiving Mail:
     -[IMPROVEMENT] Currently not handled
 
-
+General:
+    -[BUG-3] Fix all TODO and FIXME in the code base
 
 -----------------------------
 Project Phase 2 Requirements
