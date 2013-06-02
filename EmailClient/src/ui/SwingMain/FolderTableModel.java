@@ -11,13 +11,13 @@ import javax.swing.table.AbstractTableModel;
 class FolderTableModel extends AbstractTableModel {
 
     MessageController controller;
-    String[] messages;
+    protected String[] messages;
     boolean isOutbound = false;
 
     public FolderTableModel(MessageController controller, String folderId) {
         this.controller = controller;
         messages = controller.getEmailList(folderId);
-
+        
         if ((folderId.equals(controller.getOutboxFolderId()))
                 || (folderId.equals(controller.getSentMessagesFolderId()))
                 || (folderId.equals(controller.getDraftsFolderId()))) {
