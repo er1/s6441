@@ -1,5 +1,6 @@
 package Email;
 
+import Persist.MessageTransfer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import util.Util;
 
 /**
@@ -464,8 +467,34 @@ public class MessageController extends Observable {
         Folder outbox = store.getOutbox();
         Folder sent = store.getSentMessages();
 
+        MessageTransfer transfer = MessageTransfer.getInstance();
+
+        while (transfer.MessageExistFor("in")) {
+            String message = transfer.getMessageFor("in");
+            PlainTextMessage.parse(message);
+        }
+
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
+            PlainTextMessage msg = (PlainTextMessage) out; // FIXME (this is pretty derpy)
+            String content = msg.serialize();
+
+            String to = out.getHeaderValue("To");
+
+            Pattern mailpat = Pattern.compile("<(.*)>");
+            Matcher mailmat = mailpat.matcher(to);
+            if (mailmat.find()) {
+                to = mailmat.group(1).trim();
+            }
+            
+            Pattern userpat = Pattern.compile("([^@]+)@.*");
+            Matcher usermat = userpat.matcher(to);
+
+            if (usermat.find()) {
+                to = usermat.group(1).trim();
+            }
+
+            transfer.sendMessageTo(to, content);
 
             sent.addMessage(out);
             this.getIdfromMessage(out);
@@ -478,5 +507,12 @@ public class MessageController extends Observable {
 
     public String getTemplatesFolderId() {
         return getIdfromFolder(store.getTemplates());
+    }
+
+    public String createMeeting() {
+        Message newMeeting = new PlainTextMessage();
+        UUID messageId = UUID.randomUUID();
+        newMeeting.setId(messageId.toString());
+        return getIdfromMessage(newMeeting);
     }
 }

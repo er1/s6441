@@ -5,6 +5,7 @@ import Email.MessageController;
 import java.awt.BorderLayout;
 import javax.swing.*;
 import java.awt.GridLayout;
+import ui.LabeledTextField;
 
 /**
  * Main Email Client window
@@ -16,6 +17,7 @@ public class MainWindow extends JFrame {
     FolderList folders;
     MessageList messages;
     Content content;
+    LabeledTextField searchBar;
 
     /**
      * Constructor
@@ -32,6 +34,7 @@ public class MainWindow extends JFrame {
         this.messages.displayFolder(controller.getInboxFolderId());
         this.folders = new FolderList(controller, this.messages);
 
+        this.searchBar = new LabeledTextField("Search");
 
         // Create the main layout
         BorderLayout layout = new BorderLayout();
@@ -39,6 +42,10 @@ public class MainWindow extends JFrame {
 
         // Contruct widgets
         folders.refresh();
+
+        // Create the layout for the search bar
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BorderLayout());
 
         // Create a layout for the center
         JPanel center = new JPanel();
@@ -64,7 +71,10 @@ public class MainWindow extends JFrame {
         center.add(messagesPane);
         center.add(contentPane);
 
-        this.add(center);
+        searchPanel.add(searchBar, BorderLayout.NORTH);
+        searchPanel.add(center);
+        
+        this.add(searchPanel);
         this.add(toolbar, BorderLayout.NORTH);
         this.add(foldersPane, BorderLayout.WEST);
 

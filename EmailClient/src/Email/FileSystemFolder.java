@@ -4,6 +4,7 @@ import Persist.PersistentStorage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import util.Util;
 
 /**
@@ -85,7 +86,9 @@ public class FileSystemFolder implements Folder {
             for (String subfolder : subFolderList) {
 
                 // FIXME:
-                String[] sep = subfolder.split(File.separator);
+                //subfolder.split
+                String pattern = Pattern.quote(System.getProperty("file.separator"));
+                String[] sep = subfolder.split(pattern);
                 String last = sep[sep.length - 1];
                 FileSystemFolder folder = new FileSystemFolder(last, this);
                 //FIXME populate ArrayList in folder? Or In constructor?
