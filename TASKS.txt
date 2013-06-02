@@ -15,7 +15,7 @@ Unit Tests:
 
 Create Subfolders:
     
-    -[BUG-1] Anywhere other than inbox should not allow subfolders
+    -[ANAS - BUG-1] Anywhere other than inbox should not allow subfolders
 
 Move Mail:
     
