@@ -7,6 +7,8 @@ package Email;
  */
 public interface Mailbox extends Folder {
 
+    String getUserId();
+    
     /**
      * Get the Drafts folder
      *

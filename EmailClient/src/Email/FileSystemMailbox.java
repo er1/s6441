@@ -11,6 +11,8 @@ import java.util.HashMap;
  */
 public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
 
+    private String userId;
+    
     private HashMap<String, FileSystemFolder> topLevelFolders;
     private PersistentStorage storage = PersistentStorage.getInstance();
 
@@ -22,6 +24,9 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
      */
     public FileSystemMailbox(String mailboxID) {
         super(mailboxID, null);
+        
+        userId = mailboxID;
+        
         this.topLevelFolders = new HashMap<String, FileSystemFolder>();
     }
 
@@ -90,5 +95,10 @@ public class FileSystemMailbox extends FileSystemFolder implements Mailbox {
     public Folder getTemplates() {
         String folderName = "Templates";
         return getFolder(folderName);
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
     }
 }

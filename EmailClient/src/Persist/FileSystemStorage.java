@@ -25,18 +25,18 @@ class FileSystemStorage extends PersistentStorage {
     }
     String mailBoxPath;
     private String mailBoxID;
-    static private FileSystemStorage instance = null;
+    //static private FileSystemStorage instance = null;
 
     FileSystemStorage(String mailBoxID) {
-        if (null == instance) {
-            String path = getHomeFolderPathWithSeparator();
-            mailBoxPath = path;
-            logger.log(Level.INFO, "mailboxes are in {0} ", mailBoxPath);
-            newFolder(mailBoxPath + File.separator + mailBoxID);
-            this.mailBoxID = mailBoxID;
-            initialiseMailboxFolder();
-            this.instance = this;
-        }
+        //if (null == instance) {
+        String path = getHomeFolderPathWithSeparator();
+        mailBoxPath = path;
+        logger.log(Level.INFO, "mailboxes are in {0} ", mailBoxPath);
+        newFolder(mailBoxPath + File.separator + mailBoxID); // FIXME:
+        this.mailBoxID = mailBoxID;
+        initialiseMailboxFolder();
+        //    this.instance = this;
+        //  }
     }
 
     @Override
@@ -105,7 +105,7 @@ class FileSystemStorage extends PersistentStorage {
         File folderToDelete = new File(mailBoxPath + folder);
         if (!folderToDelete.isDirectory() || !folderToDelete.exists()) {
             return false;
-        };
+        }
         File[] allFiles = folderToDelete.listFiles();
         for (File file : allFiles) {
             if (file.isDirectory()) {
@@ -180,7 +180,9 @@ class FileSystemStorage extends PersistentStorage {
         } catch (FileNotFoundException ex) {
             logger.log(Level.SEVERE, null, ex);
         } finally {
-            scanner.close();
+            if (scanner != null) {
+                scanner.close();
+            }
         }
         return text.toString();
     }
@@ -213,8 +215,9 @@ class FileSystemStorage extends PersistentStorage {
         initialFolders.add("Templates");
         initialFolders.add("Meetings");
 
+        newFolderInMailbox(File.separator + mailBoxID);
         for (String folder : initialFolders) {
-            logger.log(Level.INFO, File.separator + mailBoxID + File.separator + folder);
+            logger.log(Level.INFO, "{0}{1}{2}{3}", new Object[]{File.separator, mailBoxID, File.separator, folder});
             newFolderInMailbox(File.separator + mailBoxID + File.separator + folder);
         }
     }
