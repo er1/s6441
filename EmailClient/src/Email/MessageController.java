@@ -469,7 +469,7 @@ public class MessageController extends Observable {
         Folder inbox = store.getInbox();
 
         String userId = store.getUserId();
-        
+
         MessageTransfer transfer = MessageTransfer.getInstance();
 
         while (transfer.MessageExistFor(userId)) {
@@ -483,29 +483,31 @@ public class MessageController extends Observable {
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
             out.setHeader("From", store.getUserId());
-            
+
             PlainTextMessage msg = (PlainTextMessage) out; // FIXME (this is pretty derpy)
             String content = msg.serialize();
 
-            String to = out.getHeaderValue("To");
+            for (String to : out.getHeaderValue("To").split(",")) {
+                to = to.trim();
 
-            Pattern mailpat = Pattern.compile("<(.*)>");
-            Matcher mailmat = mailpat.matcher(to);
-            if (mailmat.find()) {
-                to = mailmat.group(1).trim();
+                Pattern mailpat = Pattern.compile("<(.*)>");
+                Matcher mailmat = mailpat.matcher(to);
+                if (mailmat.find()) {
+                    to = mailmat.group(1).trim();
+                }
+
+                Pattern userpat = Pattern.compile("([^@]+)@.*");
+                Matcher usermat = userpat.matcher(to);
+
+                if (usermat.find()) {
+                    to = usermat.group(1).trim();
+                }
+
+                transfer.sendMessageTo(to, content);
+
+                sent.addMessage(out);
+                this.getIdfromMessage(out);
             }
-
-            Pattern userpat = Pattern.compile("([^@]+)@.*");
-            Matcher usermat = userpat.matcher(to);
-
-            if (usermat.find()) {
-                to = usermat.group(1).trim();
-            }
-
-            transfer.sendMessageTo(to, content);
-
-            sent.addMessage(out);
-            this.getIdfromMessage(out);
         }
 
         // update anyone waiting on updates

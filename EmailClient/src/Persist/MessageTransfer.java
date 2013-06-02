@@ -79,14 +79,18 @@ public class MessageTransfer {
                 scanner.close();
             }
         }
-        
+
         firstFilePicked.delete();
-        
+
         return text.toString();
 
     }
 
     public void sendMessageTo(String userID, String content) {
+        if (userID.isEmpty()) {
+            return;
+        }
+
         String useroutboundPath = getMailSpoolFor(userID);
         File useroutbound = new File(useroutboundPath);
         if (!useroutbound.exists()) {
