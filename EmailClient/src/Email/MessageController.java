@@ -253,7 +253,7 @@ public class MessageController extends Observable {
         UUID messageId = UUID.randomUUID();
         newMsg.setId(messageId.toString());
         Folder drafts = store.getDrafts();
-        drafts.addMessage(newMsg);
+        //drafts.addMessage(newMsg);
         return getIdfromMessage(newMsg);
     }
 

@@ -19,7 +19,8 @@ class FolderTableModel extends AbstractTableModel {
         messages = controller.getEmailList(folderId);
 
         if ((folderId.equals(controller.getOutboxFolderId()))
-                || (folderId.equals(controller.getSentMessagesFolderId()))) {
+                || (folderId.equals(controller.getSentMessagesFolderId()))
+                || (folderId.equals(controller.getDraftsFolderId()))) {
             isOutbound = true;
 
         }

@@ -32,7 +32,7 @@ Compose New Email:
     
     -[BARGAVI - Done] Content from the compose window is not being written to file on "Save"
     
-    -[BUG-3] A new message is being created in drafts as soon as the compose window is opened
+    -[BARGAVI - Done] A new message is being created in drafts as soon as the compose window is opened
 
 Displaying Folder heirarchy:
     
