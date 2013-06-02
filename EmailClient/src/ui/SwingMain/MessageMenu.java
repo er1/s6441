@@ -80,9 +80,10 @@ public class MessageMenu extends JPopupMenu {
 
     void move() {
 
-        String path = System.getProperty("user.home") + File.separator;
+        String path = System.getProperty("user.home") + File.separator + "_mailbox" + File.separator;
         String inboxPath = path + Persist.PersistentStorage.getInstance().getMailboxID()
                 + File.separator + "Inbox";
+        
         String destinationPath;
         JFileChooser fc = new JFileChooser(inboxPath);
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
