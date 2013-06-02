@@ -25,7 +25,6 @@ class SwingUserInterface extends UserInterface {
                 this,
                 JOptionPane.QUESTION_MESSAGE,
                 JOptionPane.OK_CANCEL_OPTION);
-
         Object result = getMailBoxIDDialog.showInputDialog(
                 frame,
                 "Hi! Input your mailbox ID:",

@@ -82,11 +82,12 @@ public class FileSystemFolder implements Folder {
     public ArrayList<Folder> getSubfolders() {
         ArrayList<String> subFolderList = persistStore.loadSubfolders(this.getPath());
         ArrayList<Folder> subFolders = Util.newArrayList();
+           
         if (null != subFolderList) {
             for (String subfolder : subFolderList) {
 
                 // FIXME:
-                //subfolder.split
+                //subfolder.
                 String pattern = Pattern.quote(System.getProperty("file.separator"));
                 String[] sep = subfolder.split(pattern);
                 String last = sep[sep.length - 1];

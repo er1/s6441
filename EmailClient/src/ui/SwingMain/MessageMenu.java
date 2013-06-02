@@ -4,20 +4,26 @@ import Email.MessageController;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import ui.SwingMessage.MessageEditor;
 
 public class MessageMenu extends JPopupMenu {
 
+    final JFrame frame = new JFrame("Error Message");
     String selected;
+    String[] neededPath, neededString;
     MessageController controller;
 
     public MessageMenu(String selectedMessage) {
         selected = selectedMessage;
+        String pattern = Pattern.quote(System.getProperty("file.separator"));               
+        neededString = selected.split(pattern);
         controller = MessageController.getInstance();
-
         JMenuItem openItem = new JMenuItem("Open");
         JMenuItem deleteItem = new JMenuItem("Delete");
         JMenuItem moveItem = new JMenuItem("Move to ...");
@@ -40,10 +46,10 @@ public class MessageMenu extends JPopupMenu {
                 move();
             }
         });
-
         this.add(openItem);
         this.add(deleteItem);
-        this.add(moveItem);
+        if(neededString[1].matches("Inbox")||neededString[1].matches("Trash")){
+        this.add(moveItem);}
     }
 
     void open() {
@@ -60,20 +66,19 @@ public class MessageMenu extends JPopupMenu {
         
         String path = System.getProperty("user.home") + File.separator ;
         String inboxPath = path + Persist.PersistentStorage.getInstance().getMailboxID() 
-                + File.separator + "Inbox";
-        
+                + File.separator + "Inbox";        
         String destinationPath;
         JFileChooser fc = new JFileChooser(inboxPath);
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         fc.setAcceptAllFileFilterUsed(false);
         fc.setDialogTitle("Move selected mail to folder");
         int res = fc.showOpenDialog(null);
-        if (res == JFileChooser.APPROVE_OPTION) {
-            
-            destinationPath = fc.getSelectedFile().getPath();
-            destinationPath = destinationPath.substring(path.length());
-            
-            controller.moveMessageToFolder(selected, destinationPath);
+       
+         if (res == JFileChooser.APPROVE_OPTION) {
+              destinationPath = fc.getSelectedFile().getPath();
+        destinationPath = destinationPath.substring(path.length());
+        
+            controller.moveMessageToFolder(selected, destinationPath);         
         }    
     }
 }
