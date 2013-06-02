@@ -16,6 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import ui.SwingMessage.MessageEditor;
+import ui.SwingRules.RulesEditor;
 
 /**
  * Creating and handling tool bar menu
@@ -31,6 +32,7 @@ public class ToolRibbon extends JToolBar {
     JButton refreshButton;
     JButton composeButton;
     JButton replyButton;
+    JButton ruleButton;
     MessageController controller;
     String currentMessage;
     String currentFolder;
@@ -74,7 +76,8 @@ public class ToolRibbon extends JToolBar {
         deleteButton = makeButton("resources/delete.png", "Send the selected message to the trash (Alt + D)", size);
 
         markUnreadButton = makeButton("resources/unread.png", "Mark this message as not read", size);
-
+        ruleButton = makeButton("resources/rules.png", "Create rules/filters (F6)", size);
+        
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -85,7 +88,6 @@ public class ToolRibbon extends JToolBar {
         Action refresh = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("refresh");
                 doRefresh();
             }
         };
@@ -132,6 +134,23 @@ public class ToolRibbon extends JToolBar {
         });
         deleteButton.setMnemonic(KeyEvent.VK_D);
 
+        ruleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doRule();
+            }
+        });
+        
+        Action rule = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doRule();
+            }
+        };
+        
+        ruleButton.getInputMap().put(KeyStroke.getKeyStroke("F6"), "Rules");
+        ruleButton.getActionMap().put("Rules", rule);
+        
         this.setRollover(true);
         this.add(refreshButton);
         this.add(composeButton);
@@ -139,6 +158,7 @@ public class ToolRibbon extends JToolBar {
         this.add(markUnreadButton);
         this.add(forwardButton);
         this.add(deleteButton);
+        this.add(ruleButton);
     }
 
     private void doRefresh() {
@@ -177,6 +197,12 @@ public class ToolRibbon extends JToolBar {
         } else {
             controller.moveMessageToFolder(currentMessage, trash);
         }
+    }
+    
+    private void doRule() {
+        RulesEditor rules = new RulesEditor();
+        rules.init();
+        rules.setVisible(true);
     }
 
     public void setSelectedMessage(String messageid) {
