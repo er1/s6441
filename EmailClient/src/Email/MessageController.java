@@ -479,4 +479,11 @@ public class MessageController extends Observable {
     public String getTemplatesFolderId() {
         return getIdfromFolder(store.getTemplates());
     }
+
+    public String createMeeting() {
+        Message newMeeting = new PlainTextMessage();
+        UUID messageId = UUID.randomUUID();
+        newMeeting.setId(messageId.toString());
+        return getIdfromMessage(newMeeting);
+    }
 }
