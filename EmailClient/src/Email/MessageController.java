@@ -23,7 +23,7 @@ public class MessageController extends Observable {
     // What should I be doing here? this is dumb
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
-
+    HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
     /**
      * MessageController Constructor
      *
@@ -34,7 +34,7 @@ public class MessageController extends Observable {
         
     }
 
-    /**
+    /** 
      * Get the instance ofMessageController
      *
      * @param messagestore
@@ -570,10 +570,47 @@ public class MessageController extends Observable {
         return getIdfromMessage(newMeeting);
     }
 
+    public FilterRule getRuleFromId(String ruleId) {
+        return ruleLookup.get(ruleId);
+    }
+
+    public String getIdfromRule(FilterRule rule) {
+        String id = rule.getRuleId();
+        ruleLookup.put(id, rule);
+        return id;
+    }
     public void loadRules() {
         rules = new Rules();
     }
     public void addRule(FilterRule rule) {
         rules.addRule(rule);
+    }
+
+    public void deleteRule(int ruleId) {
+        rules.deleteRule(ruleId);
+    }
+    
+    public String[] getRuleList() {
+        String[] ids;
+
+        try {
+            
+            ArrayList<FilterRule> set;
+            set = rules.getListOfRules();
+
+            ids = new String[set.size()];
+
+            int index = 0;
+            for (FilterRule rule : set) {
+                ids[index++] = getIdfromRule(rule);
+            }
+        } catch (Exception ex) {
+            ids = new String[0];
+        }
+        return ids;
+    }
+    
+    public int getRulesCount() {
+        return rules.getListOfRules().size();
     }
 }

@@ -1,4 +1,4 @@
-package ui.SwingMain;
+    package ui.SwingMain;
 
 import Email.MessageController;
 import Email.Summary;

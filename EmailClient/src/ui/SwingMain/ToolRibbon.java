@@ -79,7 +79,7 @@ public class ToolRibbon extends JToolBar {
         meetingsButton = makeButton("resources/meetings.png", "Create a new meeting (Alt + M)", size);
 
         markUnreadButton = makeButton("resources/unread.png", "Mark this message as not read", size);
-        ruleButton = makeButton("resources/rules.png", "Create rules/filters (F6)", size);
+        ruleButton = makeButton("resources/rules.png", "Rules/filters (F6)", size);
 
         refreshButton.addActionListener(new ActionListener() {
             @Override
