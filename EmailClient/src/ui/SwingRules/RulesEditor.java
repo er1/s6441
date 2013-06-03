@@ -30,6 +30,7 @@ import javax.swing.table.AbstractTableModel;
 public class RulesEditor extends JFrame{
     
     RulesTableModel model;
+    JTable rulesTable;
     
     LabeledTextField fromField;
     LabeledTextField subjectField;
@@ -45,7 +46,6 @@ public class RulesEditor extends JFrame{
     public void init() {
         
         JPanel rulesPanel = new JPanel();
-        final JTable rulesTable;
         
         rulesPanel.setLayout(new GridLayout());
         
@@ -94,6 +94,9 @@ public class RulesEditor extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 deleteRule(rulesTable.getSelectedRow());
+                model = new RulesTableModel(MessageController.getInstance());
+                model.fireTableDataChanged();
+                rulesTable.setModel(model);
             }   
         });
         
@@ -156,6 +159,9 @@ public class RulesEditor extends JFrame{
                 createRule();
                 createFrame.setVisible(false);
                 createFrame.dispose();
+                model = new RulesTableModel(MessageController.getInstance());
+                model.fireTableDataChanged();
+                rulesTable.setModel(model);
             }   
         });
         
@@ -239,7 +245,6 @@ public class RulesEditor extends JFrame{
                 default:
                     return new String();
             }
-
         }
         
         @Override
