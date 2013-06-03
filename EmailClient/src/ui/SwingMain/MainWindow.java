@@ -53,7 +53,11 @@ public class MainWindow extends JFrame {
         // Create the layout for the search bar
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BorderLayout());
-
+        // grid layout
+        JPanel buttonSearch = new JPanel();
+        GridLayout searchLayout = new GridLayout();
+        searchLayout.setColumns(2);
+        buttonSearch.setLayout(searchLayout);
         // Create a layout for the center
         JPanel center = new JPanel();
         GridLayout centerLayout = new GridLayout();
@@ -87,14 +91,13 @@ public class MainWindow extends JFrame {
         searchButton.setMnemonic(KeyEvent.VK_S);
 
         
-        // Add elements
+        // Add elements        
         center.add(messagesPane);
         center.add(contentPane);
-        searchPanel.add(searchButton);
-
-        searchPanel.add(searchBar, BorderLayout.NORTH);
+        buttonSearch.add(searchBar);
+        buttonSearch.add(searchButton);
+        searchPanel.add(buttonSearch, BorderLayout.NORTH);
         searchPanel.add(center);
-        
         this.add(searchPanel);
         this.add(toolbar, BorderLayout.NORTH);
         this.add(foldersPane, BorderLayout.WEST);
