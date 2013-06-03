@@ -5,6 +5,9 @@ import Email.MessageController;
 import java.awt.BorderLayout;
 import javax.swing.*;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import ui.LabeledTextField;
 
 /**
@@ -18,14 +21,18 @@ public class MainWindow extends JFrame {
     MessageList messages;
     Content content;
     LabeledTextField searchBar;
+    SearchFolderTableModel search;
+    JButton searchButton;
+    MessageController controller;
 
     /**
      * Constructor
      */
     public MainWindow() {
         super("Email Client");
+        this.searchButton = new JButton("Search");
         String mailBoxID = Persist.PersistentStorage.getInstance().getMailboxID();
-        MessageController controller = MessageController.getInstance(new FileSystemMailbox(mailBoxID));
+        controller = MessageController.getInstance(new FileSystemMailbox(mailBoxID));
         controller.loadRules();
         //this.windowMenu = new Menu();
         this.toolbar = new ToolRibbon();
@@ -33,9 +40,9 @@ public class MainWindow extends JFrame {
         this.messages = new MessageList(controller, this.content, this.toolbar);
         this.messages.displayFolder(controller.getInboxFolderId());
         this.folders = new FolderList(controller, this.messages);
-
         this.searchBar = new LabeledTextField("Search");
-        
+       
+ 
         // Create the main layout
         BorderLayout layout = new BorderLayout();
         this.setLayout(layout);
@@ -63,13 +70,27 @@ public class MainWindow extends JFrame {
         JScrollPane contentPane = new JScrollPane(content);
 
         // border everthing
-        foldersPane.setBorder(BorderFactory.createLoweredBevelBorder());
+        foldersPane.setBorder(BorderFactory.createLoweredBevelBorder());        
+        searchButton.setSize(45,20);
+        searchButton.setToolTipText("To search Mail (Alt + S)");
+        searchButton.setBorder(BorderFactory.createEmptyBorder());
         messagesPane.setBorder(BorderFactory.createLoweredBevelBorder());
         contentPane.setBorder(BorderFactory.createLoweredBevelBorder());
 
+        // Action listner
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doSearch(searchBar.getText());
+            }
+        });
+        searchButton.setMnemonic(KeyEvent.VK_S);
+
+        
         // Add elements
         center.add(messagesPane);
         center.add(contentPane);
+        searchPanel.add(searchButton);
 
         searchPanel.add(searchBar, BorderLayout.NORTH);
         searchPanel.add(center);
@@ -82,5 +103,12 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(windowMenu);
         this.setSize(1000, 600);
+        
+    }
+    
+    public void doSearch(String searchText)
+    {
+        System.out.println("Input Text -----> " + searchText);
+        search = new SearchFolderTableModel(controller, controller.getRootFolderId(), searchText);
     }
 }

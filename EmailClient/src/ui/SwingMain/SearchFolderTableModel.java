@@ -6,8 +6,6 @@ package ui.SwingMain;
 
 import Email.MessageController;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 import util.Util;
 
 /**
@@ -18,9 +16,9 @@ public class SearchFolderTableModel extends FolderTableModel {
     
     SearchFolderTableModel(MessageController controller, String folderId, String searchText) {
         super(controller, folderId);
-    
+        System.out.println("Came Here -------->" + controller + "  FolderID Here -------->"  + folderId + "  Text Here -------->" + searchText );
         ArrayList<String> found = Util.newArrayList();
-        
+        controller.getEmailList(folderId);
         for (String messageid : messages) {
             String to = controller.getEmailHeader(messageid, "To");
             String from = controller.getEmailHeader(messageid, "From");
