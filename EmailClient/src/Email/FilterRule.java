@@ -4,20 +4,18 @@
  */
 package Email;
 
-import Email.MessageController;
-import java.util.ArrayList;
-
 /**
  *
  * @author Bargavi
  */
 public class FilterRule {
-    
+   
+    String ruleId;
     String fromText;
     String subjectText;
     String contentText;
     String moveToFolder;
-   
+      
     public boolean matches(String messageid) {
         
         MessageController controller = MessageController.getInstance();
@@ -30,9 +28,7 @@ public class FilterRule {
             (content.toLowerCase().contains(contentText.toLowerCase()))) {
                 return true;
             }
-        
         return false;
-
     }
     
     public void setFromField(String fromText) {
@@ -50,5 +46,28 @@ public class FilterRule {
     public void setmoveToField(String moveToFolder) {
         this.moveToFolder = moveToFolder;
     }
-       
+
+    public String getFromField() {
+        return this.fromText;
+    }
+
+    public String getsubjectField() {
+        return this.subjectText;
+    }
+
+    public String getcontentField() {
+        return this.contentText;
+    }
+
+    public String getmoveToField() {
+        return this.moveToFolder;
+    }
+    
+    public String getRuleId() {
+        return this.ruleId;   
+    }
+    
+    public void setRuleId(String ruleId) {
+        this.ruleId = ruleId;
+    }
 }
