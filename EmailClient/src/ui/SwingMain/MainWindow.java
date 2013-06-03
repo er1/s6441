@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
         this.messages = new MessageList(controller, this.content, this.toolbar);
         this.messages.displayFolder(controller.getInboxFolderId());
         this.folders = new FolderList(controller, this.messages);
-        this.searchBar = new LabeledTextField("Search");
+        this.searchBar = new LabeledTextField("");
        
  
         // Create the main layout
@@ -53,18 +53,18 @@ public class MainWindow extends JFrame {
         // Create the layout for the search bar
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BorderLayout());
-        // grid layout
+        
+        // Grid layout search Bar
         JPanel buttonSearch = new JPanel();
-        GridLayout searchLayout = new GridLayout();
-        searchLayout.setColumns(2);
+        BorderLayout searchLayout = new BorderLayout();
         buttonSearch.setLayout(searchLayout);
+        //searchLayout.getVgap();
         // Create a layout for the center
         JPanel center = new JPanel();
         GridLayout centerLayout = new GridLayout();
         centerLayout.setColumns(1);
         centerLayout.setRows(2);
         center.setLayout(centerLayout);
-
         layout.setHgap(2);
         centerLayout.setVgap(2);
 
@@ -94,8 +94,8 @@ public class MainWindow extends JFrame {
         // Add elements        
         center.add(messagesPane);
         center.add(contentPane);
-        buttonSearch.add(searchBar);
-        buttonSearch.add(searchButton);
+        buttonSearch.add(searchBar, BorderLayout.CENTER);
+        buttonSearch.add(searchButton, BorderLayout.EAST);
         searchPanel.add(buttonSearch, BorderLayout.NORTH);
         searchPanel.add(center);
         this.add(searchPanel);
