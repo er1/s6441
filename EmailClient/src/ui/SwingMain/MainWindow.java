@@ -36,10 +36,10 @@ public class MainWindow extends JFrame {
         controller.loadRules();
         //this.windowMenu = new Menu();
         this.toolbar = new ToolRibbon();
-        this.content = new Content(controller);
-        this.messages = new MessageList(controller, this.content, this.toolbar);
+        this.content = new Content();
+        this.messages = new MessageList(this.content, this.toolbar);
         this.messages.displayFolder(controller.getInboxFolderId());
-        this.folders = new FolderList(controller, this.messages);
+        this.folders = new FolderList(this.messages);
         this.searchBar = new LabeledTextField("");
        
  

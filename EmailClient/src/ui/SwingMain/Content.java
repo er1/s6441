@@ -9,14 +9,14 @@ import javax.swing.JTextArea;
  */
 public class Content extends JTextArea {
 
-    MessageController store;
+    MessageController controller;
 
     /**
      * Constructor
      * @param controller 
      */
-    public Content(MessageController controller) {
-        this.store = controller;
+    public Content() {
+        this.controller = MessageController.getInstance();
         this.setEditable(false);
     }
     
@@ -25,7 +25,7 @@ public class Content extends JTextArea {
      * @param messageid
      */
     public void showMessage(String messageid) {
-        String content = store.getEmailContent(messageid);
+        String content = controller.getEmailContent(messageid);
         this.setText(content);
     }
 }

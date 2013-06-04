@@ -23,7 +23,7 @@ import javax.swing.tree.TreePath;
  */
 public class FolderList extends JTree {
 
-    MessageController store;
+    MessageController controller;
     MessageList list;
     FolderTreeModel model;
 
@@ -33,12 +33,12 @@ public class FolderList extends JTree {
      * @param controller
      * @param messagelist
      */
-    public FolderList(MessageController controller, MessageList messagelist) {
+    public FolderList(MessageList messagelist) {
         super();
-        store = controller;
+        controller = MessageController.getInstance();
         list = messagelist;
         init();
-        store.addObserver(new Observer() {
+        controller.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object o1) {
                 refresh();
@@ -51,7 +51,7 @@ public class FolderList extends JTree {
 
         Dimension size = new Dimension(200, 200); // can be arbitrarily changed
 
-        model = new FolderTreeModel(store);
+        model = new FolderTreeModel();
 
         this.setMaximumSize(size);
 
@@ -102,8 +102,10 @@ public class FolderList extends JTree {
      * Function to refresh the Tree Hierarchy
      */
     public void refresh() {
-        model = new FolderTreeModel(store);
+        TreePath p = this.getSelectionPath();
+        model = new FolderTreeModel();
         this.setModel(model);
+        this.setSelectionPath(p);
     }
 
     private void changefolder() {

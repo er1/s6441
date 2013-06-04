@@ -4,6 +4,8 @@ import Email.MessageController;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -29,8 +31,8 @@ public class MessageList extends JTable {
      * @param controller
      * @param content
      */
-    public MessageList(MessageController controller, Content content, ToolRibbon toolribbon) {
-        this.controller = controller;
+    public MessageList(Content content, ToolRibbon toolribbon) {
+        this.controller = MessageController.getInstance();
         this.content = content;
         this.toolribbon = toolribbon;
         ListSelectionModel lsm = this.getSelectionModel();
@@ -68,6 +70,13 @@ public class MessageList extends JTable {
             public void mouseExited(MouseEvent me) {
             }
         });
+
+        controller.addObserver(new Observer() {
+            @Override
+            public void update(Observable o, Object o1) {
+                refresh();
+            }
+        });
     }
 
     void makeMenu(Point mouseposition) {
@@ -94,13 +103,27 @@ public class MessageList extends JTable {
         toolribbon.setSelectedFolder(folderId);
     }
 
+    private void refresh() {
+        int row = this.getSelectedRow();
+        displayFolder(folderid);
+        if (row < 0) {
+            return;
+        }
+        this.setRowSelectionInterval(row, row);
+    }
+
     private void changemessage() {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
+
+        if (messageid == null) {
+            return;
+        }
+
         content.showMessage(messageid);
 
         toolribbon.setSelectedMessage(messageid);
-        
+
         controller.markRead(messageid);
 
     }

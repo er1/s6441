@@ -33,8 +33,6 @@ public class FileSystemFolder implements Folder {
 
         this.folders = null;
         this.messages = null;
-
-        this.sync();
     }
 
     @Override
@@ -86,16 +84,11 @@ public class FileSystemFolder implements Folder {
 
             if (null != subFolderList) {
                 for (String subfolder : subFolderList) {
-
-                    // FIXME:
-                    //subfolder.
                     String pattern = Pattern.quote(System.getProperty("file.separator"));
                     String[] sep = subfolder.split(pattern);
                     String last = sep[sep.length - 1];
+
                     Folder folder = new FileSystemFolderProxy(last, this);
-                    //FIXME populate ArrayList in folder? Or In constructor?
-                    //Or does the folder do it as needed.
-                    // TODO: proxy pattern might work here   -e
                     folders.add(folder);
 
                 }
@@ -115,6 +108,8 @@ public class FileSystemFolder implements Folder {
         persistStore.newMessage(m.getId());
         persistStore.saveMessage(m.getId(), m.serialize());
         this.messages.add(m);
+
+        sync();
     }
 
     @Override
@@ -122,24 +117,28 @@ public class FileSystemFolder implements Folder {
         //FIXME: Currenlty Assuming this is save to existing message
         //TODO check that toString is implemented
         persistStore.saveMessage(msg.getId(), msg.toString());
+        sync();
     }
 
     @Override
     public void deleteMessage(Message msg) {
         persistStore.deleteMessage(msg.getId());
         this.messages.remove(msg);
+        sync();
     }
 
     @Override
     public void addFolder(Folder folder) {
         persistStore.newFolderInMailbox(folder.getId());
         this.folders.add(folder);
+        sync();
     }
 
     @Override
     public void deleteFolder(Folder folder) {
         persistStore.deleteFolderAndAllContents(folder.getId());
         this.folders.remove(folder);
+        sync();
     }
 
     @Override
@@ -187,6 +186,7 @@ public class FileSystemFolder implements Folder {
     @Override
     public void createFolder(String name) {
         persistStore.newFolder(this.getPath() + File.separator + name);
+        sync();
     }
 
     @Override
@@ -194,5 +194,9 @@ public class FileSystemFolder implements Folder {
         FileSystemFolder fsdest;
         fsdest = (FileSystemFolder) destination;
         persistStore.moveFolder(this.getPath(), fsdest.getPath());
+
+        parent.sync();
+        sync();
+        destination.sync();
     }
 }

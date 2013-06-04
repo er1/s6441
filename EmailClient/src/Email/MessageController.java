@@ -222,7 +222,7 @@ public class MessageController extends Observable {
         if (read == null || read.length() == 0) {
             return;
         }
-        
+
         setEmailHeader(messageId, "X-Read", null);
 
         // update anyone waiting on updates
@@ -524,15 +524,6 @@ public class MessageController extends Observable {
 
         MessageTransfer transfer = MessageTransfer.getInstance();
 
-        while (transfer.MessageExistFor(userId)) {
-            String message = transfer.getMessageFor(userId);
-            Message newMsg = PlainTextMessage.parse(message);
-            UUID messageId = UUID.randomUUID();
-            newMsg.setId(messageId.toString());
-            inbox.addMessage(newMsg);
-            this.setChanged();
-        }
-
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
             out.setHeader("From", store.getUserId());
@@ -560,6 +551,15 @@ public class MessageController extends Observable {
             }
             sent.addMessage(out);
             this.getIdfromMessage(out);
+            this.setChanged();
+        }
+
+        while (transfer.MessageExistFor(userId)) {
+            String message = transfer.getMessageFor(userId);
+            Message newMsg = PlainTextMessage.parse(message);
+            UUID messageId = UUID.randomUUID();
+            newMsg.setId(messageId.toString());
+            inbox.addMessage(newMsg);
             this.setChanged();
         }
 

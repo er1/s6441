@@ -15,9 +15,9 @@ class FolderTreeModel implements TreeModel {
         String id;
         String name;
 
-        public FolderNode(MessageController controller, String id) {
+        public FolderNode(String id) {
             this.id = id;
-            this.name = controller.getFolderName(id);
+            this.name = MessageController.getInstance().getFolderName(id);
         }
 
         public String getId() {
@@ -34,20 +34,20 @@ class FolderTreeModel implements TreeModel {
         }
     }
 
-    public FolderTreeModel(MessageController store) {
-        controller = store;
+    public FolderTreeModel() {
+        controller = MessageController.getInstance();
     }
 
     @Override
     public Object getRoot() {
-        return new FolderTreeModel.FolderNode(controller, controller.getRootFolderId());
+        return new FolderTreeModel.FolderNode(controller.getRootFolderId());
     }
 
     @Override
     public Object getChild(Object folderid, int index) {
         String id = ((FolderTreeModel.FolderNode) folderid).getId();
         String[] folders = controller.getFolderList(id);
-        return new FolderTreeModel.FolderNode(controller, folders[index]);
+        return new FolderTreeModel.FolderNode(folders[index]);
     }
 
     @Override
