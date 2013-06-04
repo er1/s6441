@@ -17,7 +17,7 @@ class FolderTableModel extends AbstractTableModel {
     public FolderTableModel(MessageController controller, String folderId) {
         this.controller = controller;
         messages = controller.getEmailList(folderId);
-        
+
         if ((folderId.equals(controller.getOutboxFolderId()))
                 || (folderId.equals(controller.getSentMessagesFolderId()))
                 || (folderId.equals(controller.getDraftsFolderId()))) {
@@ -33,7 +33,7 @@ class FolderTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -49,6 +49,8 @@ class FolderTableModel extends AbstractTableModel {
                 }
             case 2:
                 return "Subject";
+            case 3:
+                return "Read";
             default:
                 return new String();
         }
@@ -73,6 +75,12 @@ class FolderTableModel extends AbstractTableModel {
 
             case 2:
                 return summary.getSubject();
+            case 3:
+                if (summary.isRead()) {
+                    return "";
+                } else {
+                    return "Unread";
+                }
             default:
                 return new String();
         }

@@ -24,6 +24,7 @@ public class MessageController extends Observable {
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
+
     /**
      * MessageController Constructor
      *
@@ -31,10 +32,10 @@ public class MessageController extends Observable {
      */
     private MessageController(Mailbox messagestore) {
         store = messagestore;
-        
+
     }
 
-    /** 
+    /**
      * Get the instance ofMessageController
      *
      * @param messagestore
@@ -201,6 +202,9 @@ public class MessageController extends Observable {
      * @param messageId Message Id
      */
     public void markRead(String messageId) {
+        if (getEmailHeader(messageId, "X-Read").length() > 0) {
+            return;
+        }
         setEmailHeader(messageId, "X-Read", "FIXME: Set to NOW()");
 
         // update anyone waiting on updates
@@ -214,6 +218,11 @@ public class MessageController extends Observable {
      * @param messageId Message Id
      */
     public void markUnread(String messageId) {
+        String read = getEmailHeader(messageId, "X-Read");
+        if (read == null || read.length() == 0) {
+            return;
+        }
+        
         setEmailHeader(messageId, "X-Read", null);
 
         // update anyone waiting on updates
@@ -267,17 +276,17 @@ public class MessageController extends Observable {
 
     public String composeFrom(String template) {
         String id = compose();
-        
+
         Message temp = this.getMessageFromId(template);
         Message msg = this.getMessageFromId(id);
-                
+
         msg.setContent(temp.getContent());
         msg.setHeader("Subject", temp.getHeaderValue("Subject"));
         msg.setHeader("To", temp.getHeaderValue("To"));
-        
+
         return id;
     }
-    
+
     /**
      * Update the date
      *
@@ -426,8 +435,8 @@ public class MessageController extends Observable {
     public String getTrashFolderId() {
         return getIdfromFolder(store.getTrash());
     }
-    
-        /**
+
+    /**
      * Get template folder id
      *
      * @return id
@@ -436,8 +445,7 @@ public class MessageController extends Observable {
         return getIdfromFolder(store.getTemplates());
     }
 
-        
-        /**
+    /**
      * Get template folder id
      *
      * @return id
@@ -445,7 +453,7 @@ public class MessageController extends Observable {
     public String getMeetingFolderId() {
         return getIdfromFolder(store.getMeetings());
     }
-    
+
     /**
      * Get the name of a folder
      *
@@ -492,6 +500,10 @@ public class MessageController extends Observable {
      * @param destinationPath
      */
     public void moveFolder(String sourcePath, String destinationPath) {
+        if (sourcePath.equals(destinationPath)) {
+            return;
+        }
+
         Folder source = this.getFolderFromId(sourcePath);
         Folder dest = this.getFolderFromId(destinationPath);
         source.moveFolder(dest);
@@ -518,6 +530,7 @@ public class MessageController extends Observable {
             UUID messageId = UUID.randomUUID();
             newMsg.setId(messageId.toString());
             inbox.addMessage(newMsg);
+            this.setChanged();
         }
 
         ArrayList<Message> outbound = store.getOutbox().getMessages();
@@ -544,14 +557,14 @@ public class MessageController extends Observable {
                 }
 
                 transfer.sendMessageTo(to, content);
-
-                sent.addMessage(out);
-                this.getIdfromMessage(out);
             }
+            sent.addMessage(out);
+            this.getIdfromMessage(out);
+            this.setChanged();
         }
 
         // update anyone waiting on updates
-        this.setChanged();
+
         this.notifyObservers();
     }
 
@@ -579,9 +592,11 @@ public class MessageController extends Observable {
         ruleLookup.put(id, rule);
         return id;
     }
+
     public void loadRules() {
         rules = new Rules();
     }
+
     public void addRule(FilterRule rule) {
         rules.addRule(rule);
     }
@@ -589,12 +604,12 @@ public class MessageController extends Observable {
     public void deleteRule(int ruleId) {
         rules.deleteRule(ruleId);
     }
-    
+
     public String[] getRuleList() {
         String[] ids;
 
         try {
-            
+
             ArrayList<FilterRule> set;
             set = rules.getListOfRules();
 
@@ -609,7 +624,7 @@ public class MessageController extends Observable {
         }
         return ids;
     }
-    
+
     public int getRulesCount() {
         return rules.getListOfRules().size();
     }

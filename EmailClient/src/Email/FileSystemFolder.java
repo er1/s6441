@@ -31,8 +31,8 @@ public class FileSystemFolder implements Folder {
         this.name = name;
         this.parent = parent;
 
-        this.folders = Util.newArrayList();
-        this.messages = Util.newArrayList();
+        this.folders = null;
+        this.messages = null;
 
         this.sync();
     }
@@ -60,48 +60,48 @@ public class FileSystemFolder implements Folder {
 
     @Override
     public ArrayList<Message> getMessages() {
-
-        ArrayList<String> messageList = persistStore.loadMessageListFromFolder(this.getPath());
-        ArrayList<Message> messageNames = Util.newArrayList();
-        if (null != messageList) {
-            for (String messagePath : messageList) {
-                String filecontent = persistStore.loadMessage(messagePath);
-                PlainTextMessage msg = PlainTextMessage.parse(filecontent);
-                if (msg != null) {
-                    msg.setId(messagePath);
-                    messageNames.add(msg);
+        if (messages == null) {
+            ArrayList<String> messageList = persistStore.loadMessageListFromFolder(this.getPath());
+            messages = Util.newArrayList();
+            if (null != messageList) {
+                for (String messagePath : messageList) {
+                    String filecontent = persistStore.loadMessage(messagePath);
+                    PlainTextMessage msg = PlainTextMessage.parse(filecontent);
+                    if (msg != null) {
+                        msg.setId(messagePath);
+                        messages.add(msg);
+                    }
                 }
             }
         }
-        this.messages = messageNames;
-
-        return messageNames;
+        return messages;
     }
 
     @Override
     public ArrayList<Folder> getSubfolders() {
-        ArrayList<String> subFolderList = persistStore.loadSubfolders(this.getPath());
-        ArrayList<Folder> subFolders = Util.newArrayList();
-           
-        if (null != subFolderList) {
-            for (String subfolder : subFolderList) {
+        if (folders == null) {
 
-                // FIXME:
-                //subfolder.
-                String pattern = Pattern.quote(System.getProperty("file.separator"));
-                String[] sep = subfolder.split(pattern);
-                String last = sep[sep.length - 1];
-                FileSystemFolder folder = new FileSystemFolder(last, this);
-                //FIXME populate ArrayList in folder? Or In constructor?
-                //Or does the folder do it as needed.
-                // TODO: proxy pattern might work here   -e
-                subFolders.add(folder);
+            ArrayList<String> subFolderList = persistStore.loadSubfolders(this.getPath());
+            folders = Util.newArrayList();
 
+            if (null != subFolderList) {
+                for (String subfolder : subFolderList) {
+
+                    // FIXME:
+                    //subfolder.
+                    String pattern = Pattern.quote(System.getProperty("file.separator"));
+                    String[] sep = subfolder.split(pattern);
+                    String last = sep[sep.length - 1];
+                    Folder folder = new FileSystemFolderProxy(last, this);
+                    //FIXME populate ArrayList in folder? Or In constructor?
+                    //Or does the folder do it as needed.
+                    // TODO: proxy pattern might work here   -e
+                    folders.add(folder);
+
+                }
             }
         }
-        this.folders = subFolders;
-
-        return subFolders;
+        return folders;
     }
 
     @Override
@@ -144,9 +144,9 @@ public class FileSystemFolder implements Folder {
 
     @Override
     public void sync() {
-        //TODO Maybe this is where we can re-read from FileSystem and repopulate
-        //the arraylists for messageNames and folders?
-        // TODO: yes it is   -e
+        messages = null;
+        folders = null;
+
         this.getMessages();
         this.getSubfolders();
     }

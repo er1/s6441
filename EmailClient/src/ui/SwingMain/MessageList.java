@@ -100,6 +100,8 @@ public class MessageList extends JTable {
         content.showMessage(messageid);
 
         toolribbon.setSelectedMessage(messageid);
+        
+        controller.markRead(messageid);
 
     }
 
