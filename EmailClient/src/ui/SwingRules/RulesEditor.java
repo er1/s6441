@@ -15,12 +15,13 @@ import javax.swing.JPanel;
 import ui.LabeledTextField;
 import Email.FilterRule;
 import java.awt.GridLayout;
+import java.util.UUID;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -37,7 +38,14 @@ public class RulesEditor extends JFrame{
     LabeledTextField contentField;
     LabeledTextField moveToField;
     
+    LabeledTextField fromEditField;
+    LabeledTextField subjectEditField;
+    LabeledTextField contentEditField;
+    LabeledTextField moveToEditField;
+    
     FilterRule selectedRule;
+    
+    MessageController controller = MessageController.getInstance();
     
     public RulesEditor() {
         super("Rules/Filters");
@@ -49,7 +57,7 @@ public class RulesEditor extends JFrame{
         
         rulesPanel.setLayout(new GridLayout());
         
-        model = new RulesTableModel(MessageController.getInstance());
+        model = new RulesTableModel(controller);
         model.fireTableDataChanged();
         
         rulesTable = new JTable(model);
@@ -57,15 +65,7 @@ public class RulesEditor extends JFrame{
         rulesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         rulesPanel.add(new JScrollPane(rulesTable));
-       /* 
-        ListSelectionModel lsm = rulesTable.getSelectionModel();
-        lsm.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent lse) {
-                 selectedRule = (FilterRule) model.getValueAt(rulesTable.getSelectedRow(), -1);
-            }
-        });
-        */
+       
         JPanel buttonPanel = new JPanel();
         BoxLayout buttonLayout = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
         buttonPanel.setLayout(buttonLayout);
@@ -84,7 +84,10 @@ public class RulesEditor extends JFrame{
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //editRule();
+                int selected = rulesTable.getSelectedRow();
+                String ruleId = model.getRuleId(selected);
+                if(selected != -1) 
+                    editRuleWindow(ruleId);
             }   
         });
         
@@ -129,19 +132,51 @@ public class RulesEditor extends JFrame{
             MessageController.getInstance().deleteRule(ruleId);
         }
     }
-    void createRule() {
-        
+    
+    void moveToWarning() {
+
+        JDialog dialog = new JOptionPane("Move To field should not be empty !!",
+                JOptionPane.WARNING_MESSAGE,
+                JOptionPane.DEFAULT_OPTION)
+                .createDialog("Warning");
+        dialog.setAlwaysOnTop(true);
+        dialog.setVisible(true);
+        dialog.dispose();
+    }
+    boolean createRule() {
+
         FilterRule rule = new FilterRule();
-        
-        String ruleId = Integer.toString(MessageController.getInstance().getRulesCount() + 1); 
-        
-        rule.setRuleId(ruleId);
+
+        UUID ruleId = UUID.randomUUID();
+        rule.setRuleId(ruleId.toString());
         rule.setFromField(fromField.getText());
         rule.setsubjectField(subjectField.getText());
         rule.setcontentField(contentField.getText());
-        rule.setmoveToField(moveToField.getText());
+        if (moveToField.getText().isEmpty()) {
+            
+            moveToWarning();
+            
+        } else {
+            rule.setmoveToField(moveToField.getText());
+            MessageController.getInstance().addRule(rule);
+            return true;
+        } 
+        return false;
+    }
+    
+    boolean saveRule(FilterRule rule) {
         
-        MessageController.getInstance().addRule(rule);
+        rule.setFromField(fromEditField.getText());
+        rule.setsubjectField(subjectEditField.getText());
+        rule.setcontentField(contentEditField.getText());
+        if (moveToEditField.getText().isEmpty()) {
+            moveToWarning();
+        } else {
+            rule.setmoveToField(moveToEditField.getText());
+            //controller.updateRule(rule);
+            return true;
+        }
+        return false;
     }
     
     void createRuleWindow() {
@@ -156,9 +191,10 @@ public class RulesEditor extends JFrame{
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                createRule();
-                createFrame.setVisible(false);
-                createFrame.dispose();
+                if ( createRule() ) {
+                    createFrame.setVisible(false);
+                    createFrame.dispose();
+                }
                 model = new RulesTableModel(MessageController.getInstance());
                 model.fireTableDataChanged();
                 rulesTable.setModel(model);
@@ -200,6 +236,72 @@ public class RulesEditor extends JFrame{
         
     }
     
+    void editRuleWindow(String ruleId) {
+        
+        final FilterRule rule = controller.getRuleFromId(ruleId);
+        
+        final JFrame editFrame = new JFrame ("Edit Rule");
+        fromEditField = new LabeledTextField("From contains");
+        subjectEditField = new LabeledTextField("Subject contains");
+        contentEditField = new LabeledTextField("Message text contains");
+        moveToEditField = new LabeledTextField("Move to");
+        
+        fromEditField.setText(rule.getFromField());
+        subjectEditField.setText(rule.getsubjectField());
+        contentEditField.setText(rule.getcontentField());
+        moveToEditField.setText(rule.getmoveToField());
+        
+        JButton saveButton = new JButton("Save");
+        saveButton.setToolTipText("Save edited rule");
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+
+                if (saveRule(rule)) {
+
+                    editFrame.setVisible(false);
+                    editFrame.dispose();
+                }
+                model = new RulesTableModel(MessageController.getInstance());
+                model.fireTableDataChanged();
+                rulesTable.setModel(model);
+            }
+        });
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                editFrame.setVisible(false);
+                editFrame.dispose();
+            }
+        });
+        
+        JPanel headerPanel = new JPanel();
+        BoxLayout headerLayout = new BoxLayout(headerPanel, BoxLayout.Y_AXIS);
+        headerPanel.setLayout(headerLayout);
+        
+        headerPanel.add(fromEditField);
+        headerPanel.add(subjectEditField);
+        headerPanel.add(contentEditField);
+        headerPanel.add(moveToEditField);
+        
+        JPanel footerPanel = new JPanel();
+        BoxLayout footerLayout = new BoxLayout(footerPanel, BoxLayout.X_AXIS);
+        footerPanel.setLayout(footerLayout);
+
+        footerPanel.add(saveButton);
+        footerPanel.add(cancelButton);
+        
+        editFrame.setLayout(new BorderLayout());
+
+        editFrame.add(headerPanel, BorderLayout.NORTH);
+        editFrame.add(footerPanel, BorderLayout.SOUTH);
+        editFrame.setSize(500, 200);
+        editFrame.setVisible(true);
+        
+    }
     public static class RulesTableModel extends AbstractTableModel {
 
         String[] listOfRules;
@@ -249,10 +351,15 @@ public class RulesEditor extends JFrame{
         
         @Override
         public String getColumnName(int col) {
-             return columnNames[col];
+            return columnNames[col];
         }
-        
+
+        public String getRuleId(int selected) {
+            try {
+                return listOfRules[selected];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return null;
+            }
+        }
     }
-    
-    
 }
