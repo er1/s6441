@@ -4,7 +4,6 @@
  */
 package ui.SwingMain;
 
-import Email.MessageController;
 import java.util.ArrayList;
 import util.Util;
 
@@ -13,50 +12,52 @@ import util.Util;
  * @author chanman
  */
 public class SearchFolderTableModel extends FolderTableModel {
-   
-    protected String[] messages,folderList;
-   
-    SearchFolderTableModel(MessageController controller, String folderId, String searchText) {
-        super(controller, folderId);
-        ArrayList<String> found = Util.newArrayList();
-        folderList = controller.getFolderList(folderId);
-        for (String folderIDs : folderList){
-         messages = controller.getEmailList(folderIDs);
-         for(String messageid : messages)
-         {
-            String to = controller.getEmailHeader(messageid, "To");
-            String from = controller.getEmailHeader(messageid, "From");
-            String subject = controller.getEmailHeader(messageid, "Subject");
-            String content = controller.getEmailContent(messageid);
-          /*System.out.println("The to of message ----> " + to);
-            System.out.println("The from of message ----> " + from);
-            System.out.println("The subject of message ----> " + subject);
-            System.out.println("The content of message ----> " + content);
-          */
-            if (to.toLowerCase().contains(searchText.toLowerCase())) {
-                found.add(messageid);
-                continue;
-            }
-            if (from.toLowerCase().contains(searchText.toLowerCase())) {
-                found.add(messageid);
-                continue;
-            }
-            if (subject.toLowerCase().contains(searchText.toLowerCase())) {
-                found.add(messageid);
-                continue;
-            }
-            if (content.toLowerCase().contains(searchText.toLowerCase())) {
-                found.add(messageid);
-                continue;
-            }
-        }// End of internal For loop
-           
-         }// End of outer for loop
-         int n = found.size();
-         for(int i = 0; i < n ; i++)
-         System.out.println( found.get( i ) );
 
+    SearchFolderTableModel(String folderId, String searchText) {
+        super(folderId);
+        ArrayList<String> filtered = recurse(folderId, searchText);
+        
+        messages = new String[filtered.size()];
+       
+        for (int i = 0; i < filtered.size(); i++) {
+            messages[i] = filtered.get(i);
+        }
+    }
+
+    private ArrayList<String> recurse(String folderId, String searchText) {
+        ArrayList<String> found = Util.newArrayList();
+
+        for (String msg : controller.getEmailList(folderId)) {
+            if (filter(msg, searchText)) {
+                found.add(msg);
+            }
+        }
+
+        for (String sub : controller.getFolderList(folderId)) {
+            found.addAll(recurse(sub, searchText));
+        }
+
+        return found;
+    }
+
+    protected boolean filter(String messageid, String searchText) {
+        String to = controller.getEmailHeader(messageid, "To");
+        String from = controller.getEmailHeader(messageid, "From");
+        String subject = controller.getEmailHeader(messageid, "Subject");
+        String content = controller.getEmailContent(messageid);
+
+        if (to.toLowerCase().contains(searchText.toLowerCase())) {
+            return true;
+        }
+        if (from.toLowerCase().contains(searchText.toLowerCase())) {
+            return true;
+        }
+        if (subject.toLowerCase().contains(searchText.toLowerCase())) {
+            return true;
+        }
+        if (content.toLowerCase().contains(searchText.toLowerCase())) {
+            return true;
+        }
+        return false;
     }
 }
-
-     

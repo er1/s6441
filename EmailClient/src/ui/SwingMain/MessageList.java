@@ -97,7 +97,7 @@ public class MessageList extends JTable {
     public void displayFolder(String folderId) {
         this.folderid = folderId;
 
-        model = new FolderTableModel(controller, folderId);
+        model = new FolderTableModel(folderId);
         this.setModel(model);
 
         toolribbon.setSelectedFolder(folderId);

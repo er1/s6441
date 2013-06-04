@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
     FolderList folders;
     MessageList messages;
     Content content;
-    LabeledTextField searchBar;
+    JTextField searchBar;
     SearchFolderTableModel search;
     JButton searchButton;
     MessageController controller;
@@ -30,7 +30,6 @@ public class MainWindow extends JFrame {
      */
     public MainWindow() {
         super("Email Client");
-        this.searchButton = new JButton("Search");
         String mailBoxID = Persist.PersistentStorage.getInstance().getMailboxID();
         controller = MessageController.getInstance(new FileSystemMailbox(mailBoxID));
         controller.loadRules();
@@ -40,9 +39,21 @@ public class MainWindow extends JFrame {
         this.messages = new MessageList(this.content, this.toolbar);
         this.messages.displayFolder(controller.getInboxFolderId());
         this.folders = new FolderList(this.messages);
-        this.searchBar = new LabeledTextField("");
-       
- 
+
+        this.searchBar = new JTextField();
+        this.searchButton = new JButton("Search");
+
+        searchButton.setToolTipText("To search Mail (Alt + S)");
+
+        // Action listner
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                doSearch(searchBar.getText());
+            }
+        });
+        searchButton.setMnemonic(KeyEvent.VK_S);
+        
         // Create the main layout
         BorderLayout layout = new BorderLayout();
         this.setLayout(layout);
@@ -52,13 +63,11 @@ public class MainWindow extends JFrame {
 
         // Create the layout for the search bar
         JPanel searchPanel = new JPanel();
-        searchPanel.setLayout(new BorderLayout());
+        searchPanel.setLayout(new BorderLayout());     
         
-        // Grid layout search Bar
-        JPanel buttonSearch = new JPanel();
-        BorderLayout searchLayout = new BorderLayout();
-        buttonSearch.setLayout(searchLayout);
-        //searchLayout.getVgap();
+        JPanel searchCenterPanel = new JPanel();
+        searchCenterPanel.setLayout(new BorderLayout());       
+
         // Create a layout for the center
         JPanel center = new JPanel();
         GridLayout centerLayout = new GridLayout();
@@ -74,31 +83,22 @@ public class MainWindow extends JFrame {
         JScrollPane contentPane = new JScrollPane(content);
 
         // border everthing
-        foldersPane.setBorder(BorderFactory.createLoweredBevelBorder());        
-        searchButton.setSize(45,20);
-        searchButton.setToolTipText("To search Mail (Alt + S)");
-        searchButton.setBorder(BorderFactory.createEmptyBorder());
+        foldersPane.setBorder(BorderFactory.createLoweredBevelBorder());
         messagesPane.setBorder(BorderFactory.createLoweredBevelBorder());
         contentPane.setBorder(BorderFactory.createLoweredBevelBorder());
 
-        // Action listner
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                doSearch(searchBar.getText());
-            }
-        });
-        searchButton.setMnemonic(KeyEvent.VK_S);
-
-        
         // Add elements        
         center.add(messagesPane);
         center.add(contentPane);
-        buttonSearch.add(searchBar, BorderLayout.CENTER);
-        buttonSearch.add(searchButton, BorderLayout.EAST);
-        searchPanel.add(buttonSearch, BorderLayout.NORTH);
-        searchPanel.add(center);
-        this.add(searchPanel);
+        
+        searchPanel.add(new JLabel("Search: "), BorderLayout.WEST);
+        searchPanel.add(searchBar);
+        searchPanel.add(searchButton, BorderLayout.EAST);
+        
+        searchCenterPanel.add(searchPanel, BorderLayout.NORTH);
+        searchCenterPanel.add(center);
+        
+        this.add(searchCenterPanel);
         this.add(toolbar, BorderLayout.NORTH);
         this.add(foldersPane, BorderLayout.WEST);
 
@@ -106,12 +106,11 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(windowMenu);
         this.setSize(1000, 600);
-        
+
     }
-    
-    public void doSearch(String searchText)
-    {
-        System.out.println("Input Text -----> " + searchText);
-        search = new SearchFolderTableModel(controller, controller.getRootFolderId(), searchText);
+
+    public void doSearch(String searchText) {
+        search = new SearchFolderTableModel(controller.getRootFolderId(), searchText);
+        messages.setModel(search);
     }
 }
