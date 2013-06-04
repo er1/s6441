@@ -107,8 +107,6 @@ public class FileSystemFolder implements Folder {
         persistStore.deleteMessage(id);
         persistStore.newMessage(m.getId());
         persistStore.saveMessage(m.getId(), m.serialize());
-        this.messages.add(m);
-
         sync();
     }
 
