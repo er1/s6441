@@ -242,9 +242,9 @@ class FileSystemStorage extends PersistentStorage {
 
     @Override
     public ArrayList<FilterRule> loadRulesFromFileSystem() {
-        
-        ArrayList<FilterRule> listOfRules= new ArrayList<FilterRule>();
-        
+
+        ArrayList<FilterRule> listOfRules = new ArrayList<FilterRule>();
+
         String path = mailBoxPath + File.separator + mailBoxID + File.separator + "rules.txt";
 
         StringBuilder text = new StringBuilder();
@@ -253,7 +253,7 @@ class FileSystemStorage extends PersistentStorage {
 
         try {
             scanner = new Scanner(new FileInputStream(path));
-            scanner.useDelimiter(NL);         
+            scanner.useDelimiter(NL);
             while (scanner.hasNext()) {
                 FilterRule rule = new FilterRule();
                 String line = scanner.next();
@@ -280,19 +280,19 @@ class FileSystemStorage extends PersistentStorage {
 
     @Override
     public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules) {
-        
+
         String path = mailBoxPath + File.separator + mailBoxID + File.separator + "rules.txt";
         File file = new File(path);
         String delimiter = "---";
         try {
             FileOutputStream outputStream = new FileOutputStream(file);
-            for(FilterRule rule : listOfRules) {
-                String line = rule.getFromField() + delimiter + rule.getsubjectField() + 
-                        delimiter + rule.getcontentField() + delimiter + rule.getmoveToField();
+            for (FilterRule rule : listOfRules) {
+                String line = rule.getFromField() + delimiter + rule.getsubjectField()
+                        + delimiter + rule.getcontentField() + delimiter + rule.getmoveToField();
                 outputStream.write(line.getBytes());
                 outputStream.write("\n".getBytes());
             }
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FileSystemStorage.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

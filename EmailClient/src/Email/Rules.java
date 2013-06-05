@@ -30,13 +30,13 @@ public class Rules {
             }
         });
     }
-    
+
     public ArrayList getListOfRules() {
         return listOfRules;
     }
-    
+
     public static Rules getInstance() {
-        if (rules == null){
+        if (rules == null) {
             rules = new Rules();
         }
         return rules;
@@ -59,14 +59,14 @@ public class Rules {
     public void addRule(FilterRule rule) {
         listOfRules.add(rule);
     }
-    
+
     public void deleteRule(int ruleId) {
-        if(listOfRules.size() > ruleId)
+        if (listOfRules.size() > ruleId) {
             listOfRules.remove(ruleId);
+        }
     }
 
     void saveRules() {
         persistStore.saveRulesToFileSystem(listOfRules);
     }
-    
 }

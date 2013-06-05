@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * Persistent Storage is for requesting File System store
+ *
  * @author anasalkhatib
  */
 public abstract class PersistentStorage {
@@ -14,7 +15,7 @@ public abstract class PersistentStorage {
     /**
      * Static Factory method to request a File System Persistent store
      *
-     * @param mailBoxID 
+     * @param mailBoxID
      * @return A Persistent Storage that uses the File System as the back end
      */
     public static PersistentStorage getFileSystemStorage(String mailBoxID) {
@@ -25,9 +26,11 @@ public abstract class PersistentStorage {
             return fileSystemStorage;
         }
     }
+
     /**
      * Get instance of Persistent Storage
-     * @return instance 
+     *
+     * @return instance
      */
     public static PersistentStorage getInstance() {
         return instance;
@@ -35,47 +38,58 @@ public abstract class PersistentStorage {
 
     /**
      * Get the id of mail box
-     * @return MailBoxID 
+     *
+     * @return MailBoxID
      */
     abstract public String getMailboxID();
 
     /**
      * New Folder will be created in a given path
+     *
      * @param fullPath
-     * @return true/false 
+     * @return true/false
      */
     abstract public boolean newFolder(String fullPath);
 
     /**
      * Create a new folder in MailBox
+     *
      * @param newFolderPath
      * @return true/false
      */
     abstract public boolean newFolderInMailbox(String newFolderPath);
+
     /**
      * Create new rule file in mailbox to store list of rules
+     *
      * @param path
      * @return true/false
      */
     abstract public boolean newRuleFileInMailbox(String path);
-    
+
     abstract public ArrayList<FilterRule> loadRulesFromFileSystem();
-    
+
     abstract public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules);
+
     /**
      * Load all messages from the folder
+     *
      * @param folder
      * @return ArrayList of messages
      */
     abstract public ArrayList<String> loadMessageListFromFolder(String folder);
+
     /**
      * Load all the sub folders from a directory
+     *
      * @param folder
      * @return ArrayList of sub folders in a directory
      */
     abstract public ArrayList<String> loadSubfolders(String folder);
+
     /**
-     * Delete the folder and its contents 
+     * Delete the folder and its contents
+     *
      * @param folder
      * @return true/false
      */
@@ -83,6 +97,7 @@ public abstract class PersistentStorage {
 
     /**
      * Move a message to a given folder
+     *
      * @param message
      * @param folder
      * @return true/false
@@ -91,6 +106,7 @@ public abstract class PersistentStorage {
 
     /**
      * Add a new message file to a given folder
+     *
      * @param folder
      * @return true/false
      */
@@ -98,19 +114,24 @@ public abstract class PersistentStorage {
 
     /**
      * Save message file with the given content
+     *
      * @param message
      * @param content
      * @return true/false
      */
     abstract public boolean saveMessage(String message, String content);
+
     /**
      * Get content of a given messagePath
+     *
      * @param message
      * @return message
      */
     abstract public String loadMessage(String message);
+
     /**
      * Delete message file
+     *
      * @param message
      * @return true/false
      */
@@ -118,6 +139,7 @@ public abstract class PersistentStorage {
 
     /**
      * Move a folder to another folder
+     *
      * @param folderToMove
      * @param destinationFolder
      * @return true/false

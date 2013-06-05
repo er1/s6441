@@ -6,6 +6,7 @@ package Email;
 
 /**
  * DummyStore is for testing purposes
+ *
  * @author chanman
  */
 public class DummyStore extends TemporaryFolder implements Mailbox {
@@ -29,7 +30,7 @@ public class DummyStore extends TemporaryFolder implements Mailbox {
         sent.setId("sent");
         drafts.setId("draft");
         trash.setId("trash");
-        
+
         // add them to the store on creation
         this.addFolder(inbox);
         this.addFolder(outbox);

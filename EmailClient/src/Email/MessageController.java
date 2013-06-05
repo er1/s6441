@@ -302,7 +302,10 @@ public class MessageController extends Observable {
         newMsg.setId(messageId.toString());
         Folder drafts = store.getDrafts();
         //drafts.addMessage(newMsg);
-        return getIdfromMessage(newMsg);
+
+        String id = getIdfromMessage(newMsg);
+        markRead(id);
+        return id;
     }
 
     public String composeFrom(String template) {
@@ -558,6 +561,7 @@ public class MessageController extends Observable {
         ArrayList<Message> outbound = store.getOutbox().getMessages();
         for (Message out : outbound) {
             out.setHeader("From", store.getUserId());
+            out.setHeader("X-Read", null); // mark as unread for the recipient
 
             PlainTextMessage msg = (PlainTextMessage) out; // FIXME (this is pretty derpy)
             String content = msg.serialize();
