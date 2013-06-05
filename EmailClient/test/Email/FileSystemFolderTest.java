@@ -167,16 +167,16 @@ public class FileSystemFolderTest {
      */
     @Test
     public void testAddAndDeleteFolder() {
+        PersistentStorage.getTestingStorage();
+        FileSystemMailbox mailbox = new FileSystemMailbox("TEST_MAILBOX");
         
-        String expResult = "folder";
-        Folder folder = new TemporaryFolder(expResult);
-        FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
-        instance.addFolder(folder);
+        String testname = "zzz-test-zzz";
         
-        assertEquals(expResult, folder.getName());
+        Folder t = new FileSystemFolderProxy(testname, mailbox);
         
-        instance.deleteFolder(folder);
-        assertEquals(expResult,folder.getName());
+        mailbox.addFolder(t);
+        mailbox.deleteFolder(t);
+        
     }
 
      /**
