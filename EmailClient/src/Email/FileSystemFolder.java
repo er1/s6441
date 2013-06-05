@@ -81,6 +81,9 @@ public class FileSystemFolder implements Folder {
                 newset.put(messagefn, messages.get(messagefn));
             } else {
                 String filecontent = persistStore.loadMessage(messagepath);
+                if(filecontent.isEmpty()) {
+                    continue;
+                }
                 PlainTextMessage msg = PlainTextMessage.parse(filecontent);
                 msg.setId(messagepath);
                 newset.put(messagefn, msg);
