@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import ui.LabeledTextField;
 import Email.FilterRule;
+import Email.Rules;
 import java.awt.GridLayout;
 import java.util.UUID;
 import javax.swing.JDialog;
@@ -104,10 +105,12 @@ public class RulesEditor extends JFrame{
         });
 
         JButton doneButton = new JButton("Done");
+        doneButton.setToolTipText("Apply rules to Inbox");
         doneButton.addActionListener(new ActionListener() {
-
+            
             @Override
             public void actionPerformed(ActionEvent ae) {
+                applyRule();
                 setVisible(false);
                 dispose();
             }
@@ -131,6 +134,10 @@ public class RulesEditor extends JFrame{
         if(ruleId != -1) {
             MessageController.getInstance().deleteRule(ruleId);
         }
+    }
+
+    void applyRule() {
+        Rules.getInstance().applyRules(controller.getInboxFolderId());
     }
 
     void moveToWarning() {

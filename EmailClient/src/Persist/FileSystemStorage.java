@@ -35,6 +35,7 @@ class FileSystemStorage extends PersistentStorage {
         newFolder(mailBoxPath + File.separator + mailBoxID); // FIXME:
         this.mailBoxID = mailBoxID;
         initialiseMailboxFolder();
+        newRuleFileInMailbox(File.separator + mailBoxID + File.separator + "rules.txt");
         //    this.instance = this;
         //  }
     }
@@ -65,7 +66,17 @@ class FileSystemStorage extends PersistentStorage {
         //TODO Handle return?
         return folder.mkdir();
     }
-
+    
+    @Override
+    public boolean newRuleFileInMailbox(String path) {
+        File file = new File(mailBoxPath + path);
+        try {
+            return file.createNewFile();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
     @Override
     public ArrayList<String> loadMessageListFromFolder(String folder) {
         File parentFolder = new File(mailBoxPath + folder);

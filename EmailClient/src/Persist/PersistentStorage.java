@@ -52,6 +52,12 @@ public abstract class PersistentStorage {
      */
     abstract public boolean newFolderInMailbox(String newFolderPath);
     /**
+     * Create new rule file in mailbox to store list of rules
+     * @param path
+     * @return true/false
+     */
+    abstract public boolean newRuleFileInMailbox(String path);
+    /**
      * Load all messages from the folder
      * @param folder
      * @return ArrayList of messages
