@@ -16,6 +16,7 @@ import ui.LabeledTextField;
 import Email.FilterRule;
 import Email.Rules;
 import java.awt.GridLayout;
+import java.io.File;
 import java.util.UUID;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -159,6 +160,7 @@ public class RulesEditor extends JFrame{
         rule.setFromField(fromField.getText());
         rule.setsubjectField(subjectField.getText());
         rule.setcontentField(contentField.getText());
+        
         if (moveToField.getText().isEmpty()) {
             
             moveToWarning("Move To field should not be empty !!");
@@ -237,6 +239,9 @@ public class RulesEditor extends JFrame{
         headerPanel.add(fromField);
         headerPanel.add(subjectField);
         headerPanel.add(contentField);
+        
+        String Inbox = controller.getInboxFolderId() + File.separator ;
+        moveToField.setText(Inbox);
         headerPanel.add(moveToField);
         
         JPanel footerPanel = new JPanel();
