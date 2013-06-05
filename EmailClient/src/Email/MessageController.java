@@ -563,8 +563,9 @@ public class MessageController extends Observable {
             this.setChanged();
         }
 
-        // update anyone waiting on updates
+        store.sync();
 
+        // update anyone waiting on updates
         this.notifyObservers();
     }
 

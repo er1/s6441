@@ -21,15 +21,19 @@ public class FileSystemFolderProxy implements Folder {
 
     @Override
     public String getId() {
-        if (instance == null) {
-            return parent.getPath() + File.separator + name;
-        }
-        return instance.getId();
+        return getPath();
     }
 
     @Override
     public void setId(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getPath() {
+        if (instance == null) {
+            return parent.getPath() + File.separator + name;
+        }
+        return instance.getPath();
     }
 
     @Override
