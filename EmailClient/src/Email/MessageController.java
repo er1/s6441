@@ -276,7 +276,7 @@ public class MessageController extends Observable {
         Message msg = getMessageFromId(messageId);
         Folder destination = getFolderFromId(destinationFolderId);
         destination.addMessage(msg);
-        
+
         this.setChanged();
         this.notifyObservers();
     }
@@ -666,8 +666,8 @@ public class MessageController extends Observable {
     }
 
     public void sendMeeting(String messageId) {
-        copyMessageToFolder(messageId, getOutboxFolderId());
         moveMessageToFolder(messageId, getMeetingsFolderId());
+        copyMessageToFolder(messageId, getOutboxFolderId());
     }
 
     public MeetingSummary getMeetingSummary(String messageId) {
