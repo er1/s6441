@@ -650,4 +650,8 @@ public class MessageController extends Observable {
 
         return summary;
     }
+
+    public void saveRules() {
+        rules.saveRules();
+    }
 }

@@ -1,5 +1,6 @@
 package Persist;
 
+import Email.FilterRule;
 import java.util.ArrayList;
 
 /**
@@ -57,6 +58,10 @@ public abstract class PersistentStorage {
      * @return true/false
      */
     abstract public boolean newRuleFileInMailbox(String path);
+    
+    abstract public ArrayList<FilterRule> loadRulesFromFileSystem();
+    
+    abstract public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules);
     /**
      * Load all messages from the folder
      * @param folder

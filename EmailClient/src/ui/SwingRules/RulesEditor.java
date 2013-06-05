@@ -111,8 +111,9 @@ public class RulesEditor extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 applyRule();
+                controller.saveRules();
                 setVisible(false);
-                dispose();
+                dispose();                
             }
         });
 
@@ -126,8 +127,7 @@ public class RulesEditor extends JFrame{
         this.add(rulesPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.setSize(500, 200);
-
-
+       
     }
 
     void deleteRule(int ruleId) {
@@ -180,7 +180,6 @@ public class RulesEditor extends JFrame{
             moveToWarning();
         } else {
             rule.setmoveToField(moveToEditField.getText());
-            //controller.updateRule(rule);
             return true;
         }
         return false;
