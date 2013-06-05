@@ -19,26 +19,30 @@ import static org.junit.Assert.*;
  */
 public class MessageControllerTest {
     private String mailBoxID;
-    private MessageController controller;
-    private PersistentStorage persistStore;
-    
+    private static MessageController controller;
+    private static PersistentStorage persistStore;
+    private static Mailbox temp;
+
     public MessageControllerTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
+        persistStore = PersistentStorage.getFileSystemStorage("msgCtrl");
+        temp = (Mailbox) new FileSystemMailbox("msgCtrl");
+        controller = MessageController.getInstance(temp);
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
         mailBoxID = "test";
         this.persistStore = PersistentStorage.getFileSystemStorage(mailBoxID);
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -48,10 +52,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetInstance_Mailbox() {
-        
+
         MessageController expResult = controller;
         MessageController result = MessageController.getInstance();
-        assertEquals(expResult, result);     
+        assertEquals(expResult, result);
     }
 
     /**
@@ -62,9 +66,7 @@ public class MessageControllerTest {
         System.out.println("getInstance");
         MessageController expResult = null;
         MessageController result = MessageController.getInstance();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(result);
     }
 
     /**
@@ -74,12 +76,9 @@ public class MessageControllerTest {
     public void testGetFolderList() {
         System.out.println("getFolderList");
         String folderId = "";
-        MessageController instance = null;
         String[] expResult = null;
-        String[] result = instance.getFolderList(folderId);
+        String[] result = controller.getFolderList(folderId);
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -91,10 +90,8 @@ public class MessageControllerTest {
         String folderId = "";
         MessageController instance = null;
         String[] expResult = null;
-        String[] result = instance.getEmailList(folderId);
+        String[] result = controller.getEmailList(folderId);
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -106,10 +103,8 @@ public class MessageControllerTest {
         String id = "";
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getEmailContent(id);
+        String result = controller.getEmailContent(id);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -121,9 +116,7 @@ public class MessageControllerTest {
         String id = "";
         String content = "";
         MessageController instance = null;
-        instance.setEmailContent(id, content);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.setEmailContent(id, content);
     }
 
     /**
@@ -135,10 +128,8 @@ public class MessageControllerTest {
         String messageId = "";
         MessageController instance = null;
         Summary expResult = null;
-        Summary result = instance.getEmailSummary(messageId);
+        Summary result = controller.getEmailSummary(messageId);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -151,9 +142,7 @@ public class MessageControllerTest {
         String key = "";
         String value = "";
         MessageController instance = null;
-        instance.setEmailHeader(messageId, key, value);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.setEmailHeader(messageId, key, value);
     }
 
     /**
@@ -166,10 +155,8 @@ public class MessageControllerTest {
         String key = "";
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getEmailHeader(messageId, key);
+        String result = controller.getEmailHeader(messageId, key);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -180,9 +167,7 @@ public class MessageControllerTest {
         System.out.println("markRead");
         String messageId = "";
         MessageController instance = null;
-        instance.markRead(messageId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.markRead(messageId);
     }
 
     /**
@@ -193,9 +178,7 @@ public class MessageControllerTest {
         System.out.println("markUnread");
         String messageId = "";
         MessageController instance = null;
-        instance.markUnread(messageId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.markUnread(messageId);
     }
 
     /**
@@ -206,9 +189,7 @@ public class MessageControllerTest {
         System.out.println("delete");
         String messageId = "";
         MessageController instance = null;
-        instance.delete(messageId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.delete(messageId);
     }
 
     /**
@@ -220,9 +201,7 @@ public class MessageControllerTest {
         String messageId = "";
         String destinationFolderId = "";
         MessageController instance = null;
-        instance.moveMessageToFolder(messageId, destinationFolderId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.moveMessageToFolder(messageId, destinationFolderId);
     }
 
     /**
@@ -234,9 +213,7 @@ public class MessageControllerTest {
         String messageId = "";
         String folderId = "";
         MessageController instance = null;
-        instance.copyMessageToFolder(messageId, folderId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.copyMessageToFolder(messageId, folderId);
     }
 
     /**
@@ -247,10 +224,8 @@ public class MessageControllerTest {
         System.out.println("compose");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.compose();
+        String result = controller.compose();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -262,10 +237,8 @@ public class MessageControllerTest {
         String template = "";
         MessageController instance = null;
         String expResult = "";
-        String result = instance.composeFrom(template);
+        String result = controller.composeFrom(template);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -276,9 +249,7 @@ public class MessageControllerTest {
         System.out.println("updateDate");
         String messageid = "";
         MessageController instance = null;
-        instance.updateDate(messageid);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.updateDate(messageid);
     }
 
     /**
@@ -290,10 +261,8 @@ public class MessageControllerTest {
         String originalMessage = "";
         MessageController instance = null;
         String expResult = "";
-        String result = instance.reply(originalMessage);
+        String result = controller.reply(originalMessage);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -305,10 +274,8 @@ public class MessageControllerTest {
         String currentMessage = "";
         MessageController instance = null;
         String expResult = "";
-        String result = instance.forward(currentMessage);
+        String result = controller.forward(currentMessage);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -319,10 +286,8 @@ public class MessageControllerTest {
         System.out.println("getRootFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getRootFolderId();
+        String result = controller.getRootFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -333,10 +298,8 @@ public class MessageControllerTest {
         System.out.println("getDraftsFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getDraftsFolderId();
+        String result = controller.getDraftsFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -347,10 +310,8 @@ public class MessageControllerTest {
         System.out.println("getInboxFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getInboxFolderId();
+        String result = controller.getInboxFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -361,10 +322,8 @@ public class MessageControllerTest {
         System.out.println("getOutboxFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getOutboxFolderId();
+        String result = controller.getOutboxFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -375,10 +334,8 @@ public class MessageControllerTest {
         System.out.println("getSentMessagesFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getSentMessagesFolderId();
+        String result = controller.getSentMessagesFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -389,10 +346,8 @@ public class MessageControllerTest {
         System.out.println("getTrashFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getTrashFolderId();
+        String result = controller.getTrashFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -403,10 +358,8 @@ public class MessageControllerTest {
         System.out.println("getTemplateFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getTemplateFolderId();
+        String result = controller.getTemplateFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -417,10 +370,8 @@ public class MessageControllerTest {
         System.out.println("getMeetingFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getMeetingFolderId();
+        String result = controller.getMeetingFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -432,10 +383,8 @@ public class MessageControllerTest {
         String folder = "";
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getFolderName(folder);
+        String result = controller.getFolderName(folder);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -447,9 +396,7 @@ public class MessageControllerTest {
         String in = "";
         String name = "";
         MessageController instance = null;
-        instance.newFolder(in, name);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.newFolder(in, name);
     }
 
     /**
@@ -460,9 +407,7 @@ public class MessageControllerTest {
         System.out.println("deletefolder");
         String selected = "";
         MessageController instance = null;
-        instance.deletefolder(selected);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.deletefolder(selected);
     }
 
     /**
@@ -474,9 +419,7 @@ public class MessageControllerTest {
         String sourcePath = "";
         String destinationPath = "";
         MessageController instance = null;
-        instance.moveFolder(sourcePath, destinationPath);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.moveFolder(sourcePath, destinationPath);
     }
 
     /**
@@ -486,9 +429,7 @@ public class MessageControllerTest {
     public void testDoSendRecieve() {
         System.out.println("doSendRecieve");
         MessageController instance = null;
-        instance.doSendRecieve();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.doSendRecieve();
     }
 
     /**
@@ -499,10 +440,8 @@ public class MessageControllerTest {
         System.out.println("getMeetingsFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getMeetingsFolderId();
+        String result = controller.getMeetingsFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -513,10 +452,8 @@ public class MessageControllerTest {
         System.out.println("getTemplatesFolderId");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getTemplatesFolderId();
+        String result = controller.getTemplatesFolderId();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -527,10 +464,8 @@ public class MessageControllerTest {
         System.out.println("createMeeting");
         MessageController instance = null;
         String expResult = "";
-        String result = instance.createMeeting();
+        String result = controller.createMeeting();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -542,10 +477,8 @@ public class MessageControllerTest {
         String ruleId = "";
         MessageController instance = null;
         FilterRule expResult = null;
-        FilterRule result = instance.getRuleFromId(ruleId);
+        FilterRule result = controller.getRuleFromId(ruleId);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -557,10 +490,8 @@ public class MessageControllerTest {
         FilterRule rule = null;
         MessageController instance = null;
         String expResult = "";
-        String result = instance.getIdfromRule(rule);
+        String result = controller.getIdfromRule(rule);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -570,9 +501,7 @@ public class MessageControllerTest {
     public void testLoadRules() {
         System.out.println("loadRules");
         MessageController instance = null;
-        instance.loadRules();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.loadRules();
     }
 
     /**
@@ -583,9 +512,7 @@ public class MessageControllerTest {
         System.out.println("addRule");
         FilterRule rule = null;
         MessageController instance = null;
-        instance.addRule(rule);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.addRule(rule);
     }
 
     /**
@@ -596,9 +523,7 @@ public class MessageControllerTest {
         System.out.println("deleteRule");
         int ruleId = 0;
         MessageController instance = null;
-        instance.deleteRule(ruleId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.deleteRule(ruleId);
     }
 
     /**
@@ -609,10 +534,8 @@ public class MessageControllerTest {
         System.out.println("getRuleList");
         MessageController instance = null;
         String[] expResult = null;
-        String[] result = instance.getRuleList();
+        String[] result = controller.getRuleList();
         assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -623,10 +546,8 @@ public class MessageControllerTest {
         System.out.println("getRulesCount");
         MessageController instance = null;
         int expResult = 0;
-        int result = instance.getRulesCount();
+        int result = controller.getRulesCount();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -637,9 +558,7 @@ public class MessageControllerTest {
         System.out.println("sendMeeting");
         String messageId = "";
         MessageController instance = null;
-        instance.sendMeeting(messageId);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.sendMeeting(messageId);
     }
 
     /**
@@ -651,10 +570,8 @@ public class MessageControllerTest {
         String messageId = "";
         MessageController instance = null;
         MeetingSummary expResult = null;
-        MeetingSummary result = instance.getMeetingSummary(messageId);
+        MeetingSummary result = controller.getMeetingSummary(messageId);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -664,9 +581,7 @@ public class MessageControllerTest {
     public void testSaveRules() {
         System.out.println("saveRules");
         MessageController instance = null;
-        instance.saveRules();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        controller.saveRules();
     }
 
     /**
@@ -678,9 +593,7 @@ public class MessageControllerTest {
         String folderPath = "";
         MessageController instance = null;
         boolean expResult = false;
-        boolean result = instance.checkFolderExists(folderPath);
+        boolean result = controller.checkFolderExists(folderPath);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 }
