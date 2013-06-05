@@ -25,6 +25,8 @@ public class MessageController extends Observable {
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
+    
+    public enum UpdateType { FOLDERS_AND_MESSAGES, MESSAGES };
 
     /**
      * MessageController Constructor
@@ -154,7 +156,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
 
     }
 
@@ -193,7 +195,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
 
     }
 
@@ -227,7 +229,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     /**
@@ -245,7 +247,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     /**
@@ -262,7 +264,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
 
     }
 
@@ -278,7 +280,7 @@ public class MessageController extends Observable {
         destination.addMessage(msg);
         
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     public void copyMessageToFolder(String messageId, String folderId) {
@@ -287,7 +289,7 @@ public class MessageController extends Observable {
         destination.addMessageCopy(msg);
 
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     //FIXME Not sure what this does
@@ -333,7 +335,7 @@ public class MessageController extends Observable {
         msg.setHeader("Date", dateFormat.format(date));
 
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     /**
@@ -372,7 +374,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
 
         return replyid;
     }
@@ -410,7 +412,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.MESSAGES);
 
         return forwardid;
     }
@@ -510,7 +512,7 @@ public class MessageController extends Observable {
 
         // update anyone waiting on updates
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.FOLDERS_AND_MESSAGES);
     }
 
     /**
@@ -524,7 +526,7 @@ public class MessageController extends Observable {
         store.deleteFolder(folder);
 
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.FOLDERS_AND_MESSAGES);
     }
 
     /**
@@ -543,7 +545,7 @@ public class MessageController extends Observable {
         source.moveFolder(dest);
 
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.FOLDERS_AND_MESSAGES);
     }
 
     /**
@@ -601,7 +603,7 @@ public class MessageController extends Observable {
         store.sync();
 
         // update anyone waiting on updates
-        this.notifyObservers();
+        this.notifyObservers(UpdateType.FOLDERS_AND_MESSAGES);
     }
 
     public String getMeetingsFolderId() {

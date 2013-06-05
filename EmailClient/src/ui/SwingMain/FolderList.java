@@ -1,6 +1,7 @@
 package ui.SwingMain;
 
 import Email.MessageController;
+import Email.MessageController.UpdateType;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -11,8 +12,6 @@ import java.util.Observer;
 import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
@@ -40,8 +39,11 @@ public class FolderList extends JTree {
         init();
         controller.addObserver(new Observer() {
             @Override
-            public void update(Observable o, Object o1) {
-                refresh();
+            public void update(Observable o, Object otype) {
+                UpdateType type = (UpdateType) otype;
+                if (type == UpdateType.FOLDERS_AND_MESSAGES) {
+                    refresh();
+                }
             }
         });
     }
@@ -71,22 +73,6 @@ public class FolderList extends JTree {
             }
         });
 
-        this.addTreeExpansionListener(new TreeExpansionListener() {
-            @Override
-            public void treeExpanded(TreeExpansionEvent tee) {
-                sizechanged();
-            }
-
-            @Override
-            public void treeCollapsed(TreeExpansionEvent tee) {
-                sizechanged();
-            }
-        });
-    }
-
-    void sizechanged() {
-        // TODO: have the layout resize
-        this.doLayout();
     }
 
     void makeMenu(Point mouseposition) {
@@ -105,7 +91,6 @@ public class FolderList extends JTree {
         TreePath p = this.getSelectionPath();
         model = new FolderTreeModel();
         this.setModel(model);
-        this.setSelectionPath(p);
     }
 
     private void changefolder() {

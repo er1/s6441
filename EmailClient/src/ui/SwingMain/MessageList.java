@@ -12,6 +12,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 import ui.SwingMessage.MessageEditor;
 
 /**
@@ -115,9 +116,18 @@ public class MessageList extends JTable {
         toolribbon.setSelectedFolder(folderId);
     }
 
+    @Override
+    public void setModel(TableModel m) {
+        try {
+            model = (TableModelInterface) m;
+        } catch (ClassCastException e) {
+        }
+        super.setModel(m);
+    }
+
     private void refresh() {
         int row = this.getSelectedRow();
-        displayFolder(folderid);
+        this.setModel(this.getModel());
         if (row < 0) {
             return;
         }
