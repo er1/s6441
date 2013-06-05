@@ -7,6 +7,7 @@ package Persist;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +55,7 @@ public class FileSystemStorageTest {
     public void setUp() {
         mailboxID = "junit";
         userHome = System.getProperty("user.home") + File.separator;
-        testDirectory = userHome + mailboxID + File.separator;
+        testDirectory = userHome + "_mailbox" + File.separator + mailboxID + File.separator;
         instance = PersistentStorage.getFileSystemStorage(mailboxID);
     }
 
@@ -74,7 +75,7 @@ public class FileSystemStorageTest {
      */
     @Test
     public void testNewFolder() {
-        boolean result = instance.newFolder(testDirectory + File.separator + "newFolder");
+        boolean result = instance.newFolder(mailboxID + File.separator + "newFolder");
         assertEquals(true, result);
     }
 
@@ -83,7 +84,7 @@ public class FileSystemStorageTest {
      */
     @Test
     public void testNewFolderInMailbox() {
-        String newFolderPath = "Inbox" + File.pathSeparator + "junit";
+        String newFolderPath = "Inbox" + File.separator + "junit";
         boolean result = instance.newFolderInMailbox(newFolderPath);
         assertEquals(true, result);
     }
@@ -95,9 +96,9 @@ public class FileSystemStorageTest {
     public void testLoadMessageListFromFolder() {
         System.out.println("loadMessageListFromFolder");
         String folder = "";
-        Set<String> expResult = null;
-        Set<String> result = (Set<String>)instance.loadMessageListFromFolder(folder);
-        assertSame(expResult, result);
+        ArrayList<String> expResult = new ArrayList<String>();
+        ArrayList<String> result = instance.loadMessageListFromFolder(folder);
+        assertEquals(expResult, result);
     }
 
     /**

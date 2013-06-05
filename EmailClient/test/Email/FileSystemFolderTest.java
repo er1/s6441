@@ -5,6 +5,7 @@
 package Email;
 
 import Persist.PersistentStorage;
+import java.io.File;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -18,12 +19,15 @@ import static org.junit.Assert.*;
  * @author Bargavi
  */
 public class FileSystemFolderTest {
+    private static String userHome;
+    private static String testDirectory;
     
     private String id, name;
     private ArrayList<Message> messages;
     private ArrayList<Folder> folders;
     private PersistentStorage persistStore;
     private Mailbox parent;
+    static private String mailboxID;
 
             
     public FileSystemFolderTest() {
@@ -31,6 +35,9 @@ public class FileSystemFolderTest {
     
     @BeforeClass
     public static void setUpClass() {
+        mailboxID = "junit";
+        userHome = System.getProperty("user.home") + File.separator;
+        testDirectory = userHome + "_mailbox" + File.separator + mailboxID + File.separator;
     }
     
     @AfterClass
@@ -76,12 +83,15 @@ public class FileSystemFolderTest {
                 + "Subject: Hello\r\n"
                 + "\r\n"
                 + "Hello, World\r\n");
-       
+                
+        String userHome = System.getProperty("user.home") + File.separator;
+
+        String testId = userHome + "_mailbox" + File.separator + mailboxID + File.separator;
+        msg.setId(testDirectory + "test_email");
         ArrayList<Message> expResult = new ArrayList<Message> ();
         expResult.add((Message)msg);
                 
         FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
-        
         instance.addMessage(msg);
         
         ArrayList result = instance.getMessages();
