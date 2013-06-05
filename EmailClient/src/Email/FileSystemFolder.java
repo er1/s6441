@@ -3,6 +3,7 @@ package Email;
 import Persist.PersistentStorage;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import util.Util;
@@ -15,7 +16,7 @@ import util.Util;
 public class FileSystemFolder implements Folder {
 
     private FileSystemFolder parent;
-    ArrayList<Message> messages;
+    HashMap<String, Message> messages;
     ArrayList<Folder> folders;
     String name = new String();
     PersistentStorage persistStore = PersistentStorage.getInstance();
@@ -32,7 +33,7 @@ public class FileSystemFolder implements Folder {
         this.parent = parent;
 
         this.folders = Util.newArrayList();
-        this.messages = Util.newArrayList();
+        this.messages = Util.newHashMap();
     }
 
     @Override
@@ -58,22 +59,37 @@ public class FileSystemFolder implements Folder {
 
     @Override
     public ArrayList<Message> getMessages() {
-        messages = Util.newArrayList();
 
         ArrayList<String> messageList = persistStore.loadMessageListFromFolder(this.getPath());
 
-        if (null != messageList) {
-            for (String messagePath : messageList) {
-                String filecontent = persistStore.loadMessage(messagePath);
-                PlainTextMessage msg = PlainTextMessage.parse(filecontent);
-                if (msg != null) {
-                    msg.setId(messagePath);
-                    messages.add(msg);
-                }
-            }
+        if (messageList == null) {
+            return Util.newArrayList();
         }
 
-        return messages;
+        for (int i = 0; i < messageList.size(); i++) {
+        }
+
+        HashMap<String, Message> newset = Util.newHashMap();
+
+        for (String messagepath : messageList) {
+
+            String pattern = Pattern.quote(System.getProperty("file.separator"));
+            String[] sep = messagepath.split(pattern);
+            String messagefn = sep[sep.length - 1];
+
+            if (messages.containsKey(messagefn)) {
+                newset.put(messagefn, messages.get(messagefn));
+            } else {
+                String filecontent = persistStore.loadMessage(messagepath);
+                PlainTextMessage msg = PlainTextMessage.parse(filecontent);
+                msg.setId(messagepath);
+                newset.put(messagefn, msg);
+
+            }
+        }
+        messages = newset;
+
+        return new ArrayList<Message>(messages.values());
     }
 
     @Override

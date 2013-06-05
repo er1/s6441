@@ -237,12 +237,12 @@ public class MessageController extends Observable {
      * @param messageId Message Id
      */
     public void delete(String messageId) {
-        
+
         Message msg = this.getMessageFromId(messageId);
 
         // FIXME: we assume this is only getting called from the trash
         store.getTrash().deleteMessage(msg);
-        
+
         // update anyone waiting on updates
         this.setChanged();
         this.notifyObservers();

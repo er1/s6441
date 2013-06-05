@@ -131,7 +131,7 @@ public class MessageList extends JTable {
 
         toolribbon.setSelectedMessage(messageid);
 
-        //controller.markRead(messageid);
+        controller.markRead(messageid);
 
     }
 
