@@ -20,9 +20,7 @@ public class Rules {
     PersistentStorage persistStore = PersistentStorage.getInstance();
     ArrayList<FilterRule> listOfRules = new ArrayList<FilterRule>();
 
-    public Rules() {
-
-        Rules.rules = this;
+    private Rules() {
         listOfRules = persistStore.loadRulesFromFileSystem();
         //applyRules(controller.getInboxFolderId());
         controller.addObserver(new Observer() {
@@ -38,6 +36,9 @@ public class Rules {
     }
     
     public static Rules getInstance() {
+        if (rules == null){
+            rules = new Rules();
+        }
         return rules;
     }
 

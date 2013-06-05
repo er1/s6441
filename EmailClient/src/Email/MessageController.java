@@ -604,7 +604,7 @@ public class MessageController extends Observable {
     }
 
     public void loadRules() {
-        rules = new Rules();
+        rules = Rules.getInstance();
     }
 
     public void addRule(FilterRule rule) {
