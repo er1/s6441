@@ -84,7 +84,7 @@ public class FileSystemStorageTest {
      */
     @Test
     public void testNewFolderInMailbox() {
-        String newFolderPath = "Inbox" + File.separator + "junit";
+        String newFolderPath = mailboxID + File.separator + "Inbox" + File.separator + "junit";
         boolean result = instance.newFolderInMailbox(newFolderPath);
         assertEquals(true, result);
     }

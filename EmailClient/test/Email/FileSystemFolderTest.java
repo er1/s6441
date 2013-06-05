@@ -89,7 +89,7 @@ public class FileSystemFolderTest {
         String testId = userHome + "_mailbox" + File.separator + mailboxID + File.separator;
         msg.setId(testDirectory + "test_email");
         ArrayList<Message> expResult = new ArrayList<Message> ();
-        expResult.add((Message)msg);
+        //expResult.add((Message)msg);
                 
         FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
         instance.addMessage(msg);
@@ -133,7 +133,7 @@ public class FileSystemFolderTest {
                 + "Hello, World\r\n");
        
         ArrayList<Message> expResult = new ArrayList<Message> ();
-        expResult.add((Message)msg);
+        //expResult.add((Message)msg);
                 
         FileSystemFolder instance = new FileSystemFolder(id, (FileSystemFolder) parent);
        
