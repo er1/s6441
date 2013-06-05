@@ -86,6 +86,11 @@ public class MessageList extends JTable {
 
         // get row
         int row = this.rowAtPoint(mouseposition);
+
+        if (row < 0) {
+            return;
+        }
+
         // get id of row
         String id = (String) this.model.getValueAt(row, -1);
         JPopupMenu menu = new MessageMenu(id, folderid);
