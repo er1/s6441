@@ -278,7 +278,7 @@ public class MessageController extends Observable {
         Message msg = getMessageFromId(messageId);
         Folder destination = getFolderFromId(destinationFolderId);
         destination.addMessage(msg);
-        
+
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
     }
@@ -594,9 +594,15 @@ public class MessageController extends Observable {
         while (transfer.MessageExistFor(userId)) {
             String message = transfer.getMessageFor(userId);
             Message newMsg = PlainTextMessage.parse(message);
-            UUID messageId = UUID.randomUUID();
-            newMsg.setId(messageId.toString());
-            inbox.addMessage(newMsg);
+            if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
+                UUID meetingId = UUID.randomUUID();
+                newMsg.setId(meetingId.toString());
+                store.getMeetings().addMessage(newMsg);
+            } else {
+                UUID messageId = UUID.randomUUID();
+                newMsg.setId(messageId.toString());
+                inbox.addMessage(newMsg);
+            }
             this.setChanged();
         }
 
@@ -668,8 +674,8 @@ public class MessageController extends Observable {
     }
 
     public void sendMeeting(String messageId) {
-        copyMessageToFolder(messageId, getOutboxFolderId());
         moveMessageToFolder(messageId, getMeetingsFolderId());
+        copyMessageToFolder(messageId, getOutboxFolderId());
     }
 
     public MeetingSummary getMeetingSummary(String messageId) {
