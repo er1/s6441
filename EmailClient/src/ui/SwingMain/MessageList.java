@@ -35,6 +35,9 @@ public class MessageList extends JTable {
         this.controller = MessageController.getInstance();
         this.content = content;
         this.toolribbon = toolribbon;
+
+        this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+
         ListSelectionModel lsm = this.getSelectionModel();
         lsm.addListSelectionListener(new ListSelectionListener() {
             @Override
