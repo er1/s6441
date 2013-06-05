@@ -22,6 +22,10 @@ public class MeetingSummary {
     private String meetingDate;
     private String meetingId;
 
+    /**
+     *
+     * @param message
+     */
     public MeetingSummary(Message message) {
 
         this.Date(message.getHeaderValue("Date")).
