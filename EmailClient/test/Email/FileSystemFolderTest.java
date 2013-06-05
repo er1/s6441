@@ -103,19 +103,16 @@ public class FileSystemFolderTest {
      */
     @Test
      public void testGetSubfolders() {
-       
-        ArrayList<Folder> expResult = new ArrayList<Folder>();
+        PersistentStorage.getTestingStorage();
+        FileSystemMailbox mailbox = new FileSystemMailbox("TEST_MAILBOX");
+        mailbox.createFolder("level1");
+        mailbox.createFolder("level2");
+
+        ArrayList<Folder> result = mailbox.getSubfolders();
         
-        Folder folder = new TemporaryFolder("folder");
-        Folder f1= new TemporaryFolder("folder1");
-        Folder f2= new TemporaryFolder("folder2");
-        folder.addFolder(f1);
-        folder.addFolder(f2);
-        expResult.add(f1);
-        expResult.add(f2);
-        
-        ArrayList result = folder.getSubfolders();
-        assertEquals(expResult, result);
+        assertEquals(result.size(), 2);
+        assertEquals(result.get(0), "level1");
+        assertEquals(result.get(2), "level2");
     }
 
     /**

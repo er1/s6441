@@ -12,6 +12,20 @@ public abstract class PersistentStorage {
 
     static private PersistentStorage instance;
 
+     /**
+     * Static Factory method to request a Testing Persistent store
+     *
+     * @param mailBoxID
+     * @return A Persistent Storage that uses system memory as a temporary back end
+     */
+    public static PersistentStorage getTestingStorage() {
+        if (instance == null);
+        {
+            instance = new TestStorage();
+            return instance;
+        }
+    }
+    
     /**
      * Static Factory method to request a File System Persistent store
      *
