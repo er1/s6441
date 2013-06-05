@@ -25,7 +25,7 @@ public class MessageController extends Observable {
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
-    
+
     public enum UpdateType { FOLDERS_AND_MESSAGES, MESSAGES };
 
     /**
@@ -595,8 +595,7 @@ public class MessageController extends Observable {
             String message = transfer.getMessageFor(userId);
             Message newMsg = PlainTextMessage.parse(message);
             if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
-                UUID meetingId = UUID.randomUUID();
-                newMsg.setId(meetingId.toString());
+                newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
                 store.getMeetings().addMessage(newMsg);
             } else {
                 UUID messageId = UUID.randomUUID();
@@ -624,6 +623,7 @@ public class MessageController extends Observable {
         Message newMeeting = new PlainTextMessage();
         UUID messageId = UUID.randomUUID();
         newMeeting.setId(messageId.toString());
+        newMeeting.setHeader("X-MeetingId", messageId.toString());
         return getIdfromMessage(newMeeting);
     }
 
