@@ -19,6 +19,9 @@ public class FilterRule {
     public boolean matches(String messageid) {
 
         MessageController controller = MessageController.getInstance();
+        if (controller.getEmailHeader(messageid, "X-MeetingId") == "") {
+            return false;
+        }
         String from = controller.getEmailHeader(messageid, "From");
         String subject = controller.getEmailHeader(messageid, "Subject");
         String content = controller.getEmailContent(messageid);
