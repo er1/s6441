@@ -129,8 +129,6 @@ public class MeetingEditor extends JFrame {
         controller.setEmailContent(messageId, meetingContentTextArea.getText());
         controller.updateDate(messageId);
         controller.sendMeeting(messageId);
-        controller.moveMessageToFolder(messageId, controller.getMeetingsFolderId());
-        controller.copyMessageToFolder(messageId, controller.getOutboxFolderId());
     }
 }
 

@@ -2,13 +2,12 @@ package ui.SwingMain;
 
 import Email.MessageController;
 import Email.Summary;
-import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author chanman
  */
-class FolderTableModel extends AbstractTableModel {
+class FolderTableModel extends TableModelInterface {
 
     MessageController controller;
     protected String[] messages;
@@ -87,6 +86,7 @@ class FolderTableModel extends AbstractTableModel {
 
     }
 
+    @Override
     public String getMessageId(int selected) {
         try {
             return messages[selected];
