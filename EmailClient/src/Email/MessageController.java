@@ -259,7 +259,7 @@ public class MessageController extends Observable {
         Message msg = getMessageFromId(messageId);
         Folder destination = getFolderFromId(destinationFolderId);
         destination.addMessage(msg);
-
+        
         this.setChanged();
         this.notifyObservers();
     }
@@ -658,5 +658,9 @@ public class MessageController extends Observable {
 
     public void saveRules() {
         rules.saveRules();
+    }
+
+    public boolean checkFolderExists(String folderPath) {
+        return rules.isFolderExists(folderPath);
     }
 }

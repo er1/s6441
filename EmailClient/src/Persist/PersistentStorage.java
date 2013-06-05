@@ -123,4 +123,6 @@ public abstract class PersistentStorage {
      * @return true/false
      */
     abstract public boolean moveFolder(String folderToMove, String destinationFolder);
+
+    abstract public boolean isFolderExists(String folderPath); 
 }

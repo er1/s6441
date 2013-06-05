@@ -22,7 +22,6 @@ public class Rules {
 
     private Rules() {
         listOfRules = persistStore.loadRulesFromFileSystem();
-        //applyRules(controller.getInboxFolderId());
         controller.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object o1) {
@@ -67,6 +66,10 @@ public class Rules {
 
     void saveRules() {
         persistStore.saveRulesToFileSystem(listOfRules);
+    }
+
+    public boolean isFolderExists(String folderPath) {
+        return persistStore.isFolderExists(folderPath);    
     }
     
 }

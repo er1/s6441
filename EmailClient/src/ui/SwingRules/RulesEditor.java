@@ -140,9 +140,9 @@ public class RulesEditor extends JFrame{
         Rules.getInstance().applyRules(controller.getInboxFolderId());
     }
 
-    void moveToWarning() {
+    void moveToWarning(String text) {
 
-        JDialog dialog = new JOptionPane("Move To field should not be empty !!",
+        JDialog dialog = new JOptionPane( text,
                 JOptionPane.WARNING_MESSAGE,
                 JOptionPane.DEFAULT_OPTION)
                 .createDialog("Warning");
@@ -161,13 +161,18 @@ public class RulesEditor extends JFrame{
         rule.setcontentField(contentField.getText());
         if (moveToField.getText().isEmpty()) {
             
-            moveToWarning();
-            
+            moveToWarning("Move To field should not be empty !!");
+       
         } else {
-            rule.setmoveToField(moveToField.getText());
-            MessageController.getInstance().addRule(rule);
-            return true;
-        } 
+
+            if ( ! checkFolderExists(moveToField.getText())) {
+                moveToWarning("Destination folder does not exist !!");
+            } else {
+                rule.setmoveToField(moveToField.getText());
+                MessageController.getInstance().addRule(rule);
+                return true;
+            }
+        }
         return false;
     }
     
@@ -176,11 +181,19 @@ public class RulesEditor extends JFrame{
         rule.setFromField(fromEditField.getText());
         rule.setsubjectField(subjectEditField.getText());
         rule.setcontentField(contentEditField.getText());
-        if (moveToEditField.getText().isEmpty()) {
-            moveToWarning();
+        if (moveToField.getText().isEmpty()) {
+            
+            moveToWarning("Move To field should not be empty !!");
+       
         } else {
-            rule.setmoveToField(moveToEditField.getText());
-            return true;
+
+            if ( ! checkFolderExists(moveToEditField.getText())) {
+                moveToWarning("Destination folder does not exist !!");
+            } else {
+                rule.setmoveToField(moveToEditField.getText());
+                MessageController.getInstance().addRule(rule);
+                return true;
+            }
         }
         return false;
     }
@@ -308,6 +321,11 @@ public class RulesEditor extends JFrame{
         editFrame.setVisible(true);
         
     }
+
+    private boolean checkFolderExists(String folderPath) {
+        return controller.checkFolderExists(folderPath);
+    }
+    
     public static class RulesTableModel extends AbstractTableModel {
 
         String[] listOfRules;
