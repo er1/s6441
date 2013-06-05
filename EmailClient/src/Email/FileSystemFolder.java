@@ -159,7 +159,16 @@ public class FileSystemFolder implements Folder {
     @Override
     public void deleteMessage(Message msg) {
         persistStore.deleteMessage(msg.getId());
-        this.messages.remove(msg);
+
+        String keytoremove = null;
+        for (String s : messages.keySet()) {
+            if (messages.get(s) == msg) {
+                keytoremove = s;
+            }
+        }
+        if (keytoremove != null) {
+            this.messages.remove(keytoremove);
+        }
         sync();
     }
 

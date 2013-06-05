@@ -147,6 +147,9 @@ public class MessageController extends Observable {
      */
     public void setEmailContent(String id, String content) {
         Message message = getMessageFromId(id);
+        if (message == null) {
+            return;
+        }
         message.setContent(content);
 
         // update anyone waiting on updates
@@ -163,6 +166,11 @@ public class MessageController extends Observable {
      */
     public Summary getEmailSummary(String messageId) {
         Message message = getMessageFromId(messageId);
+        if (message == null) {
+            return null;
+        }
+
+
         Summary summary = new Summary(message);
 
         return summary;
@@ -177,6 +185,10 @@ public class MessageController extends Observable {
      */
     public void setEmailHeader(String messageId, String key, String value) {
         Message msg = getMessageFromId(messageId);
+        if (msg == null) {
+            return;
+        }
+
         msg.setHeader(key, value);
 
         // update anyone waiting on updates
@@ -194,6 +206,11 @@ public class MessageController extends Observable {
      */
     public String getEmailHeader(String messageId, String key) {
         Message msg = getMessageFromId(messageId);
+
+        if (msg == null) {
+            return "";
+        }
+
         return msg.getHeaderValue(key);
     }
 
