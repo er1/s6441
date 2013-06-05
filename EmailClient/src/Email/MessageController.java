@@ -628,4 +628,15 @@ public class MessageController extends Observable {
     public int getRulesCount() {
         return rules.getListOfRules().size();
     }
+
+    public void sendMeeting(String messageId) {
+        moveMessageToFolder(messageId, getMeetingsFolderId());
+        copyMessageToFolder(messageId, getOutboxFolderId());
+    }
+
+    public void copyMessageToFolder(String messageId, String outboxFolderId) {
+        Message msg = getMessageFromId(messageId);
+        Folder destination = getFolderFromId(outboxFolderId);
+        destination.addMessageCopy(msg);
+    }
 }

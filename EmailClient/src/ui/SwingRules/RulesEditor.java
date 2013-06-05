@@ -100,11 +100,11 @@ public class RulesEditor extends JFrame{
                 model = new RulesTableModel(MessageController.getInstance());
                 model.fireTableDataChanged();
                 rulesTable.setModel(model);
-            }   
+            }
         });
-        
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
+
+        JButton doneButton = new JButton("Done");
+        doneButton.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -112,27 +112,27 @@ public class RulesEditor extends JFrame{
                 dispose();
             }
         });
-        
+
         buttonPanel.add(createButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
-        buttonPanel.add(cancelButton);
-        
+        buttonPanel.add(doneButton);
+
         this.setLayout(new BorderLayout());
         this.add(new JLabel("List Of Rules:"), BorderLayout.NORTH);
         this.add(rulesPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.setSize(500, 200);
-        
+
 
     }
-    
+
     void deleteRule(int ruleId) {
         if(ruleId != -1) {
             MessageController.getInstance().deleteRule(ruleId);
         }
     }
-    
+
     void moveToWarning() {
 
         JDialog dialog = new JOptionPane("Move To field should not be empty !!",
