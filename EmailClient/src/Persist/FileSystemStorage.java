@@ -299,4 +299,13 @@ class FileSystemStorage extends PersistentStorage {
             Logger.getLogger(FileSystemStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public boolean isFolderExists(String folderPath) {
+        String fullPath = mailBoxPath + File.separator + folderPath;
+        File file = new File(fullPath);
+        if ( !file.exists() )
+            return false;
+        return true;
+    }
 }
