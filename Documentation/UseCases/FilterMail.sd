@@ -10,6 +10,7 @@ model:Model[a]
 
 user:view.Filter Mail
 view:Show GUI to User=controller.FilterRule()
+controller:getRule=model.getRule(InputGUI)
 controller:mailList=model.findMails(FolderID, Filter Rules)
 controller:mailmoved=model.moveMails(mailID, FolderID)
 controller:view.updateGUIInterface()

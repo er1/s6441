@@ -1,0 +1,19 @@
+#![Search]
+#!>>
+#!Search mail using text input given by the user.
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Search Mail
+view:Get List of Mails To GUI=controller.SearchText()
+controller:getText=model.SearchBar()
+controller:searchMail=model.getMails(searchText)
+controller:updateGUI=model.showMails(mailID)
+controller:view.update()
+controller:view.updateFileSystem()
+view:returnUpadatedGui=model.getUpdatedGUI(Folder)
+

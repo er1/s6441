@@ -1,0 +1,18 @@
+#![Template]
+#!>>
+#!Template mail for predefined user mails.
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Template Mail
+view:Store Template=controller.getTemplate ()
+controller:getText=model.composeMail()
+controller:searchMail=model.getMails(searchText)
+controller:updateGUI=model.showMails(mailID)
+controller:view.update()
+controller:view.updateFileSystem()
+view:returnUpadatedGui=model.getUpdatedGUI(Folder)

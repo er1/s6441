@@ -1,0 +1,19 @@
+#![Meeting]
+#!>>
+#!Meeting mail using meeting created by the user and sending mail to the respected user who are in the meeting list
+#!<<
+
+user:Actor
+view:View[a]
+controller:Controller[a]
+model:Model[a]
+
+user:view.Meeting
+view:Show GUI to User=controller.CreateMeeting()
+controller:getMeeting=model.MeetingINputGUI()
+controller:check Timeing=model.resolvetimings(meetingID)
+controller:sendMail=model.callMeeting(mailList)
+controller:view.updateGUIInterface()
+controller:view.updateFileSystem()
+view:returnUpadatedGui=model.getUpdatedGUI(Folder)
+
