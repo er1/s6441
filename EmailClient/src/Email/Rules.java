@@ -4,11 +4,10 @@
  */
 package Email;
 
+import Persist.PersistentStorage;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.table.AbstractTableModel;
-
 
 /**
  *
@@ -18,12 +17,12 @@ public class Rules {
 
     static private Rules rules;
     MessageController controller = MessageController.getInstance();
+    PersistentStorage persistStore = PersistentStorage.getInstance();
     ArrayList<FilterRule> listOfRules = new ArrayList<FilterRule>();
 
-    public Rules() {
-
-        Rules.rules = this;
-        //createDummyRule();
+    private Rules() {
+        listOfRules = persistStore.loadRulesFromFileSystem();
+        //applyRules(controller.getInboxFolderId());
         controller.addObserver(new Observer() {
             @Override
             public void update(Observable o, Object o1) {
@@ -32,20 +31,14 @@ public class Rules {
         });
     }
     
-    private void createDummyRule(){
-        FilterRule rule1 = new FilterRule();
-        rule1.setRuleId("1");
-        rule1.setFromField("Bob");
-        rule1.setcontentField("hi");
-        rule1.setsubjectField("hi");
-        rule1.setmoveToField("test/Inbox/name");
-        listOfRules.add(rule1);
-    }
     public ArrayList getListOfRules() {
         return listOfRules;
     }
     
     public static Rules getInstance() {
+        if (rules == null){
+            rules = new Rules();
+        }
         return rules;
     }
 
@@ -72,4 +65,8 @@ public class Rules {
             listOfRules.remove(ruleId);
     }
 
+    void saveRules() {
+        persistStore.saveRulesToFileSystem(listOfRules);
+    }
+    
 }

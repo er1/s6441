@@ -23,7 +23,7 @@ public class MessageList extends JTable {
     Content content;
     String folderid;
     ToolRibbon toolribbon;
-    FolderTableModel model;
+    TableModelInterface model;
 
     /**
      * Constructor
@@ -97,7 +97,11 @@ public class MessageList extends JTable {
     public void displayFolder(String folderId) {
         this.folderid = folderId;
 
-        model = new FolderTableModel(folderId);
+        if (folderId.equals(controller.getMeetingFolderId())) {
+            model = new MeetingFolderTableModel(folderId);
+        } else {
+            model = new FolderTableModel(folderId);
+        }
         this.setModel(model);
 
         toolribbon.setSelectedFolder(folderId);

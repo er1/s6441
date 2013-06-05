@@ -51,6 +51,4 @@ class SwingUserInterface extends UserInterface {
         frame.dispose();
         return inputString;
     }
-
-
 }

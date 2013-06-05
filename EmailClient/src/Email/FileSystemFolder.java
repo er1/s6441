@@ -130,9 +130,13 @@ public class FileSystemFolder implements Folder {
 
     @Override
     public void addMessageCopy(Message msg) {
-        //FIXME: Currenlty Assuming this is save to existing message
-        //TODO check that toString is implemented
-        persistStore.saveMessage(msg.getId(), msg.toString());
+        PlainTextMessage m = (PlainTextMessage) msg;
+        String id = m.getId();
+        String fn = id.substring(id.lastIndexOf(File.separator) + 1);
+        String newid = this.getPath() + File.separator + fn;
+        msg.setId(newid);
+        persistStore.newMessage(m.getId());
+        persistStore.saveMessage(m.getId(), m.serialize());
         sync();
     }
 

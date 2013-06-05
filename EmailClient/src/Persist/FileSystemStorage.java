@@ -1,5 +1,6 @@
 package Persist;
 
+import Email.FilterRule;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.Util;
@@ -35,6 +37,7 @@ class FileSystemStorage extends PersistentStorage {
         newFolder(mailBoxPath + File.separator + mailBoxID); // FIXME:
         this.mailBoxID = mailBoxID;
         initialiseMailboxFolder();
+        newRuleFileInMailbox(File.separator + mailBoxID + File.separator + "rules.txt");
         //    this.instance = this;
         //  }
     }
@@ -64,6 +67,17 @@ class FileSystemStorage extends PersistentStorage {
         File folder = new File(mailBoxPath + newFolderPath);
         //TODO Handle return?
         return folder.mkdir();
+    }
+
+    @Override
+    public boolean newRuleFileInMailbox(String path) {
+        File file = new File(mailBoxPath + path);
+        try {
+            return file.createNewFile();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     @Override
@@ -223,6 +237,66 @@ class FileSystemStorage extends PersistentStorage {
         for (String folder : initialFolders) {
             logger.log(Level.INFO, "{0}{1}{2}{3}", new Object[]{File.separator, mailBoxID, File.separator, folder});
             newFolderInMailbox(File.separator + mailBoxID + File.separator + folder);
+        }
+    }
+
+    @Override
+    public ArrayList<FilterRule> loadRulesFromFileSystem() {
+        
+        ArrayList<FilterRule> listOfRules= new ArrayList<FilterRule>();
+        
+        String path = mailBoxPath + File.separator + mailBoxID + File.separator + "rules.txt";
+
+        StringBuilder text = new StringBuilder();
+        String NL = System.getProperty("line.separator");
+        Scanner scanner = null;
+
+        try {
+            scanner = new Scanner(new FileInputStream(path));
+            scanner.useDelimiter(NL);         
+            while (scanner.hasNext()) {
+                FilterRule rule = new FilterRule();
+                String line = scanner.next();
+
+                Scanner lineScanner = new Scanner(line);
+                lineScanner.useDelimiter("---");
+                rule.setRuleId(UUID.randomUUID().toString());
+                rule.setFromField(lineScanner.next());
+                rule.setsubjectField(lineScanner.next());
+                rule.setcontentField(lineScanner.next());
+                rule.setmoveToField(lineScanner.next());
+                listOfRules.add(rule);
+            }
+
+        } catch (FileNotFoundException ex) {
+            System.out.println("File not found");
+        } finally {
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+        return listOfRules;
+    }
+
+    @Override
+    public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules) {
+        
+        String path = mailBoxPath + File.separator + mailBoxID + File.separator + "rules.txt";
+        File file = new File(path);
+        String delimiter = "---";
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            for(FilterRule rule : listOfRules) {
+                String line = rule.getFromField() + delimiter + rule.getsubjectField() + 
+                        delimiter + rule.getcontentField() + delimiter + rule.getmoveToField();
+                outputStream.write(line.getBytes());
+                outputStream.write("\n".getBytes());
+            }
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(FileSystemStorage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FileSystemStorage.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

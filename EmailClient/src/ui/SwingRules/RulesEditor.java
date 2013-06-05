@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import ui.LabeledTextField;
 import Email.FilterRule;
+import Email.Rules;
 import java.awt.GridLayout;
 import java.util.UUID;
 import javax.swing.JDialog;
@@ -100,39 +101,45 @@ public class RulesEditor extends JFrame{
                 model = new RulesTableModel(MessageController.getInstance());
                 model.fireTableDataChanged();
                 rulesTable.setModel(model);
-            }   
-        });
-        
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                setVisible(false);
-                dispose();
             }
         });
-        
+
+        JButton doneButton = new JButton("Done");
+        doneButton.setToolTipText("Apply rules to Inbox");
+        doneButton.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                applyRule();
+                controller.saveRules();
+                setVisible(false);
+                dispose();                
+            }
+        });
+
         buttonPanel.add(createButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
-        buttonPanel.add(cancelButton);
-        
+        buttonPanel.add(doneButton);
+
         this.setLayout(new BorderLayout());
         this.add(new JLabel("List Of Rules:"), BorderLayout.NORTH);
         this.add(rulesPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
         this.setSize(500, 200);
-        
-
+       
     }
-    
+
     void deleteRule(int ruleId) {
         if(ruleId != -1) {
             MessageController.getInstance().deleteRule(ruleId);
         }
     }
-    
+
+    void applyRule() {
+        Rules.getInstance().applyRules(controller.getInboxFolderId());
+    }
+
     void moveToWarning() {
 
         JDialog dialog = new JOptionPane("Move To field should not be empty !!",
@@ -173,7 +180,6 @@ public class RulesEditor extends JFrame{
             moveToWarning();
         } else {
             rule.setmoveToField(moveToEditField.getText());
-            //controller.updateRule(rule);
             return true;
         }
         return false;

@@ -1,5 +1,6 @@
 package Email;
 
+import Meeting.MeetingSummary;
 import Persist.MessageTransfer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -254,6 +255,15 @@ public class MessageController extends Observable {
         Message msg = getMessageFromId(messageId);
         Folder destination = getFolderFromId(destinationFolderId);
         destination.addMessage(msg);
+
+        this.setChanged();
+        this.notifyObservers();
+    }
+
+    public void copyMessageToFolder(String messageId, String folderId) {
+        Message msg = getMessageFromId(messageId);
+        Folder destination = getFolderFromId(folderId);
+        destination.addMessageCopy(msg);
 
         this.setChanged();
         this.notifyObservers();
@@ -595,7 +605,7 @@ public class MessageController extends Observable {
     }
 
     public void loadRules() {
-        rules = new Rules();
+        rules = Rules.getInstance();
     }
 
     public void addRule(FilterRule rule) {
@@ -628,5 +638,21 @@ public class MessageController extends Observable {
 
     public int getRulesCount() {
         return rules.getListOfRules().size();
+    }
+
+    public void sendMeeting(String messageId) {
+        copyMessageToFolder(messageId, getOutboxFolderId());
+        moveMessageToFolder(messageId, getMeetingsFolderId());
+    }
+
+    public MeetingSummary getMeetingSummary(String messageId) {
+        Message message = getMessageFromId(messageId);
+        MeetingSummary summary = new MeetingSummary(message);
+
+        return summary;
+    }
+
+    public void saveRules() {
+        rules.saveRules();
     }
 }
