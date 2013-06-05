@@ -127,6 +127,8 @@ public class MeetingEditor extends JFrame {
         controller.setEmailHeader(messageId, "MeetingDate", dateField.getText());
         controller.setEmailHeader(messageId, "MeetingStartTime", startTimeField.getText());
         controller.setEmailHeader(messageId, "MeetingEndTime", endTimeField.getText());
+        controller.setEmailHeader(messageId, "From", controller.getRootFolderId());
+
         //UID to identify meeting across different clients
         UUID meetingId = UUID.randomUUID();
         controller.setEmailHeader(messageId,"X-MeetingId",meetingId.toString());

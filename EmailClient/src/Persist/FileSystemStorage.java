@@ -90,7 +90,7 @@ class FileSystemStorage extends PersistentStorage {
         mesageList = Util.newArrayList();
         File[] allFiles = parentFolder.listFiles();
         for (File file : allFiles) {
-            if (file.isFile()) {
+            if (file.isFile() && !(file.getName().equals("rules.txt"))) {
                 mesageList.add(folder + File.separator + file.getName());
                 logger.log(Level.INFO, mesageList.toString());
             }
