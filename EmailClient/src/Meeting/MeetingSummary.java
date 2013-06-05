@@ -20,6 +20,7 @@ public class MeetingSummary {
     private String startTime;
     private String endTime;
     private String meetingDate;
+    private String meetingId;
 
     public MeetingSummary(Message message) {
 
@@ -32,6 +33,7 @@ public class MeetingSummary {
                 StartTime(message.getHeaderValue("MeetingStartTime")).
                 EndTime(message.getHeaderValue("MeetingEndTime")).
                 MeetingDate(message.getHeaderValue("MeetingDate")).
+                MeetingID(message.getHeaderValue("X-MeetingId")).
                 Read(message.getHeaderValue("X-Read").length() > 0);
     }
 
@@ -176,6 +178,10 @@ public class MeetingSummary {
     public String getMeetingDate() {
         return meetingDate;
     }
+
+    public String getMeetingId() {
+        return meetingId;
+    }
     /**
      * Is message read
      *
@@ -197,6 +203,11 @@ public class MeetingSummary {
 
     MeetingSummary MeetingDate(String meetingDate) {
         this.meetingDate = meetingDate;
+        return this;
+    }
+
+    MeetingSummary MeetingID(String meetingId) {
+        this.meetingId = meetingId;
         return this;
     }
 }
