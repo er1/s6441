@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
@@ -116,7 +117,7 @@ public class FileSystemStorageTest {
     /**
      * Test of deleteFolderAndAllContents method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testDeleteFolder() {
         System.out.println("deleteFolder");
         String folder = "";
@@ -129,7 +130,7 @@ public class FileSystemStorageTest {
     /**
      * Test of moveMessageToFolder method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testMoveMessageToFolder() {
         System.out.println("moveMessageToFolder");
         String message = "";
@@ -143,7 +144,7 @@ public class FileSystemStorageTest {
     /**
      * Test of newMessage method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testNewMessage() {
         System.out.println("newMessage");
         String folder = "";
@@ -156,7 +157,7 @@ public class FileSystemStorageTest {
     /**
      * Test of saveMessage method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testSaveMessage() {
         System.out.println("saveMessage");
         String message = "";
@@ -170,7 +171,7 @@ public class FileSystemStorageTest {
     /**
      * Test of loadMessage method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testLoadMessage() {
         System.out.println("loadMessage");
         String message = "";
@@ -185,7 +186,7 @@ public class FileSystemStorageTest {
     /**
      * Test of deleteMessage method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testDeleteMessage() {
         System.out.println("deleteMessage");
         String message = "";
@@ -198,7 +199,7 @@ public class FileSystemStorageTest {
     /**
      * Test of moveFolder method, of class FileSystemStorage.
      */
-    @Test
+    @Ignore
     public void testMoveFolder() {
         System.out.println("moveFolder");
         String folderToMove = "";
