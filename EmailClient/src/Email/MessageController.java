@@ -302,9 +302,7 @@ public class MessageController extends Observable {
         Message newMsg = new PlainTextMessage();
         UUID messageId = UUID.randomUUID();
         newMsg.setId(messageId.toString());
-        Folder drafts = store.getDrafts();
-        //drafts.addMessage(newMsg);
-
+ 
         String id = getIdfromMessage(newMsg);
         markRead(id);
         return id;
