@@ -41,6 +41,41 @@ This imposes a restriction that only one Mailbox can be used per instance of the
 `ui.*` accesses `MessageController` to provide Swing widgets for the application.
 
 
+### Protocols
+
+We elected to use the standard set out by RFC #822 as our means of storing our messages. While this is an older standard that has been superceded, new versions remain backward compatible. This allowed us to store messages in a standards compliant way while avoiding implenting additional features from newer versions. Following this standards affords us the possibility to use existing mail protocols with minimal effort.
+
+#### Example
+
+Here is an example of an RFC #822
+
+	Date:     26 Aug 76 1429 EDT
+	To:       Smith@Registry.Org
+	From:     Jones@Registry.Org
+	
+	This is a sample message
+
+Messages are plaintext messages broken down into two parts: a header and a message body.
+
+The header is a series of key value pairs one per line with the first colon delimiting the key from the value. Lines are defined has having a new line character optionally preceded by a cariage return (i.e. regex /\r?\n/). At the end of the header is one empty line marking the end of the header.
+The message body is every character following the empty line after the header and should be taken verbatim.
+Future standards define formats for the message body to allow attachments and html formatting however that is beyond the scope of this document and application.
+
+At this time, the application does not have network support but with minimal effort SMTP can be implemented for sending outbound messages in the real world and POP3 can potentially be used to get mail from a mail server.
+
+SMTP can be achived by opening a socket to a compliant server and sending something similar to the following:
+
+	HELO <myhostname>
+	MAIL FROM:<myaddress>
+	RCPT TO:<a destination>
+	RCPT TO:<another destination as many times as needed>
+	DATA
+	<the RFC 822 compliant message>
+	.
+	QUIT
+
+This doesnt care for errors but is minimal enough to just work.
+
 ### Initail GUI
 
 Email Client ID gui gets userID from the user to create a new Email client for the particular user.
