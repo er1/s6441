@@ -96,8 +96,8 @@ public class FileSystemStorageTest {
     @Test
     public void testLoadMessageListFromFolder() {
         System.out.println("loadMessageListFromFolder");
-        String folder = "";
-        ArrayList<String> expResult = new ArrayList<String>();
+        String folder = "Inbox";
+        ArrayList<String> expResult = null;
         ArrayList<String> result = instance.loadMessageListFromFolder(folder);
         assertEquals(expResult, result);
     }

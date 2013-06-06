@@ -14,7 +14,7 @@ import org.junit.Ignore;
 
 /**
  *
- * @author ChinnaChinni
+ * @author Bargavi
  */
 public class FilterRuleTest {
     
@@ -51,24 +51,37 @@ public class FilterRuleTest {
     }
 
     /**
-     * Test of setFromField method, of class FilterRule.
+     * Test of setAndGetRuleId method, of class FilterRule.
      */
+    
     @Test
-    public void testFilterRule() {
-        
+    public void testGetAndSetRuleId() {
+        FilterRule rule = new FilterRule();
+        rule.setRuleId("Rule1");
+        assertEquals("Rule1", rule.getRuleId());
+    }
+    @Test
+    public void testGetAndSetFromField() {
         FilterRule rule1 = new FilterRule();
-        rule1.setRuleId("1");
         rule1.setFromField("Bob");
-        rule1.setcontentField("hi");
-        rule1.setsubjectField("hi");
-        rule1.setmoveToField("test/Inbox/name");
-        
-        assertEquals("1", rule1.getRuleId());
         assertEquals("Bob", rule1.getFromField());
-        assertEquals("hi", rule1.getsubjectField());
-        assertEquals("hi", rule1.getcontentField());
+    }
+    @Test
+    public void testGetAndSetSubjectField() {
+        FilterRule rule1 = new FilterRule();
+        rule1.setsubjectField("Hello");
+        assertEquals("Hello", rule1.getsubjectField());
+    }
+    @Test
+    public void testGetAndSetcontentField() {
+        FilterRule rule1 = new FilterRule();
+        rule1.setcontentField("This is a message");
+        assertEquals("This is a message", rule1.getcontentField());
+    }
+    @Test
+    public void testGetAndSetMoveToField() {
+        FilterRule rule1 = new FilterRule();
+        rule1.setmoveToField("test/Inbox/name");
         assertEquals("test/Inbox/name", rule1.getmoveToField());
     }
-
-   
 }
