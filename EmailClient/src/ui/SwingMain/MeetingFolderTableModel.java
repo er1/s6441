@@ -25,7 +25,7 @@ class MeetingFolderTableModel extends TableModelInterface {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -40,6 +40,8 @@ class MeetingFolderTableModel extends TableModelInterface {
             case 3:
                 return "From";
             case 4:
+                return "To";
+            case 5:
                 return "Subject";
             default:
                 return new String();
@@ -62,6 +64,8 @@ class MeetingFolderTableModel extends TableModelInterface {
             case 3:
                 return summary.getFrom();
             case 4:
+                return summary.getTo();
+            case 5:
                 return summary.getSubject();
             default:
                 return new String();
