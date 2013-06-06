@@ -24,12 +24,16 @@ public class MeetingSummaryTest {
     public void setUp() {
         
         msg = new PlainTextMessage();
-        msg.parse("Date: 01 Jan 01 1970 GMT\r\n"
+        msg.parse("MeetingStartTime: 12:39\r\n"
+                + "X-MeetingId: 1e6239bb-f8c6-4a27-96ab-05305d116009\r\n"
+                + "MeetingEndTime: 12:59\r\n"
+                + "MeetingDate: 06/06/2013\r\n"
+                + "Date: 01 Jan 01 1970 GMT\r\n"
                 + "From: toor@example.com\r\n"
                 + "To: alice@example.com\r\n"
                 + "Subject: Hello\r\n"
                 + "\r\n"
-                + "Hello, World\r\n");
+                + "Pls attend the meeting\r\n");
         this.instance = new MeetingSummary(msg);
     }
     

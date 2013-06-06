@@ -51,9 +51,9 @@ public class FileSystemFolderProxyTest {
      */
     @Test
     public void testGetId() {
-        System.out.println("getId");
+        
         FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
-        String expResult = "TEST_MAILBOX";
+        String expResult = "TEST_MAILBOX" + File.separator + "level1";
         String result = instance.getId();
         assertEquals(expResult, result);
     }
@@ -63,7 +63,7 @@ public class FileSystemFolderProxyTest {
      */
     @Test
     public void testGetPath() {
-        System.out.println("getPath");
+        
         FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         String expResult = "TEST_MAILBOX" + File.separator + "level1";
         String result = instance.getPath();
@@ -75,7 +75,7 @@ public class FileSystemFolderProxyTest {
      */
     @Test
     public void testGetName() {
-        System.out.println("getName");
+        
         FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         String expResult = "level1";
         String result = instance.getName();
@@ -87,11 +87,11 @@ public class FileSystemFolderProxyTest {
      */
     @Ignore
     public void testSetName() {
-        System.out.println("setName");
+        
         String name = "";
         FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);;
         instance.setName(name);
-        // TODO review the generated test code and remove the default call to fail.
+        
     }
 
     /**
@@ -164,27 +164,20 @@ public class FileSystemFolderProxyTest {
     /**
      * Test of addFolder method, of class FileSystemFolderProxy.
      */
-    @Ignore
-    public void testAddFolder() {
-        System.out.println("addFolder");
-        Folder folder = null;
-        FileSystemFolderProxy instance = null;
-        instance.addFolder(folder);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of deleteFolder method, of class FileSystemFolderProxy.
-     */
-    @Ignore
-    public void testDeleteFolder() {
-        System.out.println("deleteFolder");
-        Folder folder = null;
-        FileSystemFolderProxy instance = null;
-        instance.deleteFolder(folder);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    @Test
+    public void testAddAndDeleteFolder() {
+   
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);;
+        
+        PersistentStorage.getTestingStorage();
+        
+        String testname = "zzz-test-zzz";
+        
+        Folder t = new FileSystemFolderProxy(testname, mailbox);
+        
+        instance.addFolder(t);
+        
+        instance.deleteFolder(t);
     }
 
     /**
