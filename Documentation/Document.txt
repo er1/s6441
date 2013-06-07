@@ -42,9 +42,7 @@ The Email Client project is broken up into three main layers or packages
  
 #### Persist
 Persist provides objects to create move delete and otherwise manage files in the filesystem with no notion of how Messages work higher up.
-#### USE CASE DIAGRAM:
-Use case diagram explains how the persistent storage has been created and used throughout  the project 
-![Use case Diagram](UseCases/Usecase/fileSystemStorage.png "Persistent Storage ")
+
 
 #### Email
 >Email contains most of the work for handling messages such as accessing Persist for storage and maps concepts such as Emails and Folders to Objects such as `Message` and `Folder`.
@@ -55,8 +53,6 @@ Use case diagram explains how the persistent storage has been created and used t
 
 #### User Interface
 `ui.*` accesses `MessageController` to provide Swing widgets for the application.
-![Use case Diagram](UseCases/Usecase/GUIwindow.png "Persistent Storage ")
-![Use case Diagram](UseCases/Usecase/MainWindow.png "Persistent Storage ")
 
 
 ### Protocols
@@ -197,9 +193,14 @@ Right Click Event is enabled for all events in the GUI,
 ### Meeting :
 > Meeting is a features which is been added to the phase 2 of project, by creating a new class which extends the summary class of the Message List.  So that, we can get the controller class to send the msg between users involved in the meeting. By using the send and receive mail.
 - We have created the meeting in such a way that the user gets the mail directly to his meeting folder, which is easy for identification.
--  User are allowed to create, edit and delete meeting .
--  Validation like checking date and time is done
-![Use case Diagram](UseCases/Usecase/meeting.png "Meeting ")
+- User are allowed to create, edit and delete meeting .
+- Validation like checking date and time is done
+- We extended Messages to represent meetings.
+- A meeting is a special kind of Message. It adds the Start and End Time, and Meeting Date.
+- We also kept the ID of the message consistent across all mailboxes to ensure updates/accepts/declines to meetings would reflect to all recipients.
+
+By using the date modified tag to keep track of latest update, in the future we could reject incoming changes that are done to an out of date meeting. And in phase 3 we will implement this to all multiple recepients to update meetings between themselves.
+
 
 ### Filters :
 > Filter allows the user to make the new mails redirected to a folder depending on the rules he wants. 
@@ -212,7 +213,7 @@ Right Click Event is enabled for all events in the GUI,
 - We made the class in view so the class has a control over the message class, Where we can access the mails from the persistent storage through a facade which has been created for the view.
 - Search mail search for text throughout  persistent  storage and stores the matching mail to a array, which display it to the user though JTable in the Main Window.
 
-![Use case Diagram](UseCases/Usecase/SwingMeeting.png "Meeting ")
+
 
 
       
