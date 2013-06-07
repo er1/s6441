@@ -30,10 +30,18 @@ public class Rules {
         });
     }
 
+    /**
+     * Get the list of Rules
+     * @return listOfRules array list
+     */
     public ArrayList getListOfRules() {
         return listOfRules;
     }
 
+    /**
+     * Get the instance of Rules
+     * @return Rules instance 
+     */
     public static Rules getInstance() {
         if (rules == null) {
             rules = new Rules();
@@ -41,6 +49,10 @@ public class Rules {
         return rules;
     }
 
+    /**
+     * Apply rules to the folder
+     * @param folderId
+     */
     public void applyRules(String folderId) {
 
         String[] messages = controller.getEmailList(folderId);
@@ -55,20 +67,35 @@ public class Rules {
         }
     }
 
+    /**
+     * Add a rule in the listOfRules
+     * @param rule
+     */
     public void addRule(FilterRule rule) {
         listOfRules.add(rule);
     }
 
+    /**
+     * Delete a rule in the listOfRules
+     * @param ruleId
+     */
     public void deleteRule(int ruleId) {
         if (listOfRules.size() > ruleId) {
             listOfRules.remove(ruleId);
         }
     }
-
-    void saveRules() {
+    /**
+     * Save rules in the persistStore
+     */
+    public void saveRules() {
         persistStore.saveRulesToFileSystem(listOfRules);
     }
 
+    /**
+     * Checks a folder exists or not
+     * @param folderPath
+     * @return True/False
+     */
     public boolean isFolderExists(String folderPath) {
         return persistStore.isFolderExists(folderPath);
     }
