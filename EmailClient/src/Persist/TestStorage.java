@@ -40,11 +40,19 @@ public class TestStorage extends PersistentStorage {
         return true;
     }
 
+    /**
+     * Load rules from file system when startup
+     * @return listOfRules
+     */
     @Override
     public ArrayList<FilterRule> loadRulesFromFileSystem() {
         return new ArrayList<FilterRule>();
     }
 
+    /**
+     * Store rules to file system
+     * @param listOfRules
+     */
     @Override
     public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules) {
     }
@@ -147,6 +155,11 @@ public class TestStorage extends PersistentStorage {
         return true;
     }
 
+    /**
+     * Check folder exists or not
+     * @param folderPath
+     * @return True/False
+     */
     @Override
     public boolean isFolderExists(String folderPath) {
         return content.containsKey(folderPath + File.separator);

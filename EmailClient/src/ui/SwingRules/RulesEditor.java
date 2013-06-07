@@ -49,10 +49,16 @@ public class RulesEditor extends JFrame{
     
     MessageController controller = MessageController.getInstance();
     
+    /**
+     * Constructor of RulesEditor
+     */
     public RulesEditor() {
         super("Rules/Filters");
     }
     
+    /**
+     * Function to initialize Rules window
+     */
     public void init() {
         
         JPanel rulesPanel = new JPanel();
@@ -331,28 +337,49 @@ public class RulesEditor extends JFrame{
         return controller.checkFolderExists(folderPath);
     }
     
+    /**
+     * Rules table model class
+     */
     public static class RulesTableModel extends AbstractTableModel {
 
         String[] listOfRules;
         MessageController controller;
         String[] columnNames = {"From","Subject","Content","MoveTo.."};
         
+        /**
+         * constructor to initialize listOfRules
+         * @param controller
+         */
         public RulesTableModel(MessageController controller) {
           
             this.controller = controller;
             listOfRules = controller.getRuleList();
         }
         
+        /**
+         * Get the total number of rules
+         * @return count
+         */
         @Override
         public int getRowCount() {
             return listOfRules.length;
         }
 
+        /**
+         * Get the column count
+         * @return
+         */
         @Override
         public int getColumnCount() {   
             return 4;
         }
 
+        /**
+         * Get the value of particular cell in JTable
+         * @param row
+         * @param col
+         * @return
+         */
         @Override
         public Object getValueAt(int row, int col) {
             
@@ -378,11 +405,21 @@ public class RulesEditor extends JFrame{
             }
         }
         
+        /**
+         * Get the column names
+         * @param col
+         * @return names
+         */
         @Override
         public String getColumnName(int col) {
             return columnNames[col];
         }
 
+        /**
+         * Get the rule of selected rule
+         * @param selected
+         * @return rule id
+         */
         public String getRuleId(int selected) {
             try {
                 return listOfRules[selected];

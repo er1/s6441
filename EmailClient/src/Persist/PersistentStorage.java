@@ -15,7 +15,6 @@ public abstract class PersistentStorage {
      /**
      * Static Factory method to request a Testing Persistent store
      *
-     * @param mailBoxID
      * @return A Persistent Storage that uses system memory as a temporary back end
      */
     public static PersistentStorage getTestingStorage() {
@@ -81,8 +80,16 @@ public abstract class PersistentStorage {
      */
     abstract public boolean newRuleFileInMailbox(String path);
 
+    /**
+     *
+     * @return
+     */
     abstract public ArrayList<FilterRule> loadRulesFromFileSystem();
 
+    /**
+     *
+     * @param listOfRules
+     */
     abstract public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules);
 
     /**
@@ -160,5 +167,10 @@ public abstract class PersistentStorage {
      */
     abstract public boolean moveFolder(String folderToMove, String destinationFolder);
 
+    /**
+     *
+     * @param folderPath
+     * @return
+     */
     abstract public boolean isFolderExists(String folderPath); 
 }

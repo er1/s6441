@@ -27,10 +27,10 @@ public class MessageList extends JTable {
     TableModelInterface model;
 
     /**
-     * Constructor
+     * Constructor of MessageList
      *
-     * @param controller
      * @param content
+     * @param toolribbon  
      */
     public MessageList(Content content, ToolRibbon toolribbon) {
         this.controller = MessageController.getInstance();
@@ -116,6 +116,10 @@ public class MessageList extends JTable {
         toolribbon.setSelectedFolder(folderId);
     }
 
+    /**
+     * Set the model
+     * @param m
+     */
     @Override
     public void setModel(TableModel m) {
         try {

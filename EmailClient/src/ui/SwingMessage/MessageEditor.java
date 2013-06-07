@@ -17,9 +17,19 @@ public class MessageEditor extends JFrame {
     LabeledTextField fromField;
     JTextArea messageContentTextArea;
 
+    /**
+     * Enum types for viewing windows
+     */
     public enum Type {
 
-        COMPOSE, VIEW
+        /**
+         * Type for composing message
+         */
+        COMPOSE,
+        /**
+         * Type for viewing message
+         */
+        VIEW
     };
     Type type;
 
@@ -27,6 +37,7 @@ public class MessageEditor extends JFrame {
      * Constructor for composing mail
      *
      * @param messageId
+     * @param type  
      */
     public MessageEditor(String messageId, Type type) {
         super("Email");
@@ -34,6 +45,9 @@ public class MessageEditor extends JFrame {
         this.type = type;
     }
 
+    /**
+     * Function to initialize message window
+     */
     public void init() {
         // Contruct fields
         subjectField = new LabeledTextField("Subject").tooltip("The subject of this message");

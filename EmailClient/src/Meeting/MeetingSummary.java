@@ -171,18 +171,34 @@ public class MeetingSummary {
     public String getSubject() {
         return subject;
     }
+    /**
+     * Get starting time
+     * @return startTime
+     */
     public String getStartTime() {
         return startTime;
     }
 
+    /**
+     * Get ending time
+     * @return endTime
+     */
     public String getEndTime() {
         return endTime;
     }
 
+    /**
+     * Get meeting date
+     * @return date
+     */
     public String getMeetingDate() {
         return meetingDate;
     }
 
+    /**
+     * Get the meeting id
+     * @return id
+     */
     public String getMeetingId() {
         return meetingId;
     }

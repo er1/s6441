@@ -568,7 +568,7 @@ public class MessageController extends Observable {
     }
 
     /**
-     *
+     * Function to refresh for getting and sending messages
      */
     public void doSendRecieve() {
         Folder outbox = store.getOutbox();

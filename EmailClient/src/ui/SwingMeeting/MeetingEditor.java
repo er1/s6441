@@ -32,11 +32,18 @@ public class MeetingEditor extends JFrame {
     LabeledTextField toField;
     JTextArea meetingContentTextArea;
 
+    /**
+     * Constructor of MeetingEditor
+     * @param messageId
+     */
     public MeetingEditor(String messageId) {
         super("Meeting");
         this.messageId = messageId;
     }
 
+    /**
+     * Function to initialize meeting compose window
+     */
     public void init() {
         subjectField = new LabeledTextField("Subject");
 

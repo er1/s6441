@@ -10,7 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- *
+ * Implementation of rules
  * @author Bargavi
  */
 public class Rules {

@@ -49,14 +49,14 @@ public interface Mailbox extends Folder {
     Folder getTrash();
 
     /**
-     *
-     * @return
+     * Get the Meetings folder
+     * @return Meetings
      */
     Folder getMeetings();
 
     /**
-     *
-     * @return
+     * Get the Templates folder
+     * @return Templates
      */
     Folder getTemplates();
 }

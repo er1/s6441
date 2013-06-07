@@ -5,7 +5,7 @@
 package Email;
 
 /**
- *
+ * Object to represent a rule
  * @author Bargavi
  */
 public class FilterRule {

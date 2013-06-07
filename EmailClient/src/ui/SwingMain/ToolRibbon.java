@@ -225,10 +225,18 @@ public class ToolRibbon extends JToolBar {
         rules.setVisible(true);
     }
 
+    /**
+     * Set the selected message to current message
+     * @param messageid
+     */
     public void setSelectedMessage(String messageid) {
         currentMessage = messageid;
     }
 
+    /**
+     * Set the selected folder to current folder
+     * @param folderid
+     */
     public void setSelectedFolder(String folderid) {
         currentFolder = folderid;
     }
