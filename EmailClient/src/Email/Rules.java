@@ -4,6 +4,7 @@
  */
 package Email;
 
+import Meeting.MeetingSummary;
 import Persist.PersistentStorage;
 import java.util.ArrayList;
 import java.util.Observable;
@@ -58,6 +59,11 @@ public class Rules {
         String[] messages = controller.getEmailList(folderId);
 
         for (String messageid : messages) {
+            // if its a meeting message, dont apply rules
+            MeetingSummary meetingSummary = controller.getMeetingSummary(messageid);
+            if(! meetingSummary.getMeetingId().isEmpty()) {
+                continue;
+            }
             for (FilterRule rule : listOfRules) {
                 if (rule.matches(messageid)) {
                     controller.moveMessageToFolder(messageid, rule.moveToFolder);
