@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
+import ui.SwingMeeting.MeetingEditor;
 import ui.SwingMessage.MessageEditor;
 
 /**
@@ -54,7 +55,12 @@ public class MessageList extends JTable {
                 }
 
                 if (me.getClickCount() >= 2) {
-                    openmessage();
+                    if (folderid.equals(controller.getMeetingFolderId())) {
+                        openMeeting();
+                    }
+                    else {
+                        openmessage();
+                    }                    
                 }
             }
 
@@ -163,6 +169,15 @@ public class MessageList extends JTable {
         }
 
         MessageEditor editor = new MessageEditor(messageid, MessageEditor.Type.COMPOSE);
+        editor.init();
+        editor.setVisible(true);
+    }
+
+    private void openMeeting() {
+        int selected = this.getSelectedRow();
+        String messageid = model.getMessageId(selected);
+        
+        MeetingEditor editor = new MeetingEditor(messageid , MeetingEditor.Type.VIEW_MEETING);
         editor.init();
         editor.setVisible(true);
     }

@@ -187,7 +187,7 @@ public class ToolRibbon extends JToolBar {
 
     private void doCreateMeeting() {
         String id = controller.createMeeting();
-        MeetingEditor meeting = new MeetingEditor(id);
+        MeetingEditor meeting = new MeetingEditor(id, MeetingEditor.Type.COMPOSE_MEETING);
         meeting.init();
         meeting.setVisible(true);
     }
