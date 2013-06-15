@@ -83,7 +83,7 @@ public class PlainTextMessage implements Message {
 
         // add headers
         for (String key : header.keySet()) {
-            msg += key + ": " + this.getHeaderValue(key) + "\r\n";
+            msg += key + ": " + this.getHeaderValue(key).replaceAll("\\s*\n\\s*", "\r\n    ") + "\r\n";
         }
 
         // blank line to separate headers from content
@@ -115,11 +115,14 @@ public class PlainTextMessage implements Message {
         String allLines = rawmsg.substring(matcher.start(), matcher.end());
         String[] lines = allLines.split("\n");
 
+        String lastKey = null;
+        
         for (String line : lines) {
             int colon = line.indexOf(":");
 
-            // colon not found, skip and move to next line
-            if (colon < 0) {
+            // colon not found, add to the last line
+            if (colon < 0 && lastKey != null) {
+                msg.setHeader(lastKey, msg.getHeaderValue(lastKey) + "\n" + line.trim());
                 continue;
             }
 
@@ -129,6 +132,7 @@ public class PlainTextMessage implements Message {
 
             // set values
             if (key.length() > 0) {
+                lastKey = key;
                 msg.setHeader(key, value);
             }
         }
