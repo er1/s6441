@@ -31,7 +31,7 @@ public class MessageList extends JTable {
      * Constructor of MessageList
      *
      * @param content
-     * @param toolribbon  
+     * @param toolribbon
      */
     private static MessageList instance;
     
@@ -61,11 +61,10 @@ public class MessageList extends JTable {
 
                 if (me.getClickCount() >= 2) {
                     if (folderid.equals(controller.getMeetingFolderId())) {
-                        openMeeting();
-                    }
-                    else {
+                        openMeeting(MeetingEditor.Type.VIEW_MEETING);
+                    } else {
                         openmessage();
-                    }                    
+                    }
                 }
             }
 
@@ -172,6 +171,9 @@ public class MessageList extends JTable {
 
         if (folderid.equals(controller.getTemplateFolderId())) {
             messageid = controller.composeFrom(messageid);
+        } else if (controller.isThisAMeeting(messageid)) {
+            openMeeting(MeetingEditor.Type.RESPOND_MEETING);
+            return;
         }
 
         MessageEditor editor = new MessageEditor(messageid, MessageEditor.Type.COMPOSE);
@@ -179,11 +181,11 @@ public class MessageList extends JTable {
         editor.setVisible(true);
     }
 
-    private void openMeeting() {
+    private void openMeeting(MeetingEditor.Type type) {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
-        
-        MeetingEditor editor = new MeetingEditor(messageid , MeetingEditor.Type.VIEW_MEETING);
+
+        MeetingEditor editor = new MeetingEditor(messageid, type);
         editor.init();
         editor.refresh();
         editor.setVisible(true);

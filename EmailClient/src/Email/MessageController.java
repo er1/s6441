@@ -22,17 +22,28 @@ public class MessageController extends Observable {
     private static MessageController instance = null;
     Mailbox store;
     Rules rules;
-    // What should I be doing here? this is dumb
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
 
     public void acceptMeeting(String messageId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Message message = getMessageFromId(messageId);
+        store.getMeetings().addMessage(message);
+        //TODO Send response to sender
     }
 
     public void declineMeeting(String messageId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Message message = getMessageFromId(messageId);
+        store.getTrash().addMessage(message);
+        //TODO Send response to sender
+    }
+
+    public boolean isThisAMeeting(String messageid) {
+        Message newMsg = getMessageFromId(messageid);
+        if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -661,8 +672,8 @@ public class MessageController extends Observable {
                 } else {
                     UUID messageId = UUID.randomUUID();
                     newMsg.setId(messageId.toString());
-                    inbox.addMessage(newMsg);
                 }
+                inbox.addMessage(newMsg);
                 this.setChanged();
             }
         } catch (IOException ex) {
@@ -843,7 +854,7 @@ public class MessageController extends Observable {
     public boolean checkFolderExists(String folderPath) {
         return rules.isFolderExists(folderPath);
     }
-    
+
     /**
      * Create a reply content for selected meeting
      * @param originalMessage
