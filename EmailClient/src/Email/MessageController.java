@@ -769,4 +769,77 @@ public class MessageController extends Observable {
     public boolean checkFolderExists(String folderPath) {
         return rules.isFolderExists(folderPath);
     }
+    
+    public String replyMeeting(String originalMessage) {
+        // create a new message
+        String replyid = createMeeting();
+        updateDate(replyid);
+
+        Message replymsg = getMessageFromId(replyid);
+
+        // get the original message and use it to create the reply content
+        Message original = getMessageFromId(originalMessage);
+
+        String replyContent = original.getContent();
+        //replyContent = "\r\n\r\n" + replyContent;
+        //replyContent = replyContent.replaceAll("\n", "\n> ");
+
+        // get the headers based on the original message
+        String to = original.getHeaderValue("From");
+        String subject = original.getHeaderValue("Subject");
+
+        // add RE to the subject if it is not already there
+        if (subject.length() < 3 || !"RE:".equals(subject.substring(0, 3).toUpperCase())) {
+            subject = "RE: " + subject;
+        }
+
+        // set the headers and content of the reply
+        replymsg.setContent(replyContent);
+        replymsg.setHeader("To", to);
+        replymsg.setHeader("Subject", subject);
+        replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
+        replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
+        replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
+
+        return replyid;
+    }
+    public String forwardMeeting(String currentMessage) {
+        // create a new message
+        String forwardid = createMeeting();
+        updateDate(forwardid);
+
+        Message forwardmsg = getMessageFromId(forwardid);
+
+        // get the original message and use it to create the reply content
+        Message original = getMessageFromId(currentMessage);
+
+        String forwardContent = original.getContent();
+        //forwardContent = "\r\n\r\n" + forwardContent;
+        //forwardContent = forwardContent.replaceAll("\n", "\n> ");
+
+        // get the headers based on the original message
+        String subject = original.getHeaderValue("Subject");
+
+        // add RE to the subject if it is not already there
+        if (subject.length() < 4 || !"FWD:".equals(subject.substring(0, 4).toUpperCase())) {
+            subject = "Fwd: " + subject;
+        }
+
+        // set the headers and content of the reply
+        forwardmsg.setContent(forwardContent);
+        forwardmsg.setHeader("Subject", subject);
+        forwardmsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
+        forwardmsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
+        forwardmsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
+
+        // update anyone waiting on updates
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
+
+        return forwardid;
+    }
 }

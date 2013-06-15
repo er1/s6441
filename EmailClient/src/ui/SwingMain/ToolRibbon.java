@@ -193,10 +193,19 @@ public class ToolRibbon extends JToolBar {
     }
 
     private void doReply() {
-        String id = controller.reply(currentMessage);
-        MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
-        compose.init();
-        compose.setVisible(true);
+        
+        String folderid = FolderList.currentFolderId;
+        if (folderid.equals(controller.getMeetingFolderId())) {
+            String id = controller.replyMeeting(currentMessage);
+            MeetingEditor compose = new MeetingEditor(id, MeetingEditor.Type.COMPOSE_MEETING);
+            compose.init();
+            compose.setVisible(true);
+        } else {
+            String id = controller.reply(currentMessage);
+            MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
+            compose.init();
+            compose.setVisible(true);
+        }
     }
 
     private void doMarkUnread() {
@@ -204,10 +213,19 @@ public class ToolRibbon extends JToolBar {
     }
 
     private void doForward() {
-        String id = controller.forward(currentMessage);
-        MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
-        compose.init();
-        compose.setVisible(true);
+        
+        String folderid = FolderList.currentFolderId;
+        if (folderid.equals(controller.getMeetingFolderId())) {
+            String id = controller.forwardMeeting(currentMessage);
+            MeetingEditor compose = new MeetingEditor(id, MeetingEditor.Type.COMPOSE_MEETING);
+            compose.init();
+            compose.setVisible(true);
+        } else {
+            String id = controller.forward(currentMessage);
+            MessageEditor compose = new MessageEditor(id, MessageEditor.Type.COMPOSE);
+            compose.init();
+            compose.setVisible(true);
+        }
     }
 
     private void doDelete() {
