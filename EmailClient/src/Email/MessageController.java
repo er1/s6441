@@ -800,6 +800,7 @@ public class MessageController extends Observable {
         replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
         replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
         replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
+        replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
 
         // update anyone waiting on updates
         this.setChanged();
@@ -835,6 +836,7 @@ public class MessageController extends Observable {
         forwardmsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
         forwardmsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
         forwardmsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
+        forwardmsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
 
         // update anyone waiting on updates
         this.setChanged();
