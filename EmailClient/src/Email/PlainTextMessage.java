@@ -18,7 +18,7 @@ public class PlainTextMessage implements Message {
     private String id = new String();
 
     /**
-     * Constructor
+     * Constructor to initialize header
      */
     public PlainTextMessage() {
         this.header = Util.newHashMap();

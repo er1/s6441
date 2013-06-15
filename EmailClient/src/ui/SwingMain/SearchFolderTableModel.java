@@ -40,6 +40,12 @@ public class SearchFolderTableModel extends FolderTableModel {
         return found;
     }
 
+    /**
+     * Checks a message has given searchText
+     * @param messageid
+     * @param searchText
+     * @return True/False
+     */
     protected boolean filter(String messageid, String searchText) {
         String to = controller.getEmailHeader(messageid, "To");
         String from = controller.getEmailHeader(messageid, "From");

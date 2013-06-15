@@ -12,8 +12,7 @@ public class Content extends JTextArea {
     MessageController controller;
 
     /**
-     * Constructor
-     * @param controller 
+     * Constructor of Content text area
      */
     public Content() {
         this.controller = MessageController.getInstance();

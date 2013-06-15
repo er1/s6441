@@ -11,6 +11,10 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import ui.SwingMessage.MessageEditor;
 
+/**
+ * MessageMenu class is to create a right click popup menu on the selected message 
+ * 
+ */
 public class MessageMenu extends JPopupMenu {
 
     final JFrame frame = new JFrame("Error Message");
@@ -19,6 +23,11 @@ public class MessageMenu extends JPopupMenu {
     String[] neededPath, neededString;
     MessageController controller;
 
+    /**
+     * Pops up a menu when right clicking on a message
+     * @param selectedMessage
+     * @param containingFolder
+     */
     public MessageMenu(String selectedMessage, String containingFolder) {
         selected = selectedMessage;
         folder = containingFolder;

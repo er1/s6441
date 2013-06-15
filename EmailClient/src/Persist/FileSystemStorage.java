@@ -258,14 +258,14 @@ class FileSystemStorage extends PersistentStorage {
                 FilterRule rule = new FilterRule();
                 String line = scanner.next();
 
-                Scanner lineScanner = new Scanner(line);
-                lineScanner.useDelimiter("---");
+                String[] parts = line.split("---");
+                
                 rule.setRuleId(UUID.randomUUID().toString());
-                rule.setFromField(lineScanner.next());
-                rule.setsubjectField(lineScanner.next());
-                rule.setcontentField(lineScanner.next());
-                rule.setmoveToField(lineScanner.next());
-                listOfRules.add(rule);
+                rule.setFromField(parts[0]);
+                rule.setsubjectField(parts[1]);
+                rule.setcontentField(parts[2]);
+                rule.setmoveToField(parts[3]);
+                listOfRules.add(rule);   
             }
 
         } catch (FileNotFoundException ex) {

@@ -109,6 +109,10 @@ public class MainWindow extends JFrame {
 
     }
 
+    /**
+     * doSearch function to invoke SerachFolderTableModel
+     * @param searchText
+     */
     public void doSearch(String searchText) {
         search = new SearchFolderTableModel(controller.getRootFolderId(), searchText);
         messages.setModel(search);

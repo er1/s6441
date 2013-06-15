@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -32,11 +31,35 @@ public class MeetingEditor extends JFrame {
     LabeledTextField toField;
     JTextArea meetingContentTextArea;
 
-    public MeetingEditor(String messageId) {
+    /**
+     * Enum types for viewing windows
+     */
+    public enum Type {
+
+        /**
+         * Type for composing message
+         */
+        COMPOSE_MEETING,
+        /**
+         * Type for viewing message
+         */
+        VIEW_MEETING
+    };
+    Type type;
+    
+    /**
+     * Constructor of MeetingEditor
+     * @param messageId
+     */
+    public MeetingEditor(String messageId, Type type) {
         super("Meeting");
         this.messageId = messageId;
+        this.type = type;
     }
 
+    /**
+     * Function to initialize meeting compose window
+     */
     public void init() {
         subjectField = new LabeledTextField("Subject");
 
@@ -60,6 +83,7 @@ public class MeetingEditor extends JFrame {
 
         JButton sendMeeting;
         JButton chooseDate;
+        JButton closeMeeting;
         //UtilDateModel model = new UtilDateModel();
         //JDatePickerImpl datePanel = new JDatePickerImpl(new JDatePanelImpl(model));
 
@@ -73,7 +97,26 @@ public class MeetingEditor extends JFrame {
                 dispose();
             }
         });
-
+        
+        closeMeeting = new JButton("Close");
+        closeMeeting.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                setVisible(false);
+                dispose();
+            }
+        });
+        
+        if (type == Type.VIEW_MEETING) {
+            toField.setEditable(false);
+            subjectField.setEditable(false);
+            
+            dateField.setEditable(false);
+            startTimeField.setEditable(false);
+            endTimeField.setEditable(false);
+            
+            meetingContentTextArea.setEditable(false);
+        }
 
         // Make header
         JPanel headerPanel = new JPanel();
@@ -109,16 +152,31 @@ public class MeetingEditor extends JFrame {
         BoxLayout footerLayout = new BoxLayout(footerPanel, BoxLayout.X_AXIS);
         footerPanel.setLayout(footerLayout);
 
-        footerPanel.add(sendMeeting);
+        if (type == Type.VIEW_MEETING) {
+            footerPanel.add(closeMeeting);
+        }else {
+            footerPanel.add(sendMeeting);
+        }
         this.setLayout(new BorderLayout());
 
         this.add(headerPanel, BorderLayout.NORTH);
         this.add(meetingContentTextArea);
         this.add(footerPanel, BorderLayout.SOUTH);
         this.setSize(650, 380);
+        
+        this.refresh();
     }
-
-    private void send() {
+    
+    private void refresh() {
+        MessageController controller = MessageController.getInstance();
+        subjectField.setText(controller.getEmailHeader(messageId, "Subject"));
+        toField.setText(controller.getEmailHeader(messageId, "To"));
+        dateField.setText(controller.getEmailHeader(messageId, "MeetingDate"));
+        startTimeField.setText(controller.getEmailHeader(messageId, "MeetingStartTime"));
+        endTimeField.setText(controller.getEmailHeader(messageId, "MeetingEndTime"));
+        meetingContentTextArea.setText(controller.getEmailContent(messageId));
+    }
+    private void send() {   
         //TODO Verify input is valid
         //Date is in future, Start Time < End Time
         MessageController controller = MessageController.getInstance();

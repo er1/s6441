@@ -187,7 +187,7 @@ public class ToolRibbon extends JToolBar {
 
     private void doCreateMeeting() {
         String id = controller.createMeeting();
-        MeetingEditor meeting = new MeetingEditor(id);
+        MeetingEditor meeting = new MeetingEditor(id, MeetingEditor.Type.COMPOSE_MEETING);
         meeting.init();
         meeting.setVisible(true);
     }
@@ -225,10 +225,18 @@ public class ToolRibbon extends JToolBar {
         rules.setVisible(true);
     }
 
+    /**
+     * Set the selected message to current message
+     * @param messageid
+     */
     public void setSelectedMessage(String messageid) {
         currentMessage = messageid;
     }
 
+    /**
+     * Set the selected folder to current folder
+     * @param folderid
+     */
     public void setSelectedFolder(String folderid) {
         currentFolder = folderid;
     }

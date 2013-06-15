@@ -7,6 +7,10 @@ package Email;
  */
 public interface Mailbox extends Folder {
 
+    /**
+     * Get user id
+     * @return id
+     */
     String getUserId();
 
     /**
@@ -44,7 +48,15 @@ public interface Mailbox extends Folder {
      */
     Folder getTrash();
 
+    /**
+     * Get the Meetings folder
+     * @return Meetings
+     */
     Folder getMeetings();
 
+    /**
+     * Get the Templates folder
+     * @return Templates
+     */
     Folder getTemplates();
 }

@@ -6,6 +6,7 @@ package Email;
 
 import Meeting.MeetingSummary;
 import Persist.PersistentStorage;
+import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,7 +23,8 @@ public class MessageControllerTest {
     private static MessageController controller;
     private static PersistentStorage persistStore;
     private static Mailbox temp;
-
+    public PlainTextMessage msg;
+    
     public MessageControllerTest() {
     }
 
@@ -30,7 +32,8 @@ public class MessageControllerTest {
     public static void setUpClass() {
         persistStore = PersistentStorage.getFileSystemStorage("msgCtrl");
         temp = (Mailbox) new FileSystemMailbox("msgCtrl");
-        controller = MessageController.getInstance(temp);
+        controller = MessageController.getInstance((FileSystemMailbox)temp);
+        
     }
 
     @AfterClass
@@ -39,8 +42,19 @@ public class MessageControllerTest {
 
     @Before
     public void setUp() {
-        mailBoxID = "test";
-        this.persistStore = PersistentStorage.getFileSystemStorage(mailBoxID);
+        
+        msg = new PlainTextMessage();
+        msg = PlainTextMessage.parse("MeetingStartTime: 12:39\r\n"
+                        + "X-MeetingId: 1e6239bb-f8c6-4a27-96ab-05305d116009\r\n"
+                        + "MeetingEndTime: 12:59\r\n"
+                        + "MeetingDate: 06/06/2013\r\n"
+                        + "Date: 01 Jan 01 1970 GMT\r\n"
+                        + "From: toor@example.com\r\n"
+                        + "To: alice@example.com\r\n"
+                        + "Subject: Hello\r\n"
+                        + "\r\n"
+                        + "Pls attend the meeting\r\n");
+       
     }
 
     @After
@@ -63,8 +77,6 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetInstance_0args() {
-        System.out.println("getInstance");
-        MessageController expResult = null;
         MessageController result = MessageController.getInstance();
         assertNotNull(result);
     }
@@ -74,11 +86,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetFolderList() {
-        System.out.println("getFolderList");
-        String folderId = "";
-        String[] expResult = null;
+        
+        String folderId = controller.getInboxFolderId();
         String[] result = controller.getFolderList(folderId);
-        assertArrayEquals(expResult, result);
+        assertNotNull(result);
     }
 
     /**
@@ -86,12 +97,9 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetEmailList() {
-        System.out.println("getEmailList");
-        String folderId = "";
-        MessageController instance = null;
-        String[] expResult = null;
+        String folderId = controller.getInboxFolderId();
         String[] result = controller.getEmailList(folderId);
-        assertArrayEquals(expResult, result);
+        assertNotNull(result);
     }
 
     /**
@@ -186,9 +194,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testDelete() {
-        System.out.println("delete");
-        String messageId = "";
-        MessageController instance = null;
+        String messageId = controller.compose();
+        msg.setId(messageId);
         controller.delete(messageId);
     }
 
@@ -197,11 +204,11 @@ public class MessageControllerTest {
      */
     @Test
     public void testMoveMessageToFolder() {
-        System.out.println("moveMessageToFolder");
-        String messageId = "";
-        String destinationFolderId = "";
-        MessageController instance = null;
+        String messageId = controller.compose();
+        msg.setId(messageId);
+        String destinationFolderId = controller.getInboxFolderId();
         controller.moveMessageToFolder(messageId, destinationFolderId);
+        
     }
 
     /**
@@ -209,11 +216,11 @@ public class MessageControllerTest {
      */
     @Test
     public void testCopyMessageToFolder() {
-        System.out.println("copyMessageToFolder");
-        String messageId = "";
-        String folderId = "";
-        MessageController instance = null;
-        controller.copyMessageToFolder(messageId, folderId);
+        
+        String messageId = controller.compose();
+        msg.setId(messageId);
+        String destinationFolderId = controller.getInboxFolderId();
+        controller.copyMessageToFolder(messageId, destinationFolderId);
     }
 
     /**
@@ -221,11 +228,9 @@ public class MessageControllerTest {
      */
     @Test
     public void testCompose() {
-        System.out.println("compose");
-        MessageController instance = null;
-        String expResult = "";
+      
         String result = controller.compose();
-        assertEquals(expResult, result);
+        assertNotNull(result);
     }
 
     /**
@@ -233,12 +238,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testComposeFrom() {
-        System.out.println("composeFrom");
-        String template = "";
-        MessageController instance = null;
-        String expResult = "";
-        String result = controller.composeFrom(template);
-        assertEquals(expResult, result);
+        String templateId = controller.compose();
+        msg.setId(templateId);
+        String result = controller.composeFrom(templateId);
+        assertNotNull(result);
     }
 
     /**
@@ -246,10 +249,9 @@ public class MessageControllerTest {
      */
     @Test
     public void testUpdateDate() {
-        System.out.println("updateDate");
-        String messageid = "";
-        MessageController instance = null;
-        controller.updateDate(messageid);
+        String messageId = controller.compose();
+        msg.setId(messageId);
+        controller.updateDate(messageId);
     }
 
     /**
@@ -257,12 +259,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testReply() {
-        System.out.println("reply");
-        String originalMessage = "";
-        MessageController instance = null;
-        String expResult = "";
-        String result = controller.reply(originalMessage);
-        assertEquals(expResult, result);
+        String messageId = controller.compose();
+        msg.setId(messageId);
+        String result = controller.reply(messageId);
+        assertNotNull(result);
     }
 
     /**
@@ -270,12 +270,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testForward() {
-        System.out.println("forward");
-        String currentMessage = "";
-        MessageController instance = null;
-        String expResult = "";
-        String result = controller.forward(currentMessage);
-        assertEquals(expResult, result);
+        String messageId = controller.compose();
+        msg.setId(messageId);
+        String result = controller.forward(messageId);
+        assertNotNull(result);
     }
 
     /**
@@ -283,9 +281,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetRootFolderId() {
-        System.out.println("getRootFolderId");
-        MessageController instance = null;
-        String expResult = "";
+
+        String expResult = "msgCtrl";
         String result = controller.getRootFolderId();
         assertEquals(expResult, result);
     }
@@ -295,9 +292,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetDraftsFolderId() {
-        System.out.println("getDraftsFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Drafts";
         String result = controller.getDraftsFolderId();
         assertEquals(expResult, result);
     }
@@ -307,9 +303,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetInboxFolderId() {
-        System.out.println("getInboxFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Inbox";
         String result = controller.getInboxFolderId();
         assertEquals(expResult, result);
     }
@@ -319,9 +314,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetOutboxFolderId() {
-        System.out.println("getOutboxFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Outbox";
         String result = controller.getOutboxFolderId();
         assertEquals(expResult, result);
     }
@@ -331,9 +325,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetSentMessagesFolderId() {
-        System.out.println("getSentMessagesFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Sent";
         String result = controller.getSentMessagesFolderId();
         assertEquals(expResult, result);
     }
@@ -343,9 +336,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetTrashFolderId() {
-        System.out.println("getTrashFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Trash";
         String result = controller.getTrashFolderId();
         assertEquals(expResult, result);
     }
@@ -355,9 +347,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetTemplateFolderId() {
-        System.out.println("getTemplateFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Templates";
         String result = controller.getTemplateFolderId();
         assertEquals(expResult, result);
     }
@@ -367,9 +358,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetMeetingFolderId() {
-        System.out.println("getMeetingFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Meetings";
         String result = controller.getMeetingFolderId();
         assertEquals(expResult, result);
     }
@@ -379,11 +369,9 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetFolderName() {
-        System.out.println("getFolderName");
-        String folder = "";
-        MessageController instance = null;
-        String expResult = "";
-        String result = controller.getFolderName(folder);
+        
+        String expResult = "msgCtrl";
+        String result = controller.getFolderName("msgCtrl");
         assertEquals(expResult, result);
     }
 
@@ -392,11 +380,14 @@ public class MessageControllerTest {
      */
     @Test
     public void testNewFolder() {
-        System.out.println("newFolder");
-        String in = "";
-        String name = "";
-        MessageController instance = null;
+        
+        String in = controller.getInboxFolderId();
+        String name = "new";
+       
         controller.newFolder(in, name);
+        String result = "msgCtrl" + File.separator + "Inbox" + File.separator + name;
+        boolean res = persistStore.isFolderExists(result);
+        assertTrue(res);
     }
 
     /**
@@ -404,10 +395,11 @@ public class MessageControllerTest {
      */
     @Test
     public void testDeletefolder() {
-        System.out.println("deletefolder");
-        String selected = "";
-        MessageController instance = null;
-        controller.deletefolder(selected);
+        
+        String in = controller.getInboxFolderId();
+        controller.deletefolder(in);
+        boolean res = persistStore.isFolderExists("msgCtrl" + File.separator + "Inbox");
+        assertEquals(false,res);
     }
 
     /**
@@ -437,9 +429,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetMeetingsFolderId() {
-        System.out.println("getMeetingsFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Meetings";
         String result = controller.getMeetingsFolderId();
         assertEquals(expResult, result);
     }
@@ -449,9 +440,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetTemplatesFolderId() {
-        System.out.println("getTemplatesFolderId");
-        MessageController instance = null;
-        String expResult = "";
+        
+        String expResult = "msgCtrl" + File.separator + "Templates";
         String result = controller.getTemplatesFolderId();
         assertEquals(expResult, result);
     }
@@ -461,11 +451,9 @@ public class MessageControllerTest {
      */
     @Test
     public void testCreateMeeting() {
-        System.out.println("createMeeting");
-        MessageController instance = null;
-        String expResult = "";
+      
         String result = controller.createMeeting();
-        assertEquals(expResult, result);
+        assertNotNull(result);
     }
 
     /**
@@ -486,12 +474,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetIdfromRule() {
-        System.out.println("getIdfromRule");
-        FilterRule rule = null;
-        MessageController instance = null;
-        String expResult = "";
+        FilterRule rule = new FilterRule();
+        rule.setRuleId("Rule1");
         String result = controller.getIdfromRule(rule);
-        assertEquals(expResult, result);
+        assertEquals("Rule1", result);
     }
 
     /**
@@ -499,7 +485,6 @@ public class MessageControllerTest {
      */
     @Test
     public void testLoadRules() {
-        System.out.println("loadRules");
         MessageController instance = null;
         controller.loadRules();
     }
@@ -531,11 +516,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetRuleList() {
-        System.out.println("getRuleList");
-        MessageController instance = null;
-        String[] expResult = null;
         String[] result = controller.getRuleList();
-        assertArrayEquals(expResult, result);
+        assertNotNull(result);
     }
 
     /**
@@ -555,9 +537,8 @@ public class MessageControllerTest {
      */
     @Test
     public void testSendMeeting() {
-        System.out.println("sendMeeting");
-        String messageId = "";
-        MessageController instance = null;
+        String messageId = controller.compose();
+        msg.setId(messageId);
         controller.sendMeeting(messageId);
     }
 
@@ -566,12 +547,11 @@ public class MessageControllerTest {
      */
     @Test
     public void testGetMeetingSummary() {
-        System.out.println("getMeetingSummary");
-        String messageId = "";
-        MessageController instance = null;
-        MeetingSummary expResult = null;
+        
+        String messageId = controller.compose();
+        msg.setId(messageId);
         MeetingSummary result = controller.getMeetingSummary(messageId);
-        assertEquals(expResult, result);
+        assertNotNull(result);
     }
 
     /**
@@ -589,11 +569,10 @@ public class MessageControllerTest {
      */
     @Test
     public void testCheckFolderExists() {
-        System.out.println("checkFolderExists");
-        String folderPath = "";
-        MessageController instance = null;
-        boolean expResult = false;
+
+        String folderPath = "msgCtrl";
+        boolean expResult = true;
         boolean result = controller.checkFolderExists(folderPath);
-        assertEquals(expResult, result);
+        assertEquals(true, result);
     }
 }

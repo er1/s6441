@@ -26,6 +26,10 @@ public class MessageTransfer {
         }
     }
 
+    /**
+     * Get the instance of MessageTransfer class
+     * @return instance
+     */
     static public MessageTransfer getInstance() {
         if (instance == null) {
             instance = new MessageTransfer();
@@ -41,6 +45,11 @@ public class MessageTransfer {
         return getMailSpool() + File.separator + userID;
     }
 
+    /**
+     * Check message exists for given userId
+     * @param userID
+     * @return True/False
+     */
     public boolean MessageExistFor(String userID) {
         String userinboundPath = getMailSpoolFor(userID);
         File userinbound = new File(userinboundPath);
@@ -54,6 +63,11 @@ public class MessageTransfer {
         return userinbound.listFiles().length > 0;
     }
 
+    /**
+     * Get a message for given userId
+     * @param userID
+     * @return message
+     */
     public String getMessageFor(String userID) {
         String userinboundPath = getMailSpoolFor(userID);
         File userinbound = new File(userinboundPath);
@@ -86,6 +100,11 @@ public class MessageTransfer {
 
     }
 
+    /**
+     * Send message to userId
+     * @param userID
+     * @param content
+     */
     public void sendMessageTo(String userID, String content) {
         if (userID.isEmpty()) {
             return;

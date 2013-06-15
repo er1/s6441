@@ -26,7 +26,18 @@ public class MessageController extends Observable {
     HashMap<String, Folder> folderLookup = Util.newHashMap();
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
 
-    public enum UpdateType { FOLDERS_AND_MESSAGES, MESSAGES };
+    /**
+     * Enum UpdateType 
+     */
+    public enum UpdateType {
+        /**
+         * Variable to update both for folders and messages
+         */
+        FOLDERS_AND_MESSAGES,
+        /**
+         * Variable to update only for messages
+         */
+        MESSAGES };
 
     /**
      * MessageController Constructor
@@ -283,6 +294,11 @@ public class MessageController extends Observable {
         this.notifyObservers(UpdateType.MESSAGES);
     }
 
+    /**
+     * Copy given message to specified folder
+     * @param messageId
+     * @param folderId
+     */
     public void copyMessageToFolder(String messageId, String folderId) {
         Message msg = getMessageFromId(messageId);
         Folder destination = getFolderFromId(folderId);
@@ -302,14 +318,17 @@ public class MessageController extends Observable {
         Message newMsg = new PlainTextMessage();
         UUID messageId = UUID.randomUUID();
         newMsg.setId(messageId.toString());
-        Folder drafts = store.getDrafts();
-        //drafts.addMessage(newMsg);
-
+ 
         String id = getIdfromMessage(newMsg);
         markRead(id);
         return id;
     }
 
+    /**
+     * function to say compose a mail from the given template
+     * @param template
+     * @return message id of composed mail
+     */
     public String composeFrom(String template) {
         String id = compose();
 
@@ -549,7 +568,7 @@ public class MessageController extends Observable {
     }
 
     /**
-     *
+     * Function to refresh for getting and sending messages
      */
     public void doSendRecieve() {
         Folder outbox = store.getOutbox();
@@ -611,14 +630,26 @@ public class MessageController extends Observable {
         this.notifyObservers(UpdateType.FOLDERS_AND_MESSAGES);
     }
 
+    /**
+     * Get the meetings folder id
+     * @return id
+     */
     public String getMeetingsFolderId() {
         return getIdfromFolder(store.getMeetings());
     }
 
+    /**
+     * Get the templates folder id
+     * @return id
+     */
     public String getTemplatesFolderId() {
         return getIdfromFolder(store.getTemplates());
     }
 
+    /**
+     * Create a new meeting
+     * @return meeting id
+     */
     public String createMeeting() {
         Message newMeeting = new PlainTextMessage();
         UUID messageId = UUID.randomUUID();
@@ -627,28 +658,53 @@ public class MessageController extends Observable {
         return getIdfromMessage(newMeeting);
     }
 
+    /**
+     * Get the rule from rule id
+     * @param ruleId
+     * @return object of FilterRule
+     */
     public FilterRule getRuleFromId(String ruleId) {
         return ruleLookup.get(ruleId);
     }
 
+    /**
+     * Get the id from given rule
+     * @param rule
+     * @return id
+     */
     public String getIdfromRule(FilterRule rule) {
         String id = rule.getRuleId();
         ruleLookup.put(id, rule);
         return id;
     }
 
+    /**
+     * Load rules
+     */
     public void loadRules() {
         rules = Rules.getInstance();
     }
 
+    /**
+     * Add a given rule
+     * @param rule
+     */
     public void addRule(FilterRule rule) {
         rules.addRule(rule);
     }
 
+    /**
+     * Delete a rule
+     * @param ruleId
+     */
     public void deleteRule(int ruleId) {
         rules.deleteRule(ruleId);
     }
 
+    /**
+     * Get the rules list
+     * @return ids of all the rules in rules list
+     */
     public String[] getRuleList() {
         String[] ids;
 
@@ -669,15 +725,28 @@ public class MessageController extends Observable {
         return ids;
     }
 
+    /**
+     * Get the rules count
+     * @return size
+     */
     public int getRulesCount() {
         return rules.getListOfRules().size();
     }
 
+    /**
+     * Send a meeting request
+     * @param messageId
+     */
     public void sendMeeting(String messageId) {
         moveMessageToFolder(messageId, getMeetingsFolderId());
         copyMessageToFolder(messageId, getOutboxFolderId());
     }
 
+    /**
+     * Get meeting summary of particular meeting message
+     * @param messageId
+     * @return summary
+     */
     public MeetingSummary getMeetingSummary(String messageId) {
         Message message = getMessageFromId(messageId);
         MeetingSummary summary = new MeetingSummary(message);
@@ -685,10 +754,18 @@ public class MessageController extends Observable {
         return summary;
     }
 
+    /**
+     * Save the rules
+     */
     public void saveRules() {
         rules.saveRules();
     }
 
+    /**
+     * Check given folder exists in file system
+     * @param folderPath
+     * @return True/False
+     */
     public boolean checkFolderExists(String folderPath) {
         return rules.isFolderExists(folderPath);
     }

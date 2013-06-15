@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- *
+ * Proxy class for FileSystemFolder
  * @author chanman
  */
 public class FileSystemFolderProxy implements Folder {

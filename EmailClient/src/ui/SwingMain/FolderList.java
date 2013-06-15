@@ -27,9 +27,8 @@ public class FolderList extends JTree {
     FolderTreeModel model;
 
     /**
-     * constructor
+     * constructor of FolderList
      *
-     * @param controller
      * @param messagelist
      */
     public FolderList(MessageList messagelist) {
