@@ -149,6 +149,7 @@ public class MessageList extends JTable {
         String messageid = model.getMessageId(selected);
 
         if (messageid == null) {
+            content.emptyMessage();
             return;
         }
 
