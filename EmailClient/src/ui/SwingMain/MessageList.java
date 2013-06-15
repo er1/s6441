@@ -180,6 +180,7 @@ public class MessageList extends JTable {
         
         MeetingEditor editor = new MeetingEditor(messageid , MeetingEditor.Type.VIEW_MEETING);
         editor.init();
+        editor.refresh();
         editor.setVisible(true);
     }
 }

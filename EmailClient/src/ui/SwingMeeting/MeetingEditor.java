@@ -163,11 +163,9 @@ public class MeetingEditor extends JFrame {
         this.add(meetingContentTextArea);
         this.add(footerPanel, BorderLayout.SOUTH);
         this.setSize(650, 380);
-        
-        this.refresh();
     }
     
-    private void refresh() {
+    public void refresh() {
         MessageController controller = MessageController.getInstance();
         subjectField.setText(controller.getEmailHeader(messageId, "Subject"));
         toField.setText(controller.getEmailHeader(messageId, "To"));
