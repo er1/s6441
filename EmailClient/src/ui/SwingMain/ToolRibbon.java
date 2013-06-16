@@ -211,6 +211,8 @@ public class ToolRibbon extends JToolBar {
 
     private void doMarkUnread() {
         controller.markUnread(currentMessage);
+        //Update MessageList pane automatically to see the changes
+        MessageList.getInstance().displayFolder(currentFolder);
     }
 
     private void doForward() {
@@ -237,6 +239,8 @@ public class ToolRibbon extends JToolBar {
         } else {
             controller.moveMessageToFolder(currentMessage, trash);
         }
+        //Update MessageList pane automatically
+        MessageList.getInstance().displayFolder(currentFolder);
     }
 
     private void doRule() {

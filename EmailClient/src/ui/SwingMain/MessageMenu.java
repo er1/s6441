@@ -22,17 +22,17 @@ public class MessageMenu extends JPopupMenu {
     String folder;
     String[] neededPath, neededString;
     MessageController controller;
-    final MessageList list;
+    MessageList list;
 
     /**
      * Pops up a menu when right clicking on a message
      * @param selectedMessage
      * @param containingFolder
      */
-    public MessageMenu(String selectedMessage, String containingFolder, MessageList messageList) {
+    public MessageMenu(String selectedMessage, String containingFolder) {
         selected = selectedMessage;
         folder = containingFolder;
-        list = messageList;
+        list = MessageList.getInstance();
         
         // FIXME: we should not manipulate ids
         String pattern = Pattern.quote(System.getProperty("file.separator"));

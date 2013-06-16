@@ -33,11 +33,16 @@ public class MessageList extends JTable {
      * @param content
      * @param toolribbon  
      */
+    private static MessageList instance;
+    
+    public static MessageList getInstance() {
+        return instance;
+    }
     public MessageList(Content content, ToolRibbon toolribbon) {
         this.controller = MessageController.getInstance();
         this.content = content;
         this.toolribbon = toolribbon;
-
+        this.instance = this;
         this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         ListSelectionModel lsm = this.getSelectionModel();
@@ -100,7 +105,7 @@ public class MessageList extends JTable {
 
         // get id of row
         String id = (String) this.model.getValueAt(row, -1);
-        JPopupMenu menu = new MessageMenu(id, folderid, this);
+        JPopupMenu menu = new MessageMenu(id, folderid);
         menu.show(this, mouseposition.x, mouseposition.y);
     }
 
