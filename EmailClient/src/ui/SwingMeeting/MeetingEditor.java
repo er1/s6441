@@ -4,6 +4,7 @@ import Email.MessageController;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.BoxLayout;
@@ -11,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import ui.LabeledTextField;
@@ -31,6 +33,7 @@ public class MeetingEditor extends JFrame {
     LabeledTextField toField;
     JTextArea meetingContentTextArea;
 
+  
     /**
      * Enum types for viewing windows
      */
@@ -92,9 +95,12 @@ public class MeetingEditor extends JFrame {
         sendMeeting.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                if(doValidate() == true)
+                {
                 send();
                 setVisible(false);
                 dispose();
+                }
             }
         });
         
@@ -177,6 +183,7 @@ public class MeetingEditor extends JFrame {
     private void send() {   
         //TODO Verify input is valid
         //Date is in future, Start Time < End Time
+         
         MessageController controller = MessageController.getInstance();
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
         controller.setEmailHeader(messageId, "To", toField.getText());
@@ -184,10 +191,76 @@ public class MeetingEditor extends JFrame {
         controller.setEmailHeader(messageId, "MeetingStartTime", startTimeField.getText());
         controller.setEmailHeader(messageId, "MeetingEndTime", endTimeField.getText());
         controller.setEmailHeader(messageId, "From", controller.getRootFolderId());
-
         controller.setEmailContent(messageId, meetingContentTextArea.getText());
         controller.updateDate(messageId);
         controller.sendMeeting(messageId);
+       
     }
+    
+    private boolean doValidate()
+    {
+        boolean validMsg = false;
+        
+            validMsg =   checkTime();
+       if (subjectField.getText().isEmpty()){
+             JOptionPane.showMessageDialog(
+              null,
+              "Subject field is empty. Please enter any text for subject."
+               );
+        }
+        return validMsg;
+    }
+      private boolean checkTime() {
+        String[] starttime = startTimeField.getText().split(":");
+        String[] endtime = endTimeField.getText().split(":");
+        String[] dateT = dateField.getText().split("/");
+        boolean validMsg = false;
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        String todayDate = dateFormat.format(date);
+        String[] dateNow = todayDate.split("/");       
+        if (Integer.parseInt(dateT[2]) < Integer.parseInt(dateNow[2]))
+        {
+            JOptionPane.showMessageDialog(
+        null,
+        "Year of the meeting is expired."
+           );
+        validMsg = false;
+        }
+        if (Integer.parseInt(dateT[1]) < Integer.parseInt(dateNow[1])){
+            JOptionPane.showMessageDialog(
+        null,
+        "Month of the meeting is expired."
+           );
+        validMsg = false;}
+        if (Integer.parseInt(dateT[0]) < Integer.parseInt(dateNow[0])){
+            JOptionPane.showMessageDialog(
+        null,
+        "Date of the meeting is expired."
+           );
+        validMsg = false;}
+        if (startTimeField.getText().equalsIgnoreCase(endTimeField.getText()) ){
+        JOptionPane.showMessageDialog(
+        null,
+        "Start time and end time is same pls edit the time for meeting."
+           );
+        validMsg = false;
+          }
+        else if(Integer.parseInt(endtime[0]) < Integer.parseInt(starttime[0])){
+            JOptionPane.showMessageDialog(
+        null,
+        "End time is earlier then starting time of the meeting."
+           );
+        validMsg = false;
+        }
+        else if(Integer.parseInt(starttime[0]) == Integer.parseInt(endtime[0]) && Integer.parseInt(starttime[1]) > Integer.parseInt(endtime[1]) ){
+            JOptionPane.showMessageDialog(
+        null,
+        "End time is earlier then starting time of the meeting."
+           );
+        validMsg = false;
+        }
+      return validMsg;
+      }   
+      
 }
-
