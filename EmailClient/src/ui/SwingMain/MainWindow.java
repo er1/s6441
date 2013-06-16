@@ -119,7 +119,11 @@ public class MainWindow extends JFrame {
     public void doSearch(String searchText) {
         if (! searchText.isEmpty()) {
             String folderId = FolderList.currentFolderId;
-            search = new SearchFolderTableModel(folderId, searchText);
+            if (folderId == null) {
+                search = new SearchFolderTableModel(controller.getRootFolderId(), searchText);
+            } else {
+                search = new SearchFolderTableModel(folderId, searchText);
+            }
             messages.setModel(search);
         }
         else {
