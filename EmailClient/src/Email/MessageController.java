@@ -399,7 +399,7 @@ public class MessageController extends Observable {
     }
 
     /**
-     *
+     * Create a forward content from current message
      * @param currentMessage
      * @return
      */
@@ -734,6 +734,23 @@ public class MessageController extends Observable {
     }
 
     /**
+     * Move a rule up one rule
+     * @param ruleId
+     * @param selectedIndex
+     */
+    public void moveUpRule(String ruleId, int selectedIndex) {
+        rules.moveUpRule(ruleId, selectedIndex);
+    }
+
+    /**
+     * Move a rule down one rule
+     * @param ruleId
+     * @param selectedIndex
+     */
+    public void moveDownRule(String ruleId, int selectedIndex) {
+        rules.moveDownRule(ruleId, selectedIndex);
+    }
+    /**
      * Send a meeting request
      * @param messageId
      */
@@ -770,6 +787,11 @@ public class MessageController extends Observable {
         return rules.isFolderExists(folderPath);
     }
     
+    /**
+     * Create a reply content for selected meeting
+     * @param originalMessage
+     * @return meeting id
+     */
     public String replyMeeting(String originalMessage) {
         // create a new message
         String replyid = createMeeting();
@@ -808,6 +830,11 @@ public class MessageController extends Observable {
 
         return replyid;
     }
+    /**
+     * Create a forward content for selected meeting
+     * @param currentMessage
+     * @return meeting id
+     */
     public String forwardMeeting(String currentMessage) {
         // create a new message
         String forwardid = createMeeting();

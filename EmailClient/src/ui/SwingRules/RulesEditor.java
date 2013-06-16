@@ -110,7 +110,39 @@ public class RulesEditor extends JFrame{
                 rulesTable.setModel(model);
             }
         });
-
+        
+        JButton upButton = new JButton("Up");
+        upButton.setToolTipText("Move a selected rule up");
+        upButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                int selectedIndex = rulesTable.getSelectedRow();
+                String ruleId = model.getRuleId(selectedIndex);
+                moveUpRule(ruleId, selectedIndex);
+                
+                model = new RulesTableModel(MessageController.getInstance());
+                model.fireTableDataChanged();
+                rulesTable.setModel(model);
+            }
+        });
+        
+        JButton downButton = new JButton("Down");
+        downButton.setToolTipText("Move a selected rule down");
+        downButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                
+                int selectedIndex = rulesTable.getSelectedRow();
+                String ruleId = model.getRuleId(selectedIndex);
+                moveDownRule(ruleId, selectedIndex);
+                
+                model = new RulesTableModel(MessageController.getInstance());
+                model.fireTableDataChanged();
+                rulesTable.setModel(model);
+            }
+        });
+        
         JButton doneButton = new JButton("Done");
         doneButton.setToolTipText("Apply rules to Inbox");
         doneButton.addActionListener(new ActionListener() {
@@ -127,6 +159,8 @@ public class RulesEditor extends JFrame{
         buttonPanel.add(createButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
+        buttonPanel.add(upButton);
+        buttonPanel.add(downButton);
         buttonPanel.add(doneButton);
 
         this.setLayout(new BorderLayout());
@@ -147,6 +181,19 @@ public class RulesEditor extends JFrame{
         Rules.getInstance().applyRules(controller.getInboxFolderId());
     }
 
+    void moveUpRule(String ruleId, int selectedIndex) {
+        if(selectedIndex > 0) {
+            controller.moveUpRule(ruleId, selectedIndex);
+        }
+    }
+    
+    void moveDownRule(String ruleId, int selectedIndex) {
+        int count = controller.getRulesCount();
+        if((selectedIndex != -1) && (selectedIndex != (count - 1 ))){
+            controller.moveDownRule(ruleId, selectedIndex);
+        }
+    }
+    
     void moveToWarning(String text) {
 
         JDialog dialog = new JOptionPane( text,
@@ -340,7 +387,7 @@ public class RulesEditor extends JFrame{
     /**
      * Rules table model class
      */
-    public static class RulesTableModel extends AbstractTableModel {
+    public static class RulesTableModel extends AbstractTableModel{
 
         String[] listOfRules;
         MessageController controller;
