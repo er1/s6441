@@ -26,7 +26,7 @@ public class MessageList extends JTable {
     String folderid;
     ToolRibbon toolribbon;
     TableModelInterface model;
-
+   
     /**
      * Constructor of MessageList
      *
@@ -100,7 +100,7 @@ public class MessageList extends JTable {
 
         // get id of row
         String id = (String) this.model.getValueAt(row, -1);
-        JPopupMenu menu = new MessageMenu(id, folderid);
+        JPopupMenu menu = new MessageMenu(id, folderid, this);
         menu.show(this, mouseposition.x, mouseposition.y);
     }
 
