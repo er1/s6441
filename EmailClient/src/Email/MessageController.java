@@ -2,6 +2,7 @@ package Email;
 
 import Meeting.MeetingSummary;
 import Persist.MessageTransfer;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,9 +28,10 @@ public class MessageController extends Observable {
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
 
     /**
-     * Enum UpdateType 
+     * Enum UpdateType
      */
     public enum UpdateType {
+
         /**
          * Variable to update both for folders and messages
          */
@@ -37,7 +39,8 @@ public class MessageController extends Observable {
         /**
          * Variable to update only for messages
          */
-        MESSAGES };
+        MESSAGES
+    };
 
     /**
      * MessageController Constructor
@@ -296,6 +299,7 @@ public class MessageController extends Observable {
 
     /**
      * Copy given message to specified folder
+     *
      * @param messageId
      * @param folderId
      */
@@ -318,7 +322,7 @@ public class MessageController extends Observable {
         Message newMsg = new PlainTextMessage();
         UUID messageId = UUID.randomUUID();
         newMsg.setId(messageId.toString());
- 
+
         String id = getIdfromMessage(newMsg);
         markRead(id);
         return id;
@@ -326,6 +330,7 @@ public class MessageController extends Observable {
 
     /**
      * function to say compose a mail from the given template
+     *
      * @param template
      * @return message id of composed mail
      */
@@ -602,26 +607,42 @@ public class MessageController extends Observable {
                 if (usermat.find()) {
                     to = usermat.group(1).trim();
                 }
-
-                transfer.sendMessageTo(to, content);
+                try {
+                    transfer.sendMessageTo(to, content);
+                } catch (IOException ex) {
+                    // protocol or connection error here
+                } catch (IllegalArgumentException ex) {
+                    // send error caught here
+                }
             }
             sent.addMessage(out);
             this.getIdfromMessage(out);
             this.setChanged();
         }
 
-        while (transfer.MessageExistFor(userId)) {
-            String message = transfer.getMessageFor(userId);
-            Message newMsg = PlainTextMessage.parse(message);
-            if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
-                newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
-                store.getMeetings().addMessage(newMsg);
-            } else {
-                UUID messageId = UUID.randomUUID();
-                newMsg.setId(messageId.toString());
-                inbox.addMessage(newMsg);
+        try {
+            while (transfer.MessageExistFor(userId)) {
+                String message = transfer.getMessageFor(userId);
+                Message newMsg = PlainTextMessage.parse(message);
+                if (newMsg == null) {
+                    System.out.println(message.replaceAll("\r*\n", "\r\n"));
+                    continue;
+                }
+                if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
+                    newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
+                    store.getMeetings().addMessage(newMsg);
+                } else if (!"".equals(newMsg.getHeaderValue("Message-ID"))) {
+                    newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
+                    store.getMeetings().addMessage(newMsg);
+                } else {
+                    UUID messageId = UUID.randomUUID();
+                    newMsg.setId(messageId.toString());
+                    inbox.addMessage(newMsg);
+                }
+                this.setChanged();
             }
-            this.setChanged();
+        } catch (IOException ex) {
+            // protocol or connection error here
         }
 
         store.sync();
@@ -632,6 +653,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the meetings folder id
+     *
      * @return id
      */
     public String getMeetingsFolderId() {
@@ -640,6 +662,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the templates folder id
+     *
      * @return id
      */
     public String getTemplatesFolderId() {
@@ -648,6 +671,7 @@ public class MessageController extends Observable {
 
     /**
      * Create a new meeting
+     *
      * @return meeting id
      */
     public String createMeeting() {
@@ -660,6 +684,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the rule from rule id
+     *
      * @param ruleId
      * @return object of FilterRule
      */
@@ -669,6 +694,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the id from given rule
+     *
      * @param rule
      * @return id
      */
@@ -687,6 +713,7 @@ public class MessageController extends Observable {
 
     /**
      * Add a given rule
+     *
      * @param rule
      */
     public void addRule(FilterRule rule) {
@@ -695,6 +722,7 @@ public class MessageController extends Observable {
 
     /**
      * Delete a rule
+     *
      * @param ruleId
      */
     public void deleteRule(int ruleId) {
@@ -703,6 +731,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the rules list
+     *
      * @return ids of all the rules in rules list
      */
     public String[] getRuleList() {
@@ -727,6 +756,7 @@ public class MessageController extends Observable {
 
     /**
      * Get the rules count
+     *
      * @return size
      */
     public int getRulesCount() {
@@ -735,6 +765,7 @@ public class MessageController extends Observable {
 
     /**
      * Send a meeting request
+     *
      * @param messageId
      */
     public void sendMeeting(String messageId) {
@@ -744,6 +775,7 @@ public class MessageController extends Observable {
 
     /**
      * Get meeting summary of particular meeting message
+     *
      * @param messageId
      * @return summary
      */
@@ -763,6 +795,7 @@ public class MessageController extends Observable {
 
     /**
      * Check given folder exists in file system
+     *
      * @param folderPath
      * @return True/False
      */

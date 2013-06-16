@@ -116,13 +116,15 @@ public class PlainTextMessage implements Message {
         String[] lines = allLines.split("\n");
 
         String lastKey = null;
-        
+
         for (String line : lines) {
             int colon = line.indexOf(":");
 
             // colon not found, add to the last line
             if (colon < 0 && lastKey != null) {
-                msg.setHeader(lastKey, msg.getHeaderValue(lastKey) + "\n" + line.trim());
+                if (line.trim().length() > 0) {
+                    msg.setHeader(lastKey, msg.getHeaderValue(lastKey) + "\n" + line.trim());
+                }
                 continue;
             }
 
