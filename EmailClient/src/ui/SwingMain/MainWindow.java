@@ -3,12 +3,12 @@ package ui.SwingMain;
 import Email.FileSystemMailbox;
 import Email.MessageController;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.*;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import ui.LabeledTextField;
 
 /**
  * Main Email Client window
@@ -41,7 +41,7 @@ public class MainWindow extends JFrame {
         this.folders = new FolderList(this.messages);
 
         this.searchBar = new JTextField();
-        this.searchButton = new JButton("Search");
+        this.searchButton = new JButton("Go");
 
         searchButton.setToolTipText("To search Mail (Alt + S)");
 
@@ -86,7 +86,10 @@ public class MainWindow extends JFrame {
         foldersPane.setBorder(BorderFactory.createLoweredBevelBorder());
         messagesPane.setBorder(BorderFactory.createLoweredBevelBorder());
         contentPane.setBorder(BorderFactory.createLoweredBevelBorder());
-
+        
+        //set size for folderPane
+        foldersPane.setPreferredSize(new Dimension(200,200));
+        
         // Add elements        
         center.add(messagesPane);
         center.add(contentPane);
@@ -114,7 +117,20 @@ public class MainWindow extends JFrame {
      * @param searchText
      */
     public void doSearch(String searchText) {
-        search = new SearchFolderTableModel(controller.getRootFolderId(), searchText);
-        messages.setModel(search);
+        if (! searchText.isEmpty()) {
+            String folderId = FolderList.currentFolderId;
+            if (folderId == null) {
+                search = new SearchFolderTableModel(controller.getRootFolderId(), searchText);
+            } else {
+                search = new SearchFolderTableModel(folderId, searchText);
+            }
+            messages.setModel(search);
+        }
+        else {
+                JOptionPane.showMessageDialog(
+                null,
+                "Search field is empty. Please enter any text to search."
+                );
+        }
     }
 }

@@ -27,4 +27,8 @@ public class Content extends JTextArea {
         String content = controller.getEmailContent(messageid);
         this.setText(content);
     }
+    
+    public void emptyMessage() {
+        this.setText(null);
+    }
 }

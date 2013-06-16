@@ -26,18 +26,23 @@ public class MessageList extends JTable {
     String folderid;
     ToolRibbon toolribbon;
     TableModelInterface model;
-
+   
     /**
      * Constructor of MessageList
      *
      * @param content
      * @param toolribbon  
      */
+    private static MessageList instance;
+    
+    public static MessageList getInstance() {
+        return instance;
+    }
     public MessageList(Content content, ToolRibbon toolribbon) {
         this.controller = MessageController.getInstance();
         this.content = content;
         this.toolribbon = toolribbon;
-
+        this.instance = this;
         this.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
         ListSelectionModel lsm = this.getSelectionModel();
@@ -149,6 +154,7 @@ public class MessageList extends JTable {
         String messageid = model.getMessageId(selected);
 
         if (messageid == null) {
+            content.emptyMessage();
             return;
         }
 
@@ -179,6 +185,7 @@ public class MessageList extends JTable {
         
         MeetingEditor editor = new MeetingEditor(messageid , MeetingEditor.Type.VIEW_MEETING);
         editor.init();
+        editor.refresh();
         editor.setVisible(true);
     }
 }

@@ -105,4 +105,16 @@ public class Rules {
     public boolean isFolderExists(String folderPath) {
         return persistStore.isFolderExists(folderPath);
     }
+
+    void moveUpRule(String ruleId, int selectedIndex) {
+        FilterRule rule = controller.getRuleFromId(ruleId);
+        listOfRules.remove(selectedIndex);
+        listOfRules.add((selectedIndex - 1), rule);
+    }
+    
+    void moveDownRule(String ruleId, int selectedIndex) {
+        FilterRule rule = controller.getRuleFromId(ruleId);
+        listOfRules.remove(selectedIndex);
+        listOfRules.add((selectedIndex + 1), rule);
+    }
 }

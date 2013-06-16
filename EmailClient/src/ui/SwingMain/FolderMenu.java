@@ -40,6 +40,7 @@ public class FolderMenu extends JPopupMenu {
         JMenuItem deleteFolder = new JMenuItem("Delete");
         JMenuItem newFolder = new JMenuItem("New Folder");
         JMenuItem moveFolder = new JMenuItem("Move to ...");
+        JMenuItem delete = new JMenuItem("Delete");
 
         if (pickedFolderId != null) {
             moveFolder.setText("Move to " + controller.getFolderName(pickedFolderId));
@@ -75,6 +76,13 @@ public class FolderMenu extends JPopupMenu {
             }
         });
 
+        delete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //delete mails in selected folder
+                delete();
+            }
+        });
         //FIXME
         //Should be a cal to controller that returns all Top level directories
         ArrayList<String> staticfolders = Util.newArrayList();
@@ -96,6 +104,11 @@ public class FolderMenu extends JPopupMenu {
             this.add(newFolder);
             this.add(pickFolder);
         }
+        
+        if(staticfolders.contains(selected) && 
+                (! selected.equals(controller.getRootFolderId()))) {
+            this.add(delete);
+        }
     }
 
     private void deleteFolder() {
@@ -110,7 +123,18 @@ public class FolderMenu extends JPopupMenu {
             MessageController.getInstance().deletefolder(selected);
         }
     }
-
+    private void delete() {
+        int choice = JOptionPane.showConfirmDialog(
+                null,
+                "Are you sure you want to delete all mails in this folder?",
+                "Delete mails",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        
+        if (choice == JOptionPane.YES_OPTION) {
+            MessageController.getInstance().deleteAllMails(selected);
+        }
+    }
     private void moveFolder() {
         MessageController.getInstance().moveFolder(selected, pickedFolderId);
     }

@@ -26,6 +26,7 @@ public class FolderList extends JTree {
     MessageList list;
     FolderTreeModel model;
 
+    public static String currentFolderId;
     /**
      * constructor of FolderList
      *
@@ -46,7 +47,7 @@ public class FolderList extends JTree {
             }
         });
     }
-
+    
     private void init() {
         this.setLayout(new BorderLayout());
 
@@ -96,6 +97,7 @@ public class FolderList extends JTree {
         try {
             TreePath path = this.getSelectionPath();
             String id = ((FolderTreeModel.FolderNode) path.getLastPathComponent()).getId();
+            currentFolderId = id;
             list.displayFolder(id);
         } catch (NullPointerException e) {
             // FIXME
