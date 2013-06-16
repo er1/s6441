@@ -50,7 +50,7 @@ public class MessageTransfer {
      * @param userID
      * @return True/False
      */
-    public boolean MessageExistFor(String userID) {
+    public boolean MessageExistFor(String userID) throws IOException {
         String userinboundPath = getMailSpoolFor(userID);
         File userinbound = new File(userinboundPath);
 
@@ -68,7 +68,7 @@ public class MessageTransfer {
      * @param userID
      * @return message
      */
-    public String getMessageFor(String userID) {
+    public String getMessageFor(String userID) throws IOException {
         String userinboundPath = getMailSpoolFor(userID);
         File userinbound = new File(userinboundPath);
 
@@ -105,7 +105,7 @@ public class MessageTransfer {
      * @param userID
      * @param content
      */
-    public void sendMessageTo(String userID, String content) {
+    public void sendMessageTo(String userID, String content) throws IOException {
         if (userID.isEmpty()) {
             return;
         }
