@@ -1,0 +1,55 @@
+MAILS
+	✓	Compose new mail (hotkey or toolbar button)
+	✓	Save as drafts and templates
+	✓	Send a mail 
+	✓	Delete a mail to trash (RightClick or hotkey or toolbar button)
+	✓	Move mail 
+	✓	Reply mail (hotkey or toolbar button)
+	✓	Forward mail (hotkey or toolbar button) 
+	✓	Mark mail as unread (hotkey or toolbar button)
+
+FOLDER
+	✓	Create new folder in inbox
+	✓	Move folder to destination folder within inbox
+	✓	Delete a folder in inbox -> will move mails to trash and delete a folder
+	✓	Delete top folder will move its mails to trash
+	✓	Empty trash
+
+SEARCH
+	✓	Search mail for search text in a selected folder.
+	✓	Search entire mailbox for search text if no folder is selected
+
+RULE
+	✓	Create rule (based on criteria [From/Subject/Content]) and move that to 		the destination folder
+	✓	Delete rule
+	✓	Edit Rule
+	✓	Change priority of a rule by moving either up or down
+	✓	Apply rule for mails in Inbox folder
+	✓	Automatically applies rule for incoming mail
+
+TEMPLATE
+	✓	Create template
+	✓	Delete template
+	✓	As of now updating template creates a new one
+
+MEETING
+	✓	Create new meeting 
+	✓	check validation 
+		⁃	Start time and end time should not be same
+		⁃	End time should not be earlier than starting time
+		⁃	Date should not be expired
+		⁃	To,subject and content is empty message
+	✓	Send meeting mail to recipients
+	✓	Recipients should receive it in their inbox
+	✓	Opens as a Read only meeting, with an option to accept or decline.
+	•	On Accept
+		✓	 Add the meeting to the local Meetings folder
+		✓	Send a response to the meeting organizer
+	•	 On decline:
+		✓	 Delete the meeting and move it to trash folder
+		✓	Send a response to the meeting organizer
+	✓	List meeting in Meeting folder
+	✓	Edit Meeting
+	✓	Send update message
+	✓	Delete Meeting in meeting folder
+
