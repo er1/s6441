@@ -21,6 +21,8 @@ public class MeetingSummary {
     private String endTime;
     private String meetingDate;
     private String meetingId;
+    private String acceptedRecepients;
+    //private String declinedRecepients;
 
     /**
      *
@@ -38,6 +40,7 @@ public class MeetingSummary {
                 EndTime(message.getHeaderValue("MeetingEndTime")).
                 MeetingDate(message.getHeaderValue("MeetingDate")).
                 MeetingID(message.getHeaderValue("X-MeetingId")).
+                AcceptedRecepients(message.getHeaderValue("X-Accepted")).
                 Read(message.getHeaderValue("X-Read").length() > 0);
     }
 
@@ -228,6 +231,11 @@ public class MeetingSummary {
 
     MeetingSummary MeetingID(String meetingId) {
         this.meetingId = meetingId;
+        return this;
+    }
+
+    private MeetingSummary AcceptedRecepients(String accepted) {
+        this.acceptedRecepients = accepted;
         return this;
     }
 }

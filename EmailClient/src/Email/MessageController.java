@@ -29,19 +29,81 @@ public class MessageController extends Observable {
     public void acceptMeeting(String messageId) {
         Message message = getMessageFromId(messageId);
         store.getMeetings().addMessage(message);
-        //TODO Send response to sender
+        sendAcceptToSender(message);
     }
 
     public void declineMeeting(String messageId) {
         Message message = getMessageFromId(messageId);
         store.getTrash().addMessage(message);
-        //TODO Send response to sender
+        sendDeclineToSender(message);
     }
 
     public boolean isThisAMeeting(String messageid) {
         Message newMsg = getMessageFromId(messageid);
         if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
             return true;
+        }
+        return false;
+    }
+
+    private void sendAcceptToSender(Message original) {
+        String replyid = compose();
+        updateDate(replyid);
+        Message replymsg = getMessageFromId(replyid);
+        replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
+        replymsg.setHeader("To", original.getHeaderValue("From"));
+        String userId = store.getUserId();
+        replymsg.setHeader("Subject", "ACCEPTED: " + original.getHeaderValue("Subject"));
+        replymsg.setHeader("X-Accepted", userId);
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
+        moveMessageToFolder(replyid, getOutboxFolderId());
+    }
+
+    private void sendDeclineToSender(Message original) {
+        String replyid = compose();
+        updateDate(replyid);
+        Message replymsg = getMessageFromId(replyid);
+        replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
+        replymsg.setHeader("To", original.getHeaderValue("From"));
+        String userId = store.getUserId();
+        replymsg.setHeader("Subject", "DECLINED: " + original.getHeaderValue("Subject"));
+        replymsg.setHeader("X-Declined", userId);
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
+        moveMessageToFolder(replyid, getOutboxFolderId());
+    }
+
+    /**
+     * Generate a new ID and return it as string
+     */
+    private String generateNewId() {
+        UUID messageId = UUID.randomUUID();
+        return messageId.toString();
+    }
+
+    private void handleMeetingResponse(Message newMsg) {
+        String id = "test/Meetings/" + newMsg.getHeaderValue("X-MeetingId");
+
+        if (responseToExistingMeeting(id)) {
+            String accepted = getMessageFromId(id).getHeaderValue("X-Accepted");
+            if (accepted.isEmpty()) {
+                accepted += newMsg.getHeaderValue("X-Accepted");
+            } else {
+                accepted += ", " + newMsg.getHeaderValue("X-Accepted");
+            }
+            Message existingMeeting = getMessageFromId(id);
+            existingMeeting.setHeader("X-Accepted", accepted);
+            store.getMeetings().addMessage(existingMeeting);
+        }
+    }
+
+    private boolean responseToExistingMeeting(String id) {
+        String[] meeting_ids = getEmailList(getMeetingsFolderId());
+        for (int i = 0; i < meeting_ids.length; i++) {
+            if (meeting_ids[i].contains(id)) {
+                return true;
+            }
         }
         return false;
     }
@@ -347,7 +409,6 @@ public class MessageController extends Observable {
         this.notifyObservers(UpdateType.MESSAGES);
     }
 
-    //FIXME Not sure what this does
     /**
      * Compose a new message
      *
@@ -663,9 +724,18 @@ public class MessageController extends Observable {
                     System.out.println(message.replaceAll("\r*\n", "\r\n"));
                     continue;
                 }
+                //Is it a meeting?
                 if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
-                    newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
-                    store.getMeetings().addMessage(newMsg);
+                    //Is it a Response to a meeting?
+                    if (!"".equals(newMsg.getHeaderValue("X-Accepted"))
+                            || !"".equals(newMsg.getHeaderValue("X-Declined"))) {
+                        newMsg.setId(generateNewId());
+                        handleMeetingResponse(newMsg);
+                    } else {
+                        newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
+                        //TODO What if a meeting with the same ID already exists?
+                        //store.getMeetings().addMessage(newMsg);
+                    }
                 } else if (!"".equals(newMsg.getHeaderValue("Message-ID"))) {
                     newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
                     store.getMeetings().addMessage(newMsg);
