@@ -243,7 +243,7 @@ public class MeetingEditor extends JFrame {
         String[] starttime = startTimeField.getText().split(":");
         String[] endtime = endTimeField.getText().split(":");
         String[] dateT = dateField.getText().split("/");
-        boolean validMsg = false;
+          boolean validMsg = true;
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         String todayDate = dateFormat.format(date);
