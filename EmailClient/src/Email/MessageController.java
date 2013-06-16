@@ -137,6 +137,22 @@ public class MessageController extends Observable {
         return ids;
     }
 
+    public void deleteAllMails(String folderId) {
+        Folder fldr = getFolderFromId(folderId);
+        ArrayList<Message> set;
+        set = fldr.getMessages();
+
+        for (Message message : set) {
+            String id = getIdfromMessage(message);
+            if(folderId.equals(getTrashFolderId())) {
+                delete(id);
+            }
+            else {
+                moveMessageToFolder(id, getTrashFolderId());
+            }
+        }
+    }
+
     /**
      * Get email content
      *
