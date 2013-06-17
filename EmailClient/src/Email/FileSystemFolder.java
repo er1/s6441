@@ -238,10 +238,16 @@ public class FileSystemFolder implements Folder {
 
     @Override
     public void moveFolder(Folder destination) {
+        FileSystemFolder fs;
         FileSystemFolderProxy fsdest;
-        fsdest = (FileSystemFolderProxy) destination;
-        persistStore.moveFolder(this.getPath(), fsdest.getPath());
-
+        if (destination.getName().equals("Inbox")) {
+            fs = (FileSystemFolder) destination;
+            persistStore.moveFolder(this.getPath(), fs.getPath());
+        }
+        else {
+            fsdest = (FileSystemFolderProxy) destination;
+            persistStore.moveFolder(this.getPath(), fsdest.getPath());
+        }
         parent.sync();
         sync();
         destination.sync();
