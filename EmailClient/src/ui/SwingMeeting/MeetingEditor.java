@@ -92,7 +92,8 @@ public class MeetingEditor extends JFrame {
 
         toField = new LabeledTextField("To");
         meetingContentTextArea = new JTextArea();
-
+        acceptField.setEditable(false);
+        declineField.setEditable(false);
         acceptField = new LabeledTextField("Accepted");
         declineField = new LabeledTextField("Declined");
         JButton sendMeeting;
