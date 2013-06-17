@@ -53,14 +53,12 @@ public class MessageMenu extends JPopupMenu {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 delete();
-                list.displayFolder(folder);
             }
         });
         moveItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 move();
-                list.displayFolder(folder);
             }
         });
 
@@ -89,6 +87,13 @@ public class MessageMenu extends JPopupMenu {
 
     void delete() {
         controller.moveMessageToFolder(selected, controller.getTrashFolderId());
+        
+        String trash = controller.getTrashFolderId();
+        if (folder.equals(trash)) {
+            controller.delete(selected);
+        } else {
+            controller.moveMessageToFolder(selected, trash);
+        }
     }
 
     void move() {
