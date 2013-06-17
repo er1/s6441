@@ -166,7 +166,7 @@ public class MessageList extends JTable {
 
     }
 
-    private void openmessage() {
+    public void openmessage() {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
 
