@@ -16,8 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import ui.LabeledTextField;
-import ui.SwingMain.FolderList;
-import ui.SwingMain.MessageList;
 
 /**
  * Edit Meeting Window
@@ -128,8 +126,6 @@ public class MeetingEditor extends JFrame {
                 accept();
                 setVisible(false);
                 dispose();
-                //refreshes messagelist pane
-                MessageList.getInstance().displayFolder(FolderList.currentFolderId);
             }
         });
         declineButton = new JButton("Decline");
@@ -140,8 +136,6 @@ public class MeetingEditor extends JFrame {
                 decline();
                 setVisible(false);
                 dispose();
-                //refreshes messagelist pane
-                MessageList.getInstance().displayFolder(FolderList.currentFolderId);
             }
         });
         if (type != Type.COMPOSE_MEETING) {
@@ -188,7 +182,7 @@ public class MeetingEditor extends JFrame {
         JPanel footerPanel = new JPanel();
         BoxLayout footerLayout = new BoxLayout(footerPanel, BoxLayout.X_AXIS);
         footerPanel.setLayout(footerLayout);
-        
+
         if (type == Type.VIEW_MEETING) {
             footerPanel.add(closeMeeting);
         } else if (type == Type.RESPOND_MEETING) {
