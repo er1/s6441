@@ -92,8 +92,6 @@ public class MeetingEditor extends JFrame {
 
         toField = new LabeledTextField("To");
         meetingContentTextArea = new JTextArea();
-        acceptField.setEditable(false);
-        declineField.setEditable(false);
         acceptField = new LabeledTextField("Accepted");
         declineField = new LabeledTextField("Declined");
         JButton sendMeeting;
@@ -190,6 +188,8 @@ public class MeetingEditor extends JFrame {
         headerPanel.add(datePanel);
         headerPanel.add(startTimePanel);
         headerPanel.add(endTimePanel);
+        acceptField.setEditable(false);
+        declineField.setEditable(false);
         headerPanel.add(acceptField);
         headerPanel.add(declineField);
 
@@ -245,6 +245,12 @@ public class MeetingEditor extends JFrame {
 
     private boolean doValidate() {
         validMsg = checkTime();
+        if (toField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "To field is empty. Please enter.");
+            validMsg = false;
+        }
         if (subjectField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(
                     null,
