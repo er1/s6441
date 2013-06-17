@@ -168,12 +168,19 @@ public class MessageList extends JTable {
 
     private void openmessage() {
         int selected = this.getSelectedRow();
+        if(selected < 0) {
+            return;
+        }
         String messageid = model.getMessageId(selected);
 
         if (folderid.equals(controller.getTemplateFolderId())) {
             messageid = controller.composeFrom(messageid);
         } else if (controller.isThisAMeeting(messageid)) {
-            openMeeting(MeetingEditor.Type.RESPOND_MEETING);
+            if (folderid.equals(controller.getInboxFolderId())) {
+                openMeeting(MeetingEditor.Type.RESPOND_MEETING);
+            } else {
+                openMeeting(MeetingEditor.Type.VIEW_MEETING);
+            }
             return;
         }
 
