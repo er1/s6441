@@ -221,20 +221,110 @@ public class MessageController extends Observable {
         String[] ids;
 
         try {
-            Folder fldr = getFolderFromId(folderId);
-            ArrayList<Message> set;
-            set = fldr.getMessages();
-
-            ids = new String[set.size()];
-
-            int index = 0;
-            for (Message message : set) {
-                ids[index++] = getIdfromMessage(message);
-            }
+            /*Folder fldr = getFolderFromId(folderId);
+             * ArrayList<Message> set;
+             * set = fldr.getMessages();
+             * 
+             * ids = new String[set.size()];
+             * 
+             * int index = 0;
+             * for (Message message : set) {
+             * ids[index++] = getIdfromMessage(message);
+             * }*/
+            ids = orderEmailList(folderId);
         } catch (Exception ex) {
             ids = new String[0];
         }
         return ids;
+    }
+
+    public String[] orderEmailList(String folderId) {
+        String[] ord, neword, date;
+        Summary summary;
+        int length;
+
+        try {
+            Folder fldr = getFolderFromId(folderId);
+            ArrayList<Message> set;
+            set = fldr.getMessages();
+            ord = new String[set.size()];
+            date = new String[set.size()];
+            int index = 0;
+            length = set.size();
+            for (Message message : set) {
+                ord[index++] = getIdfromMessage(message);
+            }
+            for (int i = 0; i < set.size(); i++) {
+                summary = getEmailSummary(ord[i]);
+                date[i] = summary.getDate();
+                //  System.out.println("The date of the mesages are ---->" + date[i] );
+            }
+            neword = arrangeEmailList(ord, date, length);
+        } catch (Exception ex) {
+            neword = new String[0];
+        }
+        return neword;
+    }
+
+    public String[] arrangeEmailList(String[] msgId, String date[], int length) {
+        Summary summary;
+        String[] splitDate, newmsgId, newmsgId1, newmsgId2;
+        String[] time = new String[length];
+        String[] dateMsg = new String[length];
+        String[] dateMonth = new String[length];
+        String[] dateDay = new String[length];
+        String[] dateYear = new String[length];
+        String[] timeHr = new String[length];
+        String[] timeMin = new String[length];
+        String[] timeSec = new String[length];
+        for (int i = 0; i < length; i++) {
+            summary = getEmailSummary(msgId[i]);
+            date[i] = summary.getDate();
+            System.out.println("The date of the mesages are before sending ---->" + date[i]);
+        }
+        for (int i = 0; i < length; i++) {
+            splitDate = date[i].split(" ");
+            time[i] = splitDate[1];
+            dateMsg[i] = splitDate[0];
+        }
+        for (int i = 0; i < length; i++) {
+            splitDate = dateMsg[i].split("/");
+            //    System.out.println("The splitdate ---> " + splitDate[0] +" Thing "+ splitDate[1]+" thing " + splitDate[2]);
+            dateYear[i] = splitDate[0];
+            dateMonth[i] = splitDate[1];
+            dateDay[i] = splitDate[2];
+        }
+        newmsgId = sort(dateYear, length, msgId);
+        newmsgId1 = sort(dateMonth, length, newmsgId);
+        newmsgId2 = sort(dateDay, length, newmsgId1);
+        for (int i = 0; i < length; i++) {
+            summary = getEmailSummary(newmsgId2[i]);
+            System.out.println("The date of the mesages are after receiving ---->" + summary.getDate());
+        }
+        return newmsgId2;
+    }
+
+    public String[] sort(String[] sortArray, int length, String[] msgId) {
+        int[] newArray = new int[sortArray.length];
+        for (int i = 0; i < sortArray.length; i++) {
+            newArray[i] = Integer.parseInt(sortArray[i]);
+            //  System.out.println("The coming array of of the mesages are ---->" + newArray[i]);
+        }
+        for (int i = 0; i < length; i++) {
+            int j = i;
+            int B = newArray[i];
+            String x = msgId[i];
+            while ((j > 0) && (newArray[j - 1] < B)) {
+                newArray[j] = newArray[j - 1];
+                msgId[j] = msgId[j - 1];
+                j--;
+            }
+            newArray[j] = B;
+            msgId[j] = x;
+        }
+        //   for(int i=0;i<length;i++)
+        //System.out.println("The outpput of the mesages are ---->" + newArray[i]);
+        return msgId;
     }
 
     public void deleteAllMails(String folderId) {
@@ -244,10 +334,9 @@ public class MessageController extends Observable {
 
         for (Message message : set) {
             String id = getIdfromMessage(message);
-            if(folderId.equals(getTrashFolderId())) {
+            if (folderId.equals(getTrashFolderId())) {
                 delete(id);
-            }
-            else {
+            } else {
                 moveMessageToFolder(id, getTrashFolderId());
             }
         }
@@ -517,6 +606,7 @@ public class MessageController extends Observable {
 
     /**
      * Create a forward content from current message
+     *
      * @param currentMessage
      * @return
      */
@@ -883,6 +973,7 @@ public class MessageController extends Observable {
 
     /**
      * Move a rule up one rule
+     *
      * @param ruleId
      * @param selectedIndex
      */
@@ -892,12 +983,14 @@ public class MessageController extends Observable {
 
     /**
      * Move a rule down one rule
+     *
      * @param ruleId
      * @param selectedIndex
      */
     public void moveDownRule(String ruleId, int selectedIndex) {
         rules.moveDownRule(ruleId, selectedIndex);
     }
+
     /**
      * Send a meeting request
      *
@@ -940,6 +1033,7 @@ public class MessageController extends Observable {
 
     /**
      * Create a reply content for selected meeting
+     *
      * @param originalMessage
      * @return meeting id
      */
@@ -981,8 +1075,10 @@ public class MessageController extends Observable {
 
         return replyid;
     }
+
     /**
      * Create a forward content for selected meeting
+     *
      * @param currentMessage
      * @return meeting id
      */
