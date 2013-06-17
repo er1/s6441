@@ -185,7 +185,13 @@ public class MessageList extends JTable {
     private void openMeeting(MeetingEditor.Type type) {
         int selected = this.getSelectedRow();
         String messageid = model.getMessageId(selected);
-
+       
+        String subject = controller.getEmailHeader(messageid, "Subject");
+        
+        if (subject.contains("ACCEPTED:") || subject.contains("DECLINED:")) {
+            type = MeetingEditor.Type.VIEW_MEETING;
+        }
+        
         MeetingEditor editor = new MeetingEditor(messageid, type);
         editor.init();
         editor.refresh();
