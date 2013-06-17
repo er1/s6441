@@ -142,7 +142,7 @@ public class FileSystemFolder implements Folder {
         String id = m.getId();
         String fn = id.substring(id.lastIndexOf(File.separator) + 1);
         String newid = this.getPath() + File.separator + fn;
-        msg.setId(newid);
+        m.setId(newid);
         persistStore.deleteMessage(id);
         persistStore.newMessage(m.getId());
         persistStore.saveMessage(m.getId(), m.serialize());
