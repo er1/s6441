@@ -52,9 +52,17 @@ public class MessageController extends Observable {
         Message replymsg = getMessageFromId(replyid);
         replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
         replymsg.setHeader("To", original.getHeaderValue("From"));
+        
+        replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
+        replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
+        replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
+        
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "ACCEPTED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Accepted", userId);
+        
+        replymsg.setContent (original.getContent());
+        
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
@@ -66,9 +74,17 @@ public class MessageController extends Observable {
         Message replymsg = getMessageFromId(replyid);
         replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
         replymsg.setHeader("To", original.getHeaderValue("From"));
+        
+        replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
+        replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
+        replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
+        
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "DECLINED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Declined", userId);
+        
+        replymsg.setContent (original.getContent());
+        
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
