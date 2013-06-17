@@ -85,11 +85,11 @@ public class FileSystemFolderProxyTest {
     /**
      * Test of setName method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testSetName() {
         
         String name = "";
-        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);;
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         instance.setName(name);
         
     }
@@ -97,68 +97,77 @@ public class FileSystemFolderProxyTest {
     /**
      * Test of getMessages method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testGetMessages() {
-        System.out.println("getMessages");
-        FileSystemFolderProxy instance = null;
-        ArrayList expResult = null;
+        
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         ArrayList result = instance.getMessages();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertNotNull(result);
+        
     }
 
     /**
      * Test of getSubfolders method, of class FileSystemFolderProxy.
      */
-   @Ignore
+   @Test
     public void testGetSubfolders() {
-        System.out.println("getSubfolders");
-        FileSystemFolderProxy instance = null;
-        ArrayList expResult = null;
+        
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         ArrayList result = instance.getSubfolders();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+        assertNotNull(result);
+   }
 
     /**
      * Test of addMessage method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testAddMessage() {
-        System.out.println("addMessage");
-        Message msg = null;
-        FileSystemFolderProxy instance = null;
+        
+        PlainTextMessage msg;
+        msg = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
+                + "From: toor@example.com\r\n"
+                + "To: alice@example.com\r\n"
+                + "Subject: Hello\r\n"
+                + "\r\n"
+                + "Hello, World\r\n");
+                
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         instance.addMessage(msg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of addMessageCopy method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testAddMessageCopy() {
-        System.out.println("addMessageCopy");
-        Message msg = null;
-        FileSystemFolderProxy instance = null;
+        PlainTextMessage msg;
+        msg = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
+                + "From: toor@example.com\r\n"
+                + "To: alice@example.com\r\n"
+                + "Subject: Hello\r\n"
+                + "\r\n"
+                + "Hello, World\r\n");
+                
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         instance.addMessageCopy(msg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of deleteMessage method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testDeleteMessage() {
-        System.out.println("deleteMessage");
-        Message msg = null;
-        FileSystemFolderProxy instance = null;
+        PlainTextMessage msg;
+        msg = PlainTextMessage.parse("Date: 01 Jan 01 1970 GMT\r\n"
+                + "From: toor@example.com\r\n"
+                + "To: alice@example.com\r\n"
+                + "Subject: Hello\r\n"
+                + "\r\n"
+                + "Hello, World\r\n");
+                
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
+        instance.addMessage(msg);
         instance.deleteMessage(msg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
@@ -167,7 +176,7 @@ public class FileSystemFolderProxyTest {
     @Test
     public void testAddAndDeleteFolder() {
    
-        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);;
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         
         PersistentStorage.getTestingStorage();
         
@@ -183,26 +192,22 @@ public class FileSystemFolderProxyTest {
     /**
      * Test of sync method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testSync() {
-        System.out.println("sync");
-        FileSystemFolderProxy instance = null;
-        instance.sync();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+      
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
+        instance.sync();  
     }
 
     /**
      * Test of createFolder method, of class FileSystemFolderProxy.
      */
-    @Ignore
+    @Test
     public void testCreateFolder() {
-        System.out.println("createFolder");
-        String name = "";
-        FileSystemFolderProxy instance = null;
+       
+        String name = "level3";
+        FileSystemFolderProxy instance = new FileSystemFolderProxy("level1", mailbox);
         instance.createFolder(name);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**

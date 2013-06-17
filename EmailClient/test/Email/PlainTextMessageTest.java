@@ -101,9 +101,8 @@ public class PlainTextMessageTest {
         expResult = "alice@example.com";
         result = instance.getHeaderValue("To");
         assertEquals(expResult, result);
-        expResult = "Hello\n";
+        expResult = "Hello";
         result = instance.getHeaderValue("Subject");
-        System.out.println("result : " + result.charAt(5) + "i");
         assertEquals(expResult, result);
         expResult = "";
         result = instance.getHeaderValue("X-Not-A-Header");
@@ -168,7 +167,7 @@ public class PlainTextMessageTest {
         expResult = "alice@example.com";
         result = instance.getHeaderValue("To");
         assertEquals(expResult, result);
-        expResult = "Hello\n";
+        expResult = "Hello";
         result = instance.getHeaderValue("Subject");
         assertEquals(expResult, result);
         expResult = "";
