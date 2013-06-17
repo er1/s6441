@@ -494,7 +494,7 @@ public class MessageController extends Observable {
     public String compose() {
         Message newMsg = new PlainTextMessage();
         UUID messageId = UUID.randomUUID();
-        newMsg.setId(messageId.toString());
+        newMsg.setId(messageId.toString() + ".eml");
 
         String id = getIdfromMessage(newMsg);
         markRead(id);
@@ -813,7 +813,7 @@ public class MessageController extends Observable {
                     }
                 } else {
                     UUID messageId = UUID.randomUUID();
-                    newMsg.setId(messageId.toString());
+                    newMsg.setId(messageId.toString() + ".eml");
                 }
                 inbox.addMessage(newMsg);
                 this.setChanged();
