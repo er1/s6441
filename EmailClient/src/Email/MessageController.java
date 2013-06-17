@@ -2,6 +2,7 @@ package Email;
 
 import Meeting.MeetingSummary;
 import Persist.MessageTransfer;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -52,17 +53,18 @@ public class MessageController extends Observable {
         Message replymsg = getMessageFromId(replyid);
         replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
         replymsg.setHeader("To", original.getHeaderValue("From"));
-        
+
         replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
         replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
         replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
-        
+
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "ACCEPTED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Accepted", userId);
-        
+
         replymsg.setContent (original.getContent());
-        
+
+        replymsg.setHeader("X-Response", "ACCEPT");
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
@@ -74,17 +76,18 @@ public class MessageController extends Observable {
         Message replymsg = getMessageFromId(replyid);
         replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
         replymsg.setHeader("To", original.getHeaderValue("From"));
-        
+
         replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
         replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
         replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
-        
+
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "DECLINED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Declined", userId);
-        
+
         replymsg.setContent (original.getContent());
-        
+
+        replymsg.setHeader("X-Response", "DECLINE");
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
@@ -99,17 +102,31 @@ public class MessageController extends Observable {
     }
 
     private void handleMeetingResponse(Message newMsg) {
-        String id = "test/Meetings/" + newMsg.getHeaderValue("X-MeetingId");
+        String id = getMeetingFolderId() + File.separator + newMsg.getHeaderValue("X-MeetingId");
 
         if (responseToExistingMeeting(id)) {
-            String accepted = getMessageFromId(id).getHeaderValue("X-Accepted");
-            if (accepted.isEmpty()) {
-                accepted += newMsg.getHeaderValue("X-Accepted");
-            } else {
-                accepted += ", " + newMsg.getHeaderValue("X-Accepted");
-            }
+            String response = getMessageFromId(id).getHeaderValue("X-Response");
             Message existingMeeting = getMessageFromId(id);
-            existingMeeting.setHeader("X-Accepted", accepted);
+            String userid = "";
+            if (response.equals("ACCEPT")) {
+                String accepted = getMessageFromId(id).getHeaderValue("X-Accepted");
+                if (accepted.isEmpty()) {
+                    userid = newMsg.getHeaderValue("X-Accepted");
+                    accepted += userid;
+                } else {
+                    accepted += ", " + userid;
+                }
+                existingMeeting.setHeader("X-Accepted", accepted);
+            } else {
+                String declined = getMessageFromId(id).getHeaderValue("X-Declined");
+                if (declined.isEmpty()) {
+                    userid = newMsg.getHeaderValue("X-Declined");
+                    declined += userid;
+                } else {
+                    declined += ", " + userid;
+                }
+                existingMeeting.setHeader("X-Declined", declined);
+            }
             store.getMeetings().addMessage(existingMeeting);
         }
     }
@@ -827,14 +844,12 @@ public class MessageController extends Observable {
                 String message = transfer.getMessageFor(userId);
                 Message newMsg = PlainTextMessage.parse(message);
                 if (newMsg == null) {
-                    System.out.println(message.replaceAll("\r*\n", "\r\n"));
                     continue;
                 }
                 //Is it a meeting?
                 if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
                     //Is it a Response to a meeting?
-                    if (!"".equals(newMsg.getHeaderValue("X-Accepted"))
-                            || !"".equals(newMsg.getHeaderValue("X-Declined"))) {
+                    if (!"".equals(newMsg.getHeaderValue("X-Response"))) {
                         newMsg.setId(generateNewId());
                         handleMeetingResponse(newMsg);
                     } else {

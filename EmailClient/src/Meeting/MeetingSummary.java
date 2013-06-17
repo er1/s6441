@@ -22,7 +22,8 @@ public class MeetingSummary {
     private String meetingDate;
     private String meetingId;
     private String acceptedRecepients;
-    //private String declinedRecepients;
+    private String declinedRecepients;
+    private String response;
 
     /**
      *
@@ -41,6 +42,8 @@ public class MeetingSummary {
                 MeetingDate(message.getHeaderValue("MeetingDate")).
                 MeetingID(message.getHeaderValue("X-MeetingId")).
                 AcceptedRecepients(message.getHeaderValue("X-Accepted")).
+                DeclinedRecepients(message.getHeaderValue("X-Declined")).
+                Response(message.getHeaderValue("X-Response")).
                 Read(message.getHeaderValue("X-Read").length() > 0);
     }
 
@@ -236,6 +239,16 @@ public class MeetingSummary {
 
     private MeetingSummary AcceptedRecepients(String accepted) {
         this.acceptedRecepients = accepted;
+        return this;
+    }
+
+    private MeetingSummary DeclinedRecepients(String declined) {
+        this.declinedRecepients = declined;
+        return this;
+    }
+
+    private MeetingSummary Response(String response) {
+        this.response = response;
         return this;
     }
 }
