@@ -280,7 +280,7 @@ public class MessageController extends Observable {
         for (int i = 0; i < length; i++) {
             summary = getEmailSummary(msgId[i]);
             date[i] = summary.getDate();
-            System.out.println("The date of the mesages are before sending ---->" + date[i]);
+           // System.out.println("The date of the mesages are before sending ---->" + date[i]);
         }
         for (int i = 0; i < length; i++) {
             splitDate = date[i].split(" ");
@@ -297,10 +297,10 @@ public class MessageController extends Observable {
         newmsgId = sort(dateYear, length, msgId);
         newmsgId1 = sort(dateMonth, length, newmsgId);
         newmsgId2 = sort(dateDay, length, newmsgId1);
-        for (int i = 0; i < length; i++) {
-            summary = getEmailSummary(newmsgId2[i]);
-            System.out.println("The date of the mesages are after receiving ---->" + summary.getDate());
-        }
+        /*for (int i = 0; i < length; i++) {
+         * summary = getEmailSummary(newmsgId2[i]);
+         * System.out.println("The date of the mesages are after receiving ---->" + summary.getDate());
+         * }*/
         return newmsgId2;
     }
 

@@ -31,8 +31,10 @@ public class MeetingEditor extends JFrame {
     JFormattedTextField endTimeField;
     LabeledTextField subjectField;
     LabeledTextField toField;
+    LabeledTextField acceptField;
+    LabeledTextField declineField;
     JTextArea meetingContentTextArea;
-
+    boolean validMsg = false;
 
     /**
      * Enum types for viewing windows
@@ -56,6 +58,7 @@ public class MeetingEditor extends JFrame {
 
     /**
      * Constructor of MeetingEditor
+     *
      * @param messageId
      */
     public MeetingEditor(String messageId, Type type) {
@@ -74,20 +77,24 @@ public class MeetingEditor extends JFrame {
         dateLabel = new JLabel("Date (dd/mm/yyyy):");
         SimpleDateFormat dateformat = new SimpleDateFormat("dd/MM/yyyy");
         dateField = new JFormattedTextField(dateformat);
-        Date now = new Date();
+        long now = (new Date()).getTime();
+        Date start = new Date(((now / 3600000) + 1) * 3600000);
+        Date later = new Date(((now / 3600000) + 2) * 3600000);
         dateField.setValue(now);
         dateLabel.setLabelFor(dateField);
 
         startTimeLabel = new JLabel("Start Time (HH:MM):");
         startTimeField = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
-        startTimeField.setValue(now);
+        startTimeField.setValue(start);
         endTimeLabel = new JLabel("End Time (HH:MM):");
         endTimeField = new JFormattedTextField(new SimpleDateFormat("HH:mm"));
-        endTimeField.setValue(now);
+        endTimeField.setValue(later);
 
         toField = new LabeledTextField("To");
         meetingContentTextArea = new JTextArea();
 
+        acceptField = new LabeledTextField("Accepted");
+        declineField = new LabeledTextField("Declined");
         JButton sendMeeting;
         JButton chooseDate;
         JButton closeMeeting;
@@ -101,11 +108,16 @@ public class MeetingEditor extends JFrame {
         sendMeeting.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if(doValidate() == true)
-                {
-                send();
-                setVisible(false);
-                dispose();
+                if (validMsg != true) {
+                    validMsg = doValidate();
+                }
+                System.out.println("valid Msg " + validMsg);
+                if (validMsg == true) {
+                    send();
+                    setVisible(false);
+                    dispose();
+                } else {
+                    validMsg = false;
                 }
             }
         });
@@ -177,6 +189,8 @@ public class MeetingEditor extends JFrame {
         headerPanel.add(datePanel);
         headerPanel.add(startTimePanel);
         headerPanel.add(endTimePanel);
+        headerPanel.add(acceptField);
+        headerPanel.add(declineField);
 
         // Make footer
         JPanel footerPanel = new JPanel();
@@ -207,12 +221,14 @@ public class MeetingEditor extends JFrame {
         dateField.setText(controller.getEmailHeader(messageId, "MeetingDate"));
         startTimeField.setText(controller.getEmailHeader(messageId, "MeetingStartTime"));
         endTimeField.setText(controller.getEmailHeader(messageId, "MeetingEndTime"));
+        acceptField.setText(controller.getEmailHeader(messageId, "X-Accepted"));
+        declineField.setText(controller.getEmailHeader(messageId, "X-Declined"));
         meetingContentTextArea.setText(controller.getEmailContent(messageId));
     }
+
     private void send() {
         //TODO Verify input is valid
         //Date is in future, Start Time < End Time
-
         MessageController controller = MessageController.getInstance();
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
         controller.setEmailHeader(messageId, "To", toField.getText());
@@ -226,72 +242,72 @@ public class MeetingEditor extends JFrame {
 
     }
 
-    private boolean doValidate()
-    {
-        boolean validMsg = false;
-
-            validMsg =   checkTime();
-       if (subjectField.getText().isEmpty()){
-             JOptionPane.showMessageDialog(
-              null,
-              "Subject field is empty. Please enter any text for subject."
-               );
+    private boolean doValidate() {
+        validMsg = checkTime();
+        if (subjectField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Subject field is empty. Please enter any text for subject.");
+            validMsg = false;
+        } else {
+            validMsg = true;
         }
         return validMsg;
     }
-      private boolean checkTime() {
+
+    private boolean checkTime() {
         String[] starttime = startTimeField.getText().split(":");
         String[] endtime = endTimeField.getText().split(":");
         String[] dateT = dateField.getText().split("/");
-          boolean validMsg = true;
+        boolean validMsg = true;
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         String todayDate = dateFormat.format(date);
         String[] dateNow = todayDate.split("/");
-        if (Integer.parseInt(dateT[2]) < Integer.parseInt(dateNow[2]))
-        {
+        if (Integer.parseInt(dateT[2]) < Integer.parseInt(dateNow[2])) {
             JOptionPane.showMessageDialog(
-        null,
-        "Year of the meeting is expired."
-           );
-        validMsg = false;
+                    null,
+                    "Year of the meeting is expired.");
+            validMsg = false;
+        } else {
+            validMsg = true;
         }
-        if (Integer.parseInt(dateT[1]) < Integer.parseInt(dateNow[1])){
+        if (Integer.parseInt(dateT[1]) < Integer.parseInt(dateNow[1])) {
             JOptionPane.showMessageDialog(
-        null,
-        "Month of the meeting is expired."
-           );
-        validMsg = false;}
-        if (Integer.parseInt(dateT[0]) < Integer.parseInt(dateNow[0])){
-            JOptionPane.showMessageDialog(
-        null,
-        "Date of the meeting is expired."
-           );
-        validMsg = false;}
-        if (startTimeField.getText().equalsIgnoreCase(endTimeField.getText()) ){
-        JOptionPane.showMessageDialog(
-        null,
-        "Start time and end time is same pls edit the time for meeting."
-           );
-        validMsg = false;
-          }
-        else if(Integer.parseInt(endtime[0]) < Integer.parseInt(starttime[0])){
-            JOptionPane.showMessageDialog(
-        null,
-        "End time is earlier then starting time of the meeting."
-           );
-        validMsg = false;
+                    null,
+                    "Month of the meeting is expired.");
+            validMsg = false;
+        } else {
+            validMsg = true;
         }
-        else if(Integer.parseInt(starttime[0]) == Integer.parseInt(endtime[0]) && Integer.parseInt(starttime[1]) > Integer.parseInt(endtime[1]) ){
+        if (Integer.parseInt(dateT[0]) < Integer.parseInt(dateNow[0])) {
             JOptionPane.showMessageDialog(
-        null,
-        "End time is earlier then starting time of the meeting."
-           );
-        validMsg = false;
+                    null,
+                    "Date of the meeting is expired.");
+            validMsg = false;
+        } else {
+            validMsg = true;
         }
-      return validMsg;
-      }
-
+        if (startTimeField.getText().equalsIgnoreCase(endTimeField.getText())) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Start time and end time is same pls edit the time for meeting.");
+            validMsg = false;
+        } else if (Integer.parseInt(endtime[0]) < Integer.parseInt(starttime[0])) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "End time is earlier then starting time of the meeting.");
+            validMsg = false;
+        } else if (Integer.parseInt(starttime[0]) == Integer.parseInt(endtime[0]) && Integer.parseInt(starttime[1]) > Integer.parseInt(endtime[1])) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "End time is earlier then starting time of the meeting.");
+            validMsg = false;
+        } else {
+            validMsg = true;
+        }
+        return validMsg;
+    }
 
     private void accept() {
         MessageController controller = MessageController.getInstance();
