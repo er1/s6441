@@ -38,8 +38,19 @@ public class MessageController extends Observable {
      */
     public void acceptMeeting(String messageId) {
         Message message = getMessageFromId(messageId);
-        store.getMeetings().addMessage(message);
-        sendAcceptToSender(message);
+        if (iAmCreatorOf(message)) {
+            String existId = message.getHeaderValue("X-MeetingId");
+            message.setId(existId);
+            store.getMeetings().addMessage(message);
+            store.getOutbox().addMessage(message);
+        } else {
+            store.getMeetings().addMessage(message);
+            sendAcceptToSender(message);
+        }
+    }
+
+    private boolean iAmCreatorOf(Message msg) {
+        return (msg.getHeaderValue("X-Creator").equals(getRootFolderId()));
     }
 
     /**
@@ -125,26 +136,46 @@ public class MessageController extends Observable {
             Message existingMeeting = getMessageFromId(id);
             String userid = "";
             if (response.equals("ACCEPT")) {
-                String accepted = getMessageFromId(id).getHeaderValue("X-Accepted");
-                if (accepted.isEmpty()) {
-                    userid = newMsg.getHeaderValue("X-Accepted");
-                    accepted += userid;
-                } else {
-                    accepted += ", " + userid;
-                }
-                existingMeeting.setHeader("X-Accepted", accepted);
-            } else {
-                String declined = getMessageFromId(id).getHeaderValue("X-Declined");
-                if (declined.isEmpty()) {
-                    userid = newMsg.getHeaderValue("X-Declined");
-                    declined += userid;
-                } else {
-                    declined += ", " + userid;
-                }
-                existingMeeting.setHeader("X-Declined", declined);
+                userid = newMsg.getHeaderValue("X-Accepted");
+                existingMeeting.appendToHeader("X-Accepted", userid);
+            } else if (response.equals("DECLINE")) {
+                userid = newMsg.getHeaderValue("X-Declined");
+                existingMeeting.appendToHeader("X-Declined", userid);
+            } else if (response.equals("UPDATE")) {
+                handleMeetingUpdate(newMsg);
             }
             store.getMeetings().addMessage(existingMeeting);
         }
+    }
+
+    private void handleMeetingUpdate(Message newMsg) {
+        String id = getMeetingFolderId() + File.separator + newMsg.getHeaderValue("X-MeetingId");
+        Message existingMeeting = getMessageFromId(id);
+        //Am I the creator
+        if (existingMeeting.getHeaderValue("X-Creator").equals(getRootFolderId())) {
+            //Is the meeting revision == to my meeting
+            if (existingMeeting.getHeaderValue("X-Revision").equals(newMsg.getHeaderValue("X-Revision"))) {
+                //If yes (Accept/Decline) changes
+                newMsg.appendToHeader("To", newMsg.getHeaderValue("X-Recepients"));
+                //int r = Integer.valueOf(newMsg.getHeaderValue("X-Revision")) + 1;
+                //newMsg.setHeader("X-Revision", Integer.toString(r));
+                store.getInbox().addMessage(existingMeeting);
+
+            } else {
+                //send a refuse email to the user
+                String replyId = compose();
+                Message replyRefusal = getMessageFromId(replyId);
+                replyRefusal.setHeader("Subject", "REFUSED: " + newMsg.getHeaderValue("Subject"));
+                replyRefusal.setHeader("To", newMsg.getHeaderValue("From"));
+                //send updated meeting to user
+                this.setChanged();
+                this.notifyObservers(UpdateType.MESSAGES);
+                moveMessageToFolder(replyId, getOutboxFolderId());
+            }
+        } else {
+            moveMessageToFolder(getIdfromMessage(newMsg), getTrashFolderId());
+        }
+
     }
 
     private boolean responseToExistingMeeting(String id) {
@@ -966,6 +997,9 @@ public class MessageController extends Observable {
      * @param messageId
      */
     public void sendMeeting(String messageId) {
+        if (responseToExistingMeeting(messageId)) {
+            setEmailHeader(messageId, "X-Response", "UPDATE");
+        }
         moveMessageToFolder(messageId, getMeetingsFolderId());
         copyMessageToFolder(messageId, getOutboxFolderId());
     }
@@ -1055,7 +1089,13 @@ public class MessageController extends Observable {
         // get the original message and use it to create the reply content
         Message original = getMessageFromId(currentMessage);
 
-        // set the headers and content of the reply
+        //Am I the creator?
+//        String userId = store.getUserId();
+//        if (original.getHeaderValue("X-Creator").equals(userId)) {
+//            int r = Integer.valueOf(original.getHeaderValue("X-Revision")) + 1;
+//            original.setHeader("X-Revision", Integer.toString(r));
+//        } else {
+//        }
         updateDate(currentMessage);
 
         // update anyone waiting on updates

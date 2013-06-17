@@ -217,8 +217,8 @@ public class ToolRibbon extends JToolBar {
 
         String folderid = FolderList.currentFolderId;
         if (folderid.equals(controller.getMeetingFolderId())) {
-            String id = controller.forwardMeeting(currentMessage);
-            MeetingEditor compose = new MeetingEditor(id, MeetingEditor.Type.COMPOSE_MEETING);
+            //String id = controller.forwardMeeting(currentMessage);
+            MeetingEditor compose = new MeetingEditor(currentMessage, MeetingEditor.Type.COMPOSE_MEETING);
             compose.init();
             compose.refresh();
             compose.setVisible(true);

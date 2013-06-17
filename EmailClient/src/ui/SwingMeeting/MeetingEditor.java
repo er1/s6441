@@ -232,11 +232,19 @@ public class MeetingEditor extends JFrame {
     }
 
     private void send() {
-        //TODO Verify input is valid
-        //Date is in future, Start Time < End Time
         MessageController controller = MessageController.getInstance();
+        String id = controller.getRootFolderId();
+        String creator = controller.getEmailHeader(messageId, "X-Creator");
+        if (id.equals(creator) || "".equals(creator)) {
+            //TDO send to
+            controller.setEmailHeader(messageId, "To", toField.getText());
+            controller.setEmailHeader(messageId, "X-Creator", id);
+        } else {
+            controller.setEmailHeader(messageId, "To", creator);
+            controller.setEmailHeader(messageId, "X-Recepients", toField.getText());
+            controller.setEmailHeader(messageId, "X-Response", "UPDATE");
+        }
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
-        controller.setEmailHeader(messageId, "To", toField.getText());
         controller.setEmailHeader(messageId, "MeetingDate", dateField.getText());
         controller.setEmailHeader(messageId, "MeetingStartTime", startTimeField.getText());
         controller.setEmailHeader(messageId, "MeetingEndTime", endTimeField.getText());
