@@ -47,6 +47,8 @@ public class MessageController extends Observable {
             store.getMeetings().addMessage(message);
             sendAcceptToSender(message);
         }
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     private boolean iAmCreatorOf(Message msg) {
@@ -61,6 +63,8 @@ public class MessageController extends Observable {
         Message message = getMessageFromId(messageId);
         store.getTrash().addMessage(message);
         sendDeclineToSender(message);
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     /**
@@ -97,6 +101,8 @@ public class MessageController extends Observable {
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     private void sendDeclineToSender(Message original) {
@@ -118,6 +124,8 @@ public class MessageController extends Observable {
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     /**
@@ -143,8 +151,13 @@ public class MessageController extends Observable {
                 existingMeeting.appendToHeader("X-Declined", userid);
             } else if (response.equals("UPDATE")) {
                 handleMeetingUpdate(newMsg);
+                this.setChanged();
+                this.notifyObservers(UpdateType.MESSAGES);
+                return;
             }
             store.getMeetings().addMessage(existingMeeting);
+            this.setChanged();
+            this.notifyObservers(UpdateType.MESSAGES);
         }
     }
 
@@ -170,12 +183,15 @@ public class MessageController extends Observable {
                 //send updated meeting to user
                 this.setChanged();
                 this.notifyObservers(UpdateType.MESSAGES);
-                moveMessageToFolder(replyId, getOutboxFolderId());
+                store.getOutbox().addMessage(replyRefusal);
+                //moveMessageToFolder(replyId, getOutboxFolderId());
             }
         } else {
-            moveMessageToFolder(getIdfromMessage(newMsg), getTrashFolderId());
+            store.getInbox().addMessage(newMsg);
+            //moveMessageToFolder(getIdfromMessage(newMsg), getTrashFolderId());
         }
-
+        this.setChanged();
+        this.notifyObservers(UpdateType.MESSAGES);
     }
 
     private boolean responseToExistingMeeting(String id) {
@@ -314,8 +330,8 @@ public class MessageController extends Observable {
                     db = meetingDateFormat.parse(m1.getHeaderValue("MeetingDate"));
                 } catch (ParseException ex) {
                 }
-                
-                return da.compareTo(db);                
+
+                return da.compareTo(db);
             }
         });
 
@@ -835,7 +851,7 @@ public class MessageController extends Observable {
                 if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
                     //Is it a Response to a meeting?
                     if (!"".equals(newMsg.getHeaderValue("X-Response"))) {
-                        newMsg.setId(generateNewId());
+                        newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
                         handleMeetingResponse(newMsg);
                     } else {
                         newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
