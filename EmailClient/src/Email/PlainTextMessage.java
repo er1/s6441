@@ -73,6 +73,21 @@ public class PlainTextMessage implements Message {
         }
     }
 
+    @Override
+    public void appendToHeader(String key, String value) {
+        // key and value should be striped of awkward whitespace and newlines
+        if ((value == null) || "".equals(value)) {
+            return;
+        }
+        if (header.containsKey(key)) {
+            String orig = header.get(key);
+            orig = orig + ", " + value;
+            header.put(key, orig);
+        } else {
+            header.put(key, value);
+        }
+    }
+
     /**
      * Turn this Message into a String for storage
      *

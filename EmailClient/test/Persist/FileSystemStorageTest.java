@@ -4,6 +4,9 @@
  */
 package Persist;
 
+import Email.FileSystemFolderProxy;
+import Email.FilterRule;
+import Email.Folder;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -117,96 +120,158 @@ public class FileSystemStorageTest {
     /**
      * Test of deleteFolderAndAllContents method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testDeleteFolder() {
-        System.out.println("deleteFolder");
-        String folder = "";
-        FileSystemStorage instance = null;
-        instance.deleteFolderAndAllContents(folder);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        String folder = mailboxID;
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.deleteFolderAndAllContents(folder + File.separator + "newFolder");
     }
 
     /**
      * Test of moveMessageToFolder method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testMoveMessageToFolder() {
-        System.out.println("moveMessageToFolder");
+        
         String message = "";
         String folder = "";
-        FileSystemStorage instance = null;
-        instance.moveMessageToFolder(message, folder);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.moveMessageToFolder(message, folder);
     }
 
     /**
      * Test of newMessage method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testNewMessage() {
-        System.out.println("newMessage");
-        String folder = "";
-        FileSystemStorage instance = null;
-        instance.newMessage(folder);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        
+        String folder = "Hi";
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.newMessage(folder);
+        
     }
 
     /**
      * Test of saveMessage method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testSaveMessage() {
-        System.out.println("saveMessage");
         String message = "";
         String content = "";
-        FileSystemStorage instance = null;
-        instance.saveMessage(message, content);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.saveMessage(message, content);
     }
 
     /**
      * Test of loadMessage method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testLoadMessage() {
-        System.out.println("loadMessage");
+        
         String message = "";
-        FileSystemStorage instance = null;
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
         String expResult = "";
-        String result = instance.loadMessage(message);
+        String result = inst.loadMessage(message);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of deleteMessage method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testDeleteMessage() {
-        System.out.println("deleteMessage");
+        
         String message = "";
-        FileSystemStorage instance = null;
-        instance.deleteMessage(message);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.deleteMessage(message);
     }
 
     /**
      * Test of moveFolder method, of class FileSystemStorage.
      */
-    @Ignore
+    @Test
     public void testMoveFolder() {
-        System.out.println("moveFolder");
+        
         String folderToMove = "";
         String destinationFolder = "";
-        FileSystemStorage instance = null;
-        instance.moveFolder(folderToMove, destinationFolder);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.moveFolder(folderToMove, destinationFolder);
+    }
+
+    /**
+     * Test of getMailboxID method, of class FileSystemStorage.
+     */
+    @Test
+    public void testGetMailboxID() {
+        
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        String result = inst.getMailboxID();
+        assertEquals(mailboxID, result);
+        
+    }
+
+    /**
+     * Test of newRuleFileInMailbox method, of class FileSystemStorage.
+     */
+    @Test
+    public void testNewRuleFileInMailbox() {
+        
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        String path = File.separator + mailboxID + File.separator + "rules.txt";
+        boolean expResult = false;
+        boolean result = inst.newRuleFileInMailbox(path);
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of deleteFolderAndAllContents method, of class FileSystemStorage.
+     */
+    @Test
+    public void testDeleteFolderAndAllContents() {
+        
+        String folder = mailboxID;
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        boolean expResult = false;
+        boolean result = inst.deleteFolderAndAllContents(folder + File.separator + "newFolder");
+        assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of loadRulesFromFileSystem method, of class FileSystemStorage.
+     */
+    @Test
+    public void testLoadRulesFromFileSystem() {
+        
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        ArrayList expResult = new ArrayList();
+        ArrayList result = instance.loadRulesFromFileSystem();
+        assertEquals(expResult, result);
+        
+    }
+
+    /**
+     * Test of saveRulesToFileSystem method, of class FileSystemStorage.
+     */
+    @Test
+    public void testSaveRulesToFileSystem() {
+        System.out.println("saveRulesToFileSystem");
+        ArrayList<FilterRule> listOfRules = new ArrayList();
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        inst.saveRulesToFileSystem(listOfRules);
+    }
+
+    /**
+     * Test of isFolderExists method, of class FileSystemStorage.
+     */
+    @Test
+    public void testIsFolderExists() {
+      
+        String folderPath = "";
+        FileSystemStorage inst = (FileSystemStorage) this.instance;
+        boolean expResult = true;
+        boolean result = inst.isFolderExists(folderPath);
+        assertEquals(expResult, result);
+        
     }
 }
