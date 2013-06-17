@@ -4,8 +4,11 @@ import Meeting.MeetingSummary;
 import Persist.MessageTransfer;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Observable;
@@ -25,19 +28,34 @@ public class MessageController extends Observable {
     HashMap<String, Message> messageLookup = Util.newHashMap();
     HashMap<String, Folder> folderLookup = Util.newHashMap();
     HashMap<String, FilterRule> ruleLookup = Util.newHashMap();
+    final DateFormat controllerDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+    final DateFormat meetingDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
+    /**
+     *
+     * @param messageId
+     */
     public void acceptMeeting(String messageId) {
         Message message = getMessageFromId(messageId);
         store.getMeetings().addMessage(message);
         sendAcceptToSender(message);
     }
 
+    /**
+     *
+     * @param messageId
+     */
     public void declineMeeting(String messageId) {
         Message message = getMessageFromId(messageId);
         store.getTrash().addMessage(message);
         sendDeclineToSender(message);
     }
 
+    /**
+     *
+     * @param messageid
+     * @return
+     */
     public boolean isThisAMeeting(String messageid) {
         Message newMsg = getMessageFromId(messageid);
         if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
@@ -52,17 +70,17 @@ public class MessageController extends Observable {
         Message replymsg = getMessageFromId(replyid);
         replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
         replymsg.setHeader("To", original.getHeaderValue("From"));
-        
+
         replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
         replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
         replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
-        
+
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "ACCEPTED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Accepted", userId);
-        
-        replymsg.setContent (original.getContent());
-        
+
+        replymsg.setContent(original.getContent());
+
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
@@ -74,17 +92,17 @@ public class MessageController extends Observable {
         Message replymsg = getMessageFromId(replyid);
         replymsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
         replymsg.setHeader("To", original.getHeaderValue("From"));
-        
+
         replymsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
         replymsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
         replymsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
-        
+
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "DECLINED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Declined", userId);
-        
-        replymsg.setContent (original.getContent());
-        
+
+        replymsg.setContent(original.getContent());
+
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
         moveMessageToFolder(replyid, getOutboxFolderId());
@@ -218,115 +236,56 @@ public class MessageController extends Observable {
      * @return Array of string id's of all the messages inside our folder
      */
     public String[] getEmailList(String folderId) {
-        String[] ids;
-
-        try {
-            /*Folder fldr = getFolderFromId(folderId);
-             * ArrayList<Message> set;
-             * set = fldr.getMessages();
-             * 
-             * ids = new String[set.size()];
-             * 
-             * int index = 0;
-             * for (Message message : set) {
-             * ids[index++] = getIdfromMessage(message);
-             * }*/
-            ids = orderEmailList(folderId);
-        } catch (Exception ex) {
-            ids = new String[0];
+        Folder fldr = getFolderFromId(folderId);
+        if (fldr == null) {
+            return new String[0];
         }
-        return ids;
-    }
+        ArrayList<Message> set = fldr.getMessages();
+        ArrayList<String> ids = new ArrayList<String>();
 
-    public String[] orderEmailList(String folderId) {
-        String[] ord, neword, date;
-        Summary summary;
-        int length;
+        Collections.sort(set, new Comparator<Message>() {
+            @Override
+            public int compare(Message m1, Message m2) {
+                Summary a, b;
+                a = new Summary(m2);
+                b = new Summary(m1);
+                Date da = new Date(0);
+                Date db = new Date(0);
 
-        try {
-            Folder fldr = getFolderFromId(folderId);
-            ArrayList<Message> set;
-            set = fldr.getMessages();
-            ord = new String[set.size()];
-            date = new String[set.size()];
-            int index = 0;
-            length = set.size();
-            for (Message message : set) {
-                ord[index++] = getIdfromMessage(message);
+                try {
+                    da = controllerDateFormat.parse(a.getDate());
+                } catch (ParseException ex) {
+                }
+                try {
+                    db = controllerDateFormat.parse(b.getDate());
+                } catch (ParseException ex) {
+                }
+
+                try {
+                    da = meetingDateFormat.parse(m2.getHeaderValue("MeetingDate"));
+                } catch (ParseException ex) {
+                }
+
+                try {
+                    db = meetingDateFormat.parse(m1.getHeaderValue("MeetingDate"));
+                } catch (ParseException ex) {
+                }
+                
+                return da.compareTo(db);                
             }
-            for (int i = 0; i < set.size(); i++) {
-                summary = getEmailSummary(ord[i]);
-                date[i] = summary.getDate();
-                //  System.out.println("The date of the mesages are ---->" + date[i] );
-            }
-            neword = arrangeEmailList(ord, date, length);
-        } catch (Exception ex) {
-            neword = new String[0];
+        });
+
+        for (Message message : set) {
+            ids.add(getIdfromMessage(message));
         }
-        return neword;
+
+        return ids.toArray(new String[ids.size()]);
     }
 
-    public String[] arrangeEmailList(String[] msgId, String date[], int length) {
-        Summary summary;
-        String[] splitDate, newmsgId, newmsgId1, newmsgId2;
-        String[] time = new String[length];
-        String[] dateMsg = new String[length];
-        String[] dateMonth = new String[length];
-        String[] dateDay = new String[length];
-        String[] dateYear = new String[length];
-        String[] timeHr = new String[length];
-        String[] timeMin = new String[length];
-        String[] timeSec = new String[length];
-        for (int i = 0; i < length; i++) {
-            summary = getEmailSummary(msgId[i]);
-            date[i] = summary.getDate();
-            System.out.println("The date of the mesages are before sending ---->" + date[i]);
-        }
-        for (int i = 0; i < length; i++) {
-            splitDate = date[i].split(" ");
-            time[i] = splitDate[1];
-            dateMsg[i] = splitDate[0];
-        }
-        for (int i = 0; i < length; i++) {
-            splitDate = dateMsg[i].split("/");
-            //    System.out.println("The splitdate ---> " + splitDate[0] +" Thing "+ splitDate[1]+" thing " + splitDate[2]);
-            dateYear[i] = splitDate[0];
-            dateMonth[i] = splitDate[1];
-            dateDay[i] = splitDate[2];
-        }
-        newmsgId = sort(dateYear, length, msgId);
-        newmsgId1 = sort(dateMonth, length, newmsgId);
-        newmsgId2 = sort(dateDay, length, newmsgId1);
-        for (int i = 0; i < length; i++) {
-            summary = getEmailSummary(newmsgId2[i]);
-            System.out.println("The date of the mesages are after receiving ---->" + summary.getDate());
-        }
-        return newmsgId2;
-    }
-
-    public String[] sort(String[] sortArray, int length, String[] msgId) {
-        int[] newArray = new int[sortArray.length];
-        for (int i = 0; i < sortArray.length; i++) {
-            newArray[i] = Integer.parseInt(sortArray[i]);
-            //  System.out.println("The coming array of of the mesages are ---->" + newArray[i]);
-        }
-        for (int i = 0; i < length; i++) {
-            int j = i;
-            int B = newArray[i];
-            String x = msgId[i];
-            while ((j > 0) && (newArray[j - 1] < B)) {
-                newArray[j] = newArray[j - 1];
-                msgId[j] = msgId[j - 1];
-                j--;
-            }
-            newArray[j] = B;
-            msgId[j] = x;
-        }
-        //   for(int i=0;i<length;i++)
-        //System.out.println("The outpput of the mesages are ---->" + newArray[i]);
-        return msgId;
-    }
-
+    /**
+     *
+     * @param folderId
+     */
     public void deleteAllMails(String folderId) {
         Folder fldr = getFolderFromId(folderId);
         ArrayList<Message> set;
@@ -555,9 +514,8 @@ public class MessageController extends Observable {
      */
     public void updateDate(String messageid) {
         Message msg = this.getMessageFromId(messageid);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        msg.setHeader("Date", dateFormat.format(date));
+        msg.setHeader("Date", controllerDateFormat.format(date));
 
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);

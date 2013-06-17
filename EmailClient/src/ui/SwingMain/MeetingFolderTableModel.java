@@ -2,7 +2,6 @@ package ui.SwingMain;
 
 import Email.MessageController;
 import Meeting.MeetingSummary;
-import ui.SwingMain.TableModelInterface;
 
 /**
  *

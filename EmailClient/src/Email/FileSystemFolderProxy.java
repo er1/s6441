@@ -29,6 +29,10 @@ public class FileSystemFolderProxy implements Folder {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @return
+     */
     public String getPath() {
         if (instance == null) {
             return parent.getPath() + File.separator + name;
