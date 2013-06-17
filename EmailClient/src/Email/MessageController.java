@@ -105,7 +105,7 @@ public class MessageController extends Observable {
         String id = getMeetingFolderId() + File.separator + newMsg.getHeaderValue("X-MeetingId");
 
         if (responseToExistingMeeting(id)) {
-            String response = getMessageFromId(id).getHeaderValue("X-Response");
+            String response = newMsg.getHeaderValue("X-Response");
             Message existingMeeting = getMessageFromId(id);
             String userid = "";
             if (response.equals("ACCEPT")) {
@@ -241,9 +241,9 @@ public class MessageController extends Observable {
             /*Folder fldr = getFolderFromId(folderId);
              * ArrayList<Message> set;
              * set = fldr.getMessages();
-             * 
+             *
              * ids = new String[set.size()];
-             * 
+             *
              * int index = 0;
              * for (Message message : set) {
              * ids[index++] = getIdfromMessage(message);
@@ -1098,39 +1098,16 @@ public class MessageController extends Observable {
      * @return meeting id
      */
     public String forwardMeeting(String currentMessage) {
-        // create a new message
-        String forwardid = createMeeting();
-        updateDate(forwardid);
-
-        Message forwardmsg = getMessageFromId(forwardid);
-
         // get the original message and use it to create the reply content
         Message original = getMessageFromId(currentMessage);
 
-        String forwardContent = original.getContent();
-        //forwardContent = "\r\n\r\n" + forwardContent;
-        //forwardContent = forwardContent.replaceAll("\n", "\n> ");
-
-        // get the headers based on the original message
-        String subject = original.getHeaderValue("Subject");
-
-        // add RE to the subject if it is not already there
-        if (subject.length() < 4 || !"FWD:".equals(subject.substring(0, 4).toUpperCase())) {
-            subject = "Fwd: " + subject;
-        }
-
         // set the headers and content of the reply
-        forwardmsg.setContent(forwardContent);
-        forwardmsg.setHeader("Subject", subject);
-        forwardmsg.setHeader("MeetingDate", original.getHeaderValue("MeetingDate"));
-        forwardmsg.setHeader("MeetingStartTime", original.getHeaderValue("MeetingStartTime"));
-        forwardmsg.setHeader("MeetingEndTime", original.getHeaderValue("MeetingEndTime"));
-        forwardmsg.setHeader("X-MeetingId", original.getHeaderValue("X-MeetingId"));
+        updateDate(currentMessage);
 
         // update anyone waiting on updates
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
 
-        return forwardid;
+        return currentMessage;
     }
 }

@@ -193,7 +193,7 @@ public class ToolRibbon extends JToolBar {
     }
 
     private void doReply() {
-        
+
         String folderid = FolderList.currentFolderId;
         if (folderid.equals(controller.getMeetingFolderId())) {
             String id = controller.replyMeeting(currentMessage);
@@ -214,7 +214,7 @@ public class ToolRibbon extends JToolBar {
     }
 
     private void doForward() {
-        
+
         String folderid = FolderList.currentFolderId;
         if (folderid.equals(controller.getMeetingFolderId())) {
             String id = controller.forwardMeeting(currentMessage);

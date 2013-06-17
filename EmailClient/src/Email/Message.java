@@ -50,4 +50,9 @@ public interface Message {
      * @param value
      */
     void setHeader(String key, String value);
+
+    /**
+     * Append to header (Comma separated list)
+     */
+    void appendToHeader(String key, String addValue);
 }
