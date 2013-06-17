@@ -752,9 +752,6 @@ public class MessageController extends Observable {
                         //TODO What if a meeting with the same ID already exists?
                         //store.getMeetings().addMessage(newMsg);
                     }
-                } else if (!"".equals(newMsg.getHeaderValue("Message-ID"))) {
-                    newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
-                    store.getMeetings().addMessage(newMsg);
                 } else {
                     UUID messageId = UUID.randomUUID();
                     newMsg.setId(messageId.toString());
