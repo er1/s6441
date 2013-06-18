@@ -851,7 +851,9 @@ public class MessageController extends Observable {
                 if (!"".equals(newMsg.getHeaderValue("X-MeetingId"))) {
                     //Is it a Response to a meeting?
                     if (!"".equals(newMsg.getHeaderValue("X-Response"))) {
-                        newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
+                        UUID messageId = UUID.randomUUID();
+
+                        newMsg.setId(messageId.toString());
                         handleMeetingResponse(newMsg);
                     } else {
                         newMsg.setId(newMsg.getHeaderValue("X-MeetingId"));
