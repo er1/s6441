@@ -80,7 +80,7 @@ public class MessageController extends Observable {
         replymsg.setHeader("Subject", "ACCEPTED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Accepted", userId);
 
-        replymsg.setContent (original.getContent());
+        replymsg.setContent(original.getContent());
 
         replymsg.setHeader("X-Response", "ACCEPT");
         this.setChanged();
@@ -102,7 +102,7 @@ public class MessageController extends Observable {
         String userId = store.getUserId();
         replymsg.setHeader("Subject", "DECLINED: " + original.getHeaderValue("Subject"));
         replymsg.setHeader("X-Declined", userId);
-        replymsg.setContent (original.getContent());
+        replymsg.setContent(original.getContent());
         replymsg.setHeader("X-Response", "DECLINE");
         this.setChanged();
         this.notifyObservers(UpdateType.MESSAGES);
@@ -283,8 +283,8 @@ public class MessageController extends Observable {
                     db = meetingDateFormat.parse(m1.getHeaderValue("MeetingDate"));
                 } catch (ParseException ex) {
                 }
-                
-                return da.compareTo(db);                
+
+                return da.compareTo(db);
             }
         });
 
