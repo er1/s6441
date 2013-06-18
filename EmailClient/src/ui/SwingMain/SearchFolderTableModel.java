@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import util.Util;
 
 /**
- *
+ * Table model for search box
  * @author chanman
  */
 public class SearchFolderTableModel extends FolderTableModel {

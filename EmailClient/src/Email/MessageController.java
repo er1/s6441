@@ -33,7 +33,7 @@ public class MessageController extends Observable {
     final DateFormat meetingDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     /**
-     *
+     * Accept meeting to sender
      * @param messageId
      */
     public void acceptMeeting(String messageId) {
@@ -56,7 +56,7 @@ public class MessageController extends Observable {
     }
 
     /**
-     *
+     * Send decline meeting to sender
      * @param messageId
      */
     public void declineMeeting(String messageId) {
@@ -68,9 +68,9 @@ public class MessageController extends Observable {
     }
 
     /**
-     *
+     * check is the message a meeting message or not
      * @param messageid
-     * @return
+     * @return true/false
      */
     public boolean isThisAMeeting(String messageid) {
         Message newMsg = getMessageFromId(messageid);
@@ -343,7 +343,7 @@ public class MessageController extends Observable {
     }
 
     /**
-     *
+     * Delete all mails in given folder id
      * @param folderId
      */
     public void deleteAllMails(String folderId) {
@@ -626,7 +626,7 @@ public class MessageController extends Observable {
      * Create a forward content from current message
      *
      * @param currentMessage
-     * @return
+     * @return forward msg id
      */
     public String forward(String currentMessage) {
         // create a new message

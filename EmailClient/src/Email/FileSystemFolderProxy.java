@@ -30,8 +30,8 @@ public class FileSystemFolderProxy implements Folder {
     }
 
     /**
-     *
-     * @return
+     * Get the path
+     * @return path
      */
     public String getPath() {
         if (instance == null) {
