@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- *
+ * Test storage is for testing file system.
  * @author chanman
  */
 public class TestStorage extends PersistentStorage {

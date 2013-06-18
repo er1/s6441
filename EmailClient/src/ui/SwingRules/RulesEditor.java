@@ -27,7 +27,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
+ * Gui for rules
  * @author Bargavi
  */
 public class RulesEditor extends JFrame{
@@ -414,8 +414,8 @@ public class RulesEditor extends JFrame{
 
         /**
          * Get the column count
-         * @return
-         */
+         * @return count value
+         */ 
         @Override
         public int getColumnCount() {   
             return 4;
@@ -425,7 +425,7 @@ public class RulesEditor extends JFrame{
          * Get the value of particular cell in JTable
          * @param row
          * @param col
-         * @return
+         * @return value string
          */
         @Override
         public Object getValueAt(int row, int col) {

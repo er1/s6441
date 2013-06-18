@@ -4,7 +4,7 @@ import Email.MessageController;
 import Email.Summary;
 
 /**
- *
+ * Table model according to particular folder
  * @author chanman
  */
 class FolderTableModel extends TableModelInterface {

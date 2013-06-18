@@ -81,13 +81,13 @@ public abstract class PersistentStorage {
     abstract public boolean newRuleFileInMailbox(String path);
 
     /**
-     *
-     * @return
+     * Load all rules from file system
+     * @return ArrayList of FilterRules
      */
     abstract public ArrayList<FilterRule> loadRulesFromFileSystem();
 
     /**
-     *
+     * Save all the rules to file system
      * @param listOfRules
      */
     abstract public void saveRulesToFileSystem(ArrayList<FilterRule> listOfRules);
@@ -168,9 +168,9 @@ public abstract class PersistentStorage {
     abstract public boolean moveFolder(String folderToMove, String destinationFolder);
 
     /**
-     *
+     * Check does a folder exist or not
      * @param folderPath
-     * @return
+     * @return True/False
      */
     abstract public boolean isFolderExists(String folderPath); 
 }

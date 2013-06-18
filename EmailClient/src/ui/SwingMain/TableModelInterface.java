@@ -7,7 +7,7 @@ package ui.SwingMain;
 import javax.swing.table.AbstractTableModel;
 
 /**
- *
+ * Table model interface
  * @author anasalkhatib
  */
 public abstract class TableModelInterface extends AbstractTableModel {
