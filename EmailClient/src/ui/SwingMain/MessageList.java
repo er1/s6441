@@ -35,9 +35,18 @@ public class MessageList extends JTable {
      */
     private static MessageList instance;
     
+    /**
+     * Get the instance of MessageList
+     * @return instance
+     */
     public static MessageList getInstance() {
         return instance;
     }
+    /**
+     * MessageList constructor to initialize messageList pane
+     * @param content
+     * @param toolribbon
+     */
     public MessageList(Content content, ToolRibbon toolribbon) {
         this.controller = MessageController.getInstance();
         this.content = content;
@@ -166,6 +175,9 @@ public class MessageList extends JTable {
 
     }
 
+    /**
+     * Open selected message
+     */
     public void openmessage() {
         int selected = this.getSelectedRow();
         if(selected < 0) {

@@ -10,6 +10,10 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * MessageTransfer class
+ * 
+ */
 public class MessageTransfer {
 
     static final Logger logger = Logger.getLogger(MessageTransfer.class.getName());
@@ -49,6 +53,7 @@ public class MessageTransfer {
      * Check message exists for given userId
      * @param userID
      * @return True/False
+     * @throws IOException  
      */
     public boolean MessageExistFor(String userID) throws IOException {
         String userinboundPath = getMailSpoolFor(userID);
@@ -67,6 +72,7 @@ public class MessageTransfer {
      * Get a message for given userId
      * @param userID
      * @return message
+     * @throws IOException  
      */
     public String getMessageFor(String userID) throws IOException {
         String userinboundPath = getMailSpoolFor(userID);
@@ -104,6 +110,7 @@ public class MessageTransfer {
      * Send message to userId
      * @param userID
      * @param content
+     * @throws IOException  
      */
     public void sendMessageTo(String userID, String content) throws IOException {
         if (userID.isEmpty()) {

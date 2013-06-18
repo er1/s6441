@@ -60,6 +60,7 @@ public class MeetingEditor extends JFrame {
      * Constructor of MeetingEditor
      *
      * @param messageId
+     * @param type  
      */
     public MeetingEditor(String messageId, Type type) {
         super("Meeting");
@@ -214,6 +215,9 @@ public class MeetingEditor extends JFrame {
         this.setSize(650, 380);
     }
 
+    /**
+     * Refresh meeting window
+     */
     public void refresh() {
 
         MessageController controller = MessageController.getInstance();
