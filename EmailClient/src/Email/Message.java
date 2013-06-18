@@ -53,6 +53,8 @@ public interface Message {
 
     /**
      * Append to header (Comma separated list)
+     * @param key 
+     * @param addValue 
      */
     void appendToHeader(String key, String addValue);
 }

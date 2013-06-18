@@ -35,9 +35,18 @@ public class MessageList extends JTable {
      */
     private static MessageList instance;
     
+    /**
+     * Get the instance of MessageList
+     * @return instance
+     */
     public static MessageList getInstance() {
         return instance;
     }
+    /**
+     * MessageList constructor to initialize messageList pane
+     * @param content
+     * @param toolribbon
+     */
     public MessageList(Content content, ToolRibbon toolribbon) {
         this.controller = MessageController.getInstance();
         this.content = content;
@@ -166,14 +175,24 @@ public class MessageList extends JTable {
 
     }
 
-    private void openmessage() {
+    /**
+     * Open selected message
+     */
+    public void openmessage() {
         int selected = this.getSelectedRow();
+        if(selected < 0) {
+            return;
+        }
         String messageid = model.getMessageId(selected);
 
         if (folderid.equals(controller.getTemplateFolderId())) {
             messageid = controller.composeFrom(messageid);
         } else if (controller.isThisAMeeting(messageid)) {
-            openMeeting(MeetingEditor.Type.RESPOND_MEETING);
+            if (folderid.equals(controller.getInboxFolderId())) {
+                openMeeting(MeetingEditor.Type.RESPOND_MEETING);
+            } else {
+                openMeeting(MeetingEditor.Type.VIEW_MEETING);
+            }
             return;
         }
 

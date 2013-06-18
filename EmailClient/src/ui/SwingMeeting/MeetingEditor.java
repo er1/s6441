@@ -60,6 +60,7 @@ public class MeetingEditor extends JFrame {
      * Constructor of MeetingEditor
      *
      * @param messageId
+     * @param type  
      */
     public MeetingEditor(String messageId, Type type) {
         super("Meeting");
@@ -92,7 +93,6 @@ public class MeetingEditor extends JFrame {
 
         toField = new LabeledTextField("To");
         meetingContentTextArea = new JTextArea();
-
         acceptField = new LabeledTextField("Accepted");
         declineField = new LabeledTextField("Declined");
         JButton sendMeeting;
@@ -189,6 +189,8 @@ public class MeetingEditor extends JFrame {
         headerPanel.add(datePanel);
         headerPanel.add(startTimePanel);
         headerPanel.add(endTimePanel);
+        acceptField.setEditable(false);
+        declineField.setEditable(false);
         headerPanel.add(acceptField);
         headerPanel.add(declineField);
 
@@ -213,6 +215,9 @@ public class MeetingEditor extends JFrame {
         this.setSize(650, 380);
     }
 
+    /**
+     * Refresh meeting window
+     */
     public void refresh() {
 
         MessageController controller = MessageController.getInstance();
@@ -227,11 +232,19 @@ public class MeetingEditor extends JFrame {
     }
 
     private void send() {
-        //TODO Verify input is valid
-        //Date is in future, Start Time < End Time
         MessageController controller = MessageController.getInstance();
+        String id = controller.getRootFolderId();
+        String creator = controller.getEmailHeader(messageId, "X-Creator");
+        if (id.equals(creator) || "".equals(creator)) {
+            //TDO send to
+            controller.setEmailHeader(messageId, "To", toField.getText());
+            controller.setEmailHeader(messageId, "X-Creator", id);
+        } else {
+            controller.setEmailHeader(messageId, "To", creator);
+            controller.setEmailHeader(messageId, "X-Recepients", toField.getText());
+            controller.setEmailHeader(messageId, "X-Response", "UPDATE");
+        }
         controller.setEmailHeader(messageId, "Subject", subjectField.getText());
-        controller.setEmailHeader(messageId, "To", toField.getText());
         controller.setEmailHeader(messageId, "MeetingDate", dateField.getText());
         controller.setEmailHeader(messageId, "MeetingStartTime", startTimeField.getText());
         controller.setEmailHeader(messageId, "MeetingEndTime", endTimeField.getText());
@@ -244,6 +257,12 @@ public class MeetingEditor extends JFrame {
 
     private boolean doValidate() {
         validMsg = checkTime();
+        if (toField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "To field is empty. Please enter.");
+            validMsg = false;
+        }
         if (subjectField.getText().isEmpty()) {
             JOptionPane.showMessageDialog(
                     null,

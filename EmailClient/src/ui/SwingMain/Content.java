@@ -28,6 +28,9 @@ public class Content extends JTextArea {
         this.setText(content);
     }
     
+    /**
+     * Empty message content in content pane
+     */
     public void emptyMessage() {
         this.setText(null);
     }

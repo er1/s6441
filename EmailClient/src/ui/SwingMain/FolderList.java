@@ -26,6 +26,9 @@ public class FolderList extends JTree {
     MessageList list;
     FolderTreeModel model;
 
+    /**
+     * currentFolderId is to give selected folder id
+     */
     public static String currentFolderId;
     /**
      * constructor of FolderList
