@@ -1,0 +1,29 @@
+#![Optimistic Locking]
+#!>>
+#!Optimistic locking for avoiding collision when multiple Email clients used
+#!<<
+
+user:Actor
+client1:Client1[a]
+client2:Client2[a]
+client3:Client3[a]
+server:Server[a]
+
+user:client1.Create Meeting
+client1:Sent Mail=server.send Meeting to User B and C
+client1:user.sent Mail
+
+user:client2.Get New Meeting
+client2:Recived Meeting=server.get Meeting 
+client2:user.received Meeting
+user:client2.Accept Meeting
+client2:server.Acceptance
+server:client1.Meeting Client 2 Accepted
+
+
+user:client3.Get New Meeting
+client3:Recived Meeting=server.get Meeting 
+client3:user.received Meeting
+user:client3.Accept Meeting
+client3:server.Acceptance
+server:client1.Meeting Client 2 Accepted

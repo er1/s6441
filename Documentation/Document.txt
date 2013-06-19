@@ -1,47 +1,61 @@
 SOEN 6441/1 Collaborative Email Client
-======================================
+=====================================
 
-Second Phase Development
-----------------------
- * Compose New Email
- * Save Draft Email
- * Display Your inbox folder hierarchy
- * Create Sub folders
- * Move mail to sub folders
- * Have a send mail functionality that moves email to a Sent and ToSend folder
- * All functionalities should have menu, right mouse click and hot keys
- * Delete an email from folders
- * Delete folders except top level inbox
-*  Email Templates
-*  Email Search display only email in your inbox that meet a filter criteria
-*  Email filters that move emails into a specification inbox folder that match search criteria periodically
-*  Create a new Meeting with other email attendees create email informing them
-*  Edit an Meeting
-*  Delete a Meeting
+Inital Phase Development
+------------------------
+ * Compose New Email.
+ * Save Draft Email.
+ * Display Your inbox folder hierarchy.
+ * Create Sub folders.
+ * Move mail to sub folders.
+ * Have a send mail functionality that moves email to a Sent and ToSend folder.
+ * All functionalities should have menu, right mouse click and hot keys.
+ * Delete an email from folders.
+ * Delete folders except top level inbox.
+
+Phase II Development
+---------------------
+ * Email Templates.
+ * Email Search display only email in your inbox that meet a filter criteria.
+ * Email filters that move emails into a specification inbox folder that match search criteria periodically.
+ * Create a new Meeting with other email attendees create email informing them.
+ * Edit an Meeting.
+ * Delete a Meeting.
+
+Phase III Development:
+-----------------------
+ * Send and Receive over Internet.
+ * Mail transfer between three mail Clients.
+ * Meeting accept and decline created for meeting msg between the clients over network.
+ * Email Client is changed to handle and concurrently edit,an meeting for multiple user over a network using optismistic locking.
 
 ### Project Details
 
 - Language: Java
 - Libraries: Swing
 - Development Environment: Net Beans 7.3 w/ EMMA
+- Server : Stock Mail Servers(Postfix and Devacot)
+- Protocols SMTP for outgoing mails and POP3 for incoming mails
 
 ### Architecture
 
 The Email Client project is broken up into three main layers or packages
 - `Persist` for the backing date storage on the filesystem
 - `Email` for the domain level handling of Messages and their corresponding mailbox
-- `ui` and `ui.*` for the user interface
- ####Added Features:
--  `ui.SwingMeeting` and `ui.SwingRules` for meeting and Rule
--  Templates are an advanced version of Compose mail 
--  Search is use File Storage for finding mails.
+- `ui` and `ui.*` for the user interface.
+- `ui.SwingMeeting` and `ui.SwingRules` for meeting and Rule.
+- Templates are an advanced version of Compose mail. 
+- Search is use File Storage for finding mails.
+- Send and Receive mails over the Network using Stock Mail Servers.
+- Meeting Acceptance and Decline over network.
+- Resolving multiple user meeting conflinct using optimistic locking.
 
 ![Use case Diagram](UseCases/Main/user.png "Architecture ")
-
+![Use case Diagram](UseCases/Main/SRNetwork.png "Architecture ")
 
  
 #### Persist
-Persist provides objects to create move delete and otherwise manage files in the filesystem with no notion of how Messages work higher up.
+Persist provides objects to create, move, delete and otherwise manage files in the filesystem with no notion of how Messages work higher up.
 
 
 #### Email
@@ -57,7 +71,8 @@ Persist provides objects to create move delete and otherwise manage files in the
 
 ### Protocols
 
->We elected to use the standard set out by RFC #822 as our means of storing our  messages. While this is an older standard that has been superceded, new versions remain backward compatible. This allowed us to store messages in a standards compliant way while avoiding implenting additional features from newer versions. Following this standards affords us the possibility to use existing mail protocols with minimal effort.
+>We elected to use the standard set out by RFC #822 as our means of storing our  messages. While this is an older standard that has been superceded, new versions remain backward compatible. 
+This allowed us to store messages in a standards compliant way while avoiding implenting additional features from newer versions.Following this standards affords us the possibility to use existing mail protocols with minimal effort.
 
 #### Example
 
@@ -89,6 +104,17 @@ SMTP can be achived by opening a socket to a compliant server and sending someth
 	QUIT
 
 This doesnt care for errors but is minimal enough to just work.
+
+### Servers:
+>Postfix is a free and open-source mail transfer agent (MTA) that routes and delivers electronic mail, intended as an alternative to the widely used Sendmail MTA. When have used postfix server for the mail transefer over network.
+- We have elected to use standard protocols for our email client because our original design decision to make all our messages rfc822 and rfc2822 compliant allowed us to use protocols that depended on these standards such as POP3 and SMTP.
+- We use SMTP as our means of sending messages to a compliant server and we expect messages in the mailbox on a potentially different server with POP3. 
+- This allows us to use our client with other internet servers. we did not implement connection encryption and as such we had to use a custom configured server.
+- We deployed our server on a virtual machine running Ubuntu Lucid with the stock mail servers Postfix for SMTP and Dovecot for POP3.
+- Postfix was configured only to allow local unencrypted mail (so the SSL requirement was removed) and Dovecot was configured to allow plain-text passwords on unencrypted links.Given that these are only encryption requirements.
+- Our architechture allows us to drop in a secure socket (or any other socket that may potentially use these protocols) in place of the standard unencrypted socket.
+- If a secure socket were implemented, this implementation would then work with real world servers such as gmail, live mail, and other common mail providers.
+
 
 ### Initail GUI
 
@@ -199,14 +225,28 @@ Right Click Event is enabled for all events in the GUI,
 - A meeting is a special kind of Message. It adds the Start and End Time, and Meeting Date.
 - We also kept the ID of the message consistent across all mailboxes to ensure updates/accepts/declines to meetings would reflect to all recipients.
 
-By using the date modified tag to keep track of latest update, in the future we could reject incoming changes that are done to an out of date meeting. And in phase 3 we will implement this to all multiple recepients to update meetings between themselves.
+By using the date modified tag to keep track of latest update, in the future we could reject incoming changes that are done to an out of date meeting.
 
+###Accept and Decline:
+> Meeting we have create accept and decline feature. Here we have extended old meeting feature , where we have added acceptance by using simple acknowledgement fuctions for the sender and back to receiver. When the person in the meeting declines it the fuctions automatically delets him from the meeting.
+The meeting window has a added lable filed to GUI where all the persons know who accepted and declined the meeting are displayed for better user interface.
+> We have handled the collison between same meeting edited by multiple user by using the same acknowledgement protocol between different user. When a meeting is edited then header of the meeting is updated as edited and then it is sent to all the user, 
+##Different Cases:
+ - when everyone accepts the meeting then it will get updated to all the user.
+ - If any one of the user rejects edited meeting then the decline request is sent to the user who edited and nessary changes are made. Which again goes through all the process for the user acceptance.
+ - If everyove rejected the update the meeting is restroed to its old form.
+
+###Optimistic Locking:
+> When one or more user tries to edit meeting, here we need optimistic locking. Here we have tried to implement the optimistic locking by the procedure showing the Sequence diagram.
+This feature works by sending and receving acknowledgement form user to user, this gets updated into a stack where the first uptade done is send to all the user and the need changed are done accordingly and then the second and so on
+
+![screen shot](UseCases/SD%20Images/SendRecieveSD.png "Optimistic Locking Sequence Diagram")
 
 ### Filters :
 > Filter allows the user to make the new mails redirected to a folder depending on the rules he wants. 
 - Filters are created by making use of the indoxID obtained from the controller , where the incoming mails are made observable and redirected directly to the folders according to the rule.
 - We have made the filters in such a way that when a rule is getting create and applied it not only makes changes to the incoming messages but also to the mails inside the inbox
-- Users are allowed to create , delete and edit  filters .
+- Users are allowed to create , delete and edit  filters.
 
 ### Search Mail:
 > Search mail is created by using class which extends folder table Model  where we have implemented JTree which helps in displaying the mails to the user through the GUI application. 
